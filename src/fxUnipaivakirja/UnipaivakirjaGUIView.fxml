@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import fi.jyu.mit.fxgui.ComboBoxChooser?>
 <?import fi.jyu.mit.fxgui.ListChooser?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -123,13 +123,13 @@
                   <Label text="Lisätietoja:" GridPane.rowIndex="4" />
                   <TextField GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
                   <TextField GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
-                  <TextField GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
+                  <TextField editable="false" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
                   <TextField GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
                   <Label text="Unen laatu:" GridPane.rowIndex="5" />
                   <Label text="Vireystila:" GridPane.rowIndex="6" />
-                  <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                  <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                   <DatePicker GridPane.columnIndex="1" />
+                  <ComboBoxChooser rivit="--valitse--&#10;erittäin huono&#10;huono&#10;kohtalainen&#10;hyvä&#10;erittäin hyvä" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <ComboBoxChooser rivit="--valitse--&#10;erittäin väsynyt&#10;väsynyt&#10;ihan jees&#10;pirteä&#10;erittäin energinen" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                </children>
             </GridPane>
          </content>
