@@ -10,6 +10,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.input.KeyCodeCombination?>
@@ -82,6 +83,11 @@
                   <MenuItem mnemonicParsing="false" text="Tietoja..." />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false">
+               <graphic>
+                  <TextField promptText="Hae" />
+               </graphic>
+            </Menu>
         </menus>
       </MenuBar>
    </top>
@@ -123,13 +129,13 @@
                   <Label text="Lisätietoja:" GridPane.rowIndex="4" />
                   <TextField GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
                   <TextField GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
-                  <TextField editable="false" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
-                  <TextField GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
+                  <TextField editable="false" text="9 h" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
                   <Label text="Unen laatu:" GridPane.rowIndex="5" />
                   <Label text="Vireystila:" GridPane.rowIndex="6" />
                   <DatePicker GridPane.columnIndex="1" />
                   <ComboBoxChooser rivit="--valitse--&#10;erittäin huono&#10;huono&#10;kohtalainen&#10;hyvä&#10;erittäin hyvä" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                   <ComboBoxChooser rivit="--valitse--&#10;erittäin väsynyt&#10;väsynyt&#10;ihan jees&#10;pirteä&#10;erittäin energinen" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                </children>
             </GridPane>
          </content>
