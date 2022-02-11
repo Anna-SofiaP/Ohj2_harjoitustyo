@@ -60,7 +60,8 @@ public class UnipaivakirjaGUIController {
     }
 
     @FXML void handleTulosta() {
-        //tulosta();
+        ModalController.showModal(UnipaivakirjaGUIController.class.getResource(
+                "Tulostus.fxml"), "Tulosta", null, "");
     }
 
     @FXML void handleUusiKayttaja() {
