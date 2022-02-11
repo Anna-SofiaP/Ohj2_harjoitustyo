@@ -27,17 +27,17 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </BorderPane.margin>
          <children>
-            <Button mnemonicParsing="false" text="Uusi merkintä">
+            <Button mnemonicParsing="false" onAction="#handleUusiMerkinta" text="Uusi merkintä">
                <tooltip>
                   <Tooltip text="Luo uusi unipäiväkirjamerkintä." />
                </tooltip>
             </Button>
-            <Button mnemonicParsing="false" text="Tallenna">
+            <Button mnemonicParsing="false" onAction="#handleTallenna" text="Tallenna">
                <tooltip>
                   <Tooltip text="Tallenna unipäiväkirjamerkintä." />
                </tooltip>
             </Button>
-            <Button mnemonicParsing="false" text="Poistu">
+            <Button mnemonicParsing="false" onAction="#handlePoistu" text="Poistu">
                <tooltip>
                   <Tooltip text="Poistu unipäiväkirjasta." />
                </tooltip>
@@ -50,16 +50,16 @@
         <menus>
           <Menu mnemonicParsing="false" text="Tiedosto">
             <items>
-              <MenuItem mnemonicParsing="false" text="Tallenna">
+              <MenuItem mnemonicParsing="false" onAction="#handleTallenna" text="Tallenna">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
                   </MenuItem>
-                  <MenuItem mnemonicParsing="false" text="Avaa..." />
-                  <MenuItem mnemonicParsing="false" text="Lisää uusi käyttäjä..." />
-                  <MenuItem mnemonicParsing="false" text="Poista käyttäjä..." />
-                  <MenuItem mnemonicParsing="false" text="Tulosta..." />
-                  <MenuItem mnemonicParsing="false" text="Lopeta">
+                  <MenuItem mnemonicParsing="false" onAction="#handleAvaa" text="Avaa..." />
+                  <MenuItem mnemonicParsing="false" onAction="#handleUusiKayttaja" text="Lisää uusi käyttäjä..." />
+                  <MenuItem mnemonicParsing="false" onAction="#handlePoistaKayttaja" text="Poista käyttäjä..." />
+                  <MenuItem mnemonicParsing="false" onAction="#handleTulosta" text="Tulosta..." />
+                  <MenuItem mnemonicParsing="false" onAction="#handleLopeta" text="Lopeta">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="Q" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
@@ -68,24 +68,24 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Muokkaa">
             <items>
-              <MenuItem mnemonicParsing="false" text="Lisää uusi merkintä">
+              <MenuItem mnemonicParsing="false" onAction="#handleUusiMerkinta" text="Lisää uusi merkintä">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
                   </MenuItem>
-                  <MenuItem mnemonicParsing="false" text="Poista merkintä..." />
+                  <MenuItem mnemonicParsing="false" onAction="#handlePoistaMerkinta" text="Poista merkintä..." />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Apua">
             <items>
-              <MenuItem mnemonicParsing="false" text="Apua" />
-                  <MenuItem mnemonicParsing="false" text="Ohje..." />
-                  <MenuItem mnemonicParsing="false" text="Tietoja..." />
+              <MenuItem mnemonicParsing="false" onAction="#handleApua" text="Apua" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleOhje" text="Ohje..." />
+                  <MenuItem mnemonicParsing="false" onAction="#handleTietoja" text="Tietoja..." />
             </items>
           </Menu>
             <Menu mnemonicParsing="false">
                <graphic>
-                  <TextField promptText="Hae" />
+                  <TextField onAction="#handleHaku" promptText="Hae" />
                </graphic>
             </Menu>
         </menus>

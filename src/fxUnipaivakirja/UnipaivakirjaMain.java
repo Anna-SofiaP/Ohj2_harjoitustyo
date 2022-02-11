@@ -30,7 +30,7 @@ public class UnipaivakirjaMain extends Application {
     }
 
     /**
-     * @param args Ei käytössä
+     * @param args Ei kÃ¤ytÃ¶ssÃ¤
      */
     public static void main(String[] args) {
         launch(args);
