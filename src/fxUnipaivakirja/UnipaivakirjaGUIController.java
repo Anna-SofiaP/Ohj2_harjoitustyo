@@ -1,6 +1,12 @@
 package fxUnipaivakirja;
 
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import fi.jyu.mit.fxgui.Dialogs;
+import fi.jyu.mit.fxgui.ModalController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 
@@ -11,12 +17,10 @@ import javafx.fxml.FXML;
  */
 public class UnipaivakirjaGUIController {
 
-    @FXML void handleApua() {
-        //apua();
-    }
 
     @FXML void handleAvaa() {
-        //avaa();
+        ModalController.showModal(UnipaivakirjaGUIController.class.getResource(
+                "aloitusikkuna.fxml"), "Aloitus", null, "");
     }
 
     @FXML void handleHaku() {
@@ -29,15 +33,17 @@ public class UnipaivakirjaGUIController {
     }
 
     @FXML void handleOhje() {
-        //ohje();
+        ohje();
     }
 
     @FXML void handlePoistaKayttaja() {
-        //poistaKayttaja();
+        ModalController.showModal(UnipaivakirjaGUIController.class.getResource(
+                "Poistakayttaja.fxml"), "Poista käyttäjä", null, "");
     }
 
     @FXML void handlePoistaMerkinta() {
-        //poistaMerkinta();
+        ModalController.showModal(UnipaivakirjaGUIController.class.getResource(
+                "poistaikkuna.fxml"), "Poista merkintä", null, "");
     }
 
     @FXML void handlePoistu() {
@@ -58,22 +64,38 @@ public class UnipaivakirjaGUIController {
     }
 
     @FXML void handleUusiKayttaja() {
-        //uusiKayttaja();
+        ModalController.showModal(UnipaivakirjaGUIController.class.getResource(
+                "Uusikayttaja.fxml"), "Lisää uusi käyttäjä", null, "");
     }
 
     @FXML void handleUusiMerkinta() {
-        //uusiMerkinta();
+        Dialogs.showMessageDialog("Ei osata vielä lisätä uutta merkintää.");
     }
     
     //------------------------------------------------------------
     
+    
+    /**
+     * Tallentaa muokatut tiedot.
+     */
     private void tallenna() {
         Dialogs.showMessageDialog("Tallennetaan, mutta ei toimi vielä!");
     }
     
     
-    /*private boolean avaa() {
-         
-    }*/
+    /**
+     * Näytetään harjoitustyöohjelman suunnitelma web-selaimessa.
+     */
+    private void ohje() {
+        Desktop desktop = Desktop.getDesktop();
+        try {
+            URI uri = new URI("https://tim.jyu.fi/view/kurssit/tie/ohj2/2022k/ht/ansupaav");
+            desktop.browse(uri);
+        } catch (URISyntaxException e) {
+            return;
+        } catch (IOException e) {
+            return;
+        }
+    }
 
 }

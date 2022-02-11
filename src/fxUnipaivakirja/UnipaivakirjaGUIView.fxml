@@ -78,7 +78,6 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Apua">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#handleApua" text="Apua" />
                   <MenuItem mnemonicParsing="false" onAction="#handleOhje" text="Ohje..." />
                   <MenuItem mnemonicParsing="false" onAction="#handleTietoja" text="Tietoja..." />
             </items>
@@ -135,7 +134,7 @@
                   <DatePicker GridPane.columnIndex="1" />
                   <ComboBoxChooser rivit="--valitse--&#10;erittäin huono&#10;huono&#10;kohtalainen&#10;hyvä&#10;erittäin hyvä" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                   <ComboBoxChooser rivit="--valitse--&#10;erittäin väsynyt&#10;väsynyt&#10;ihan jees&#10;pirteä&#10;erittäin energinen" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                  <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextArea prefHeight="200.0" prefWidth="200.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                </children>
             </GridPane>
          </content>
