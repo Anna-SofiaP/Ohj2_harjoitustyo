@@ -24,7 +24,7 @@ public class UnipaivakirjaGUIController {
     }
 
     @FXML void handleHaku() {
-        //hae();
+        hae();
     }
 
     @FXML void handleLopeta() {
@@ -56,7 +56,8 @@ public class UnipaivakirjaGUIController {
     }
 
     @FXML void handleTietoja() {
-        //tietoja();
+        ModalController.showModal(UnipaivakirjaGUIController.class.getResource(
+                "Tietoja.fxml"), "Tietoja", null, "");
     }
 
     @FXML void handleTulosta() {
@@ -97,6 +98,10 @@ public class UnipaivakirjaGUIController {
         } catch (IOException e) {
             return;
         }
+    }
+    
+    private void hae() {
+        //jee
     }
 
 }
