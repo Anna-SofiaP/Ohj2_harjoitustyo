@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxUnipaivakirja.UnipaivakirjaGUIController">
+<BorderPane minHeight="470.0" minWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxUnipaivakirja.UnipaivakirjaGUIController">
    <bottom>
       <HBox spacing="10.0" BorderPane.alignment="CENTER">
          <BorderPane.margin>
