@@ -1,6 +1,7 @@
 package fxUnipaivakirja;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -24,12 +25,22 @@ public class UnipaivakirjaMain extends Application {
             primaryStage.setScene(scene);
             primaryStage.setTitle("Unipaivakirja");
             primaryStage.show();
+            
+            primaryStage.setOnCloseRequest((event) -> {
+                if (!unipaivakirjaCtrl.voikoSulkea()) event.consume();
+            });
+            
+            Unipaivakirja unipaivakirja = new Unipaivakirja();
+            unipaivakirjaCtrl.setUnipaivakirja(unipaivakirja);
+            
+            if (!unipaivakirjaCtrl.avaa()) Platform.exit();
         } catch(Exception e) {
             e.printStackTrace();
         }
     }
 
     /**
+     * Käynnistetään käyttöliittymä
      * @param args Ei käytössä
      */
     public static void main(String[] args) {
