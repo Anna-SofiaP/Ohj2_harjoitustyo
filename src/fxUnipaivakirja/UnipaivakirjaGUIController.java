@@ -4,7 +4,11 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.net.URL;
+import java.util.ResourceBundle;
+import javafx.fxml.Initializable;
+import unipaivakirja.Kayttaja;
+import unipaivakirja.SailoException;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
 import javafx.application.Platform;
@@ -15,12 +19,18 @@ import javafx.fxml.FXML;
  * @version 10.2.2022
  *
  */
-public class UnipaivakirjaGUIController {
+public class UnipaivakirjaGUIController implements Initializable{
+    
+    private String kayttajanimi = "Nea";
+    
+    @Override
+    public void initialize(URL url, ResourceBundle bundle) {  
+        alusta();      
+    }
 
 
     @FXML void handleAvaa() {
-        ModalController.showModal(UnipaivakirjaGUIController.class.getResource(
-                "aloitusikkuna.fxml"), "Aloitus", null, "");
+        avaa();
     }
 
     @FXML void handleHaku() {
@@ -37,13 +47,11 @@ public class UnipaivakirjaGUIController {
     }
 
     @FXML void handlePoistaKayttaja() {
-        ModalController.showModal(UnipaivakirjaGUIController.class.getResource(
-                "Poistakayttaja.fxml"), "Poista käyttäjä", null, "");
+        Dialogs.showMessageDialog("Vielä ei osata poistaa käyttäjää");
     }
 
     @FXML void handlePoistaMerkinta() {
-        ModalController.showModal(UnipaivakirjaGUIController.class.getResource(
-                "poistaikkuna.fxml"), "Poista merkintä", null, "");
+        Dialogs.showMessageDialog("Vielä ei osata poistaa merkintää");
     }
 
     @FXML void handlePoistu() {
@@ -61,13 +69,12 @@ public class UnipaivakirjaGUIController {
     }
 
     @FXML void handleTulosta() {
-        ModalController.showModal(UnipaivakirjaGUIController.class.getResource(
-                "Tulostus.fxml"), "Tulosta", null, "");
+        TulostusController tulostusCtrl = TulostusController.tulosta(null); 
+        tulostaValitut(tulostusCtrl.getTextArea()); 
     }
 
     @FXML void handleUusiKayttaja() {
-        ModalController.showModal(UnipaivakirjaGUIController.class.getResource(
-                "Uusikayttaja.fxml"), "Lisää uusi käyttäjä", null, "");
+        uusiKayttaja();
     }
 
     @FXML void handleUusiMerkinta() {
@@ -76,6 +83,7 @@ public class UnipaivakirjaGUIController {
     
     //------------------------------------------------------------
     
+    private Kayttaja kayttajanUnipaivakirja;
     
     /**
      * Tallentaa muokatut tiedot.
@@ -83,6 +91,42 @@ public class UnipaivakirjaGUIController {
     private void tallenna() {
         Dialogs.showMessageDialog("Tallennetaan, mutta ei toimi vielä!");
     }
+    
+    
+    /**
+     * Alustaa tietyn käyttäjän unipäiväkirjan lukemalla sen 
+     * valitun nimisestä tiedostosta
+     * @param nimi tiedosto josta tietyn käyttäjän unipäiväkirjan tiedot luetaan
+     */
+    protected void lueTiedosto(String nimi) {
+        kayttajanimi = nimi;
+        setTitle("Unipäiväkirja - " + kayttajanimi);
+        String virhe = "Ei osata lukea vielä";  // TODO: tähän oikea tiedoston lukeminen
+            Dialogs.showMessageDialog(virhe);
+    }
+
+
+    private void setTitle(String title) {
+        ModalController.getStage(hakuehto).setTitle(title);
+    }
+    
+    
+    /**
+     * Luo uuden käyttäjän jota aletaan editoimaan 
+     */
+    protected void uusiKayttaja() {
+        Kayttaja uusi = new Kayttaja();
+        uusi.rekisteroi();
+        uusi.taytaNeaTiedoilla();
+        try {
+            kayttajanUnipaivakirja.lisaa(uusi);
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog("Ongelmia uuden luomisessa " + e.getMessage());
+            return;
+        }
+        hae(uusi.getKayttajaId());
+    }
+
     
     
     /**
