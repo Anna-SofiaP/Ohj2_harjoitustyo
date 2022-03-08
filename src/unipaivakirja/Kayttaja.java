@@ -1,5 +1,7 @@
 package unipaivakirja;
 
+import java.io.PrintStream;
+
 /**
  * Unipäiväkirjan käyttäjä
  * @author Omistaja
@@ -92,6 +94,13 @@ public class Kayttaja {
         ansku.tulosta(System.out);
     }
 
+
+    /**
+     * Tulostaa käyttäjän tiedot
+     * @param out ??
+     */
+    public void tulosta(PrintStream out) {
+        out.println("Jee");
     }
 
 }

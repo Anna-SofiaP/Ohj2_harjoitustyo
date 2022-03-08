@@ -84,7 +84,7 @@
           </Menu>
             <Menu mnemonicParsing="false">
                <graphic>
-                  <TextField onAction="#handleHaku" promptText="Hae" />
+                  <TextField fx:id="hakuehto" onAction="#handleHaku" promptText="Hae" />
                </graphic>
             </Menu>
         </menus>
@@ -96,7 +96,7 @@
             <Label text="Päivämäärä" BorderPane.alignment="CENTER" />
          </top>
          <center>
-            <ListChooser rivit="24.1.22&#10;23.1.22&#10;22.1.22&#10;21.1.22&#10;20.1.22&#10;" BorderPane.alignment="CENTER" />
+            <ListChooser fx:id="chooserMerkinnat" rivit="24.1.22&#10;23.1.22&#10;22.1.22&#10;21.1.22&#10;20.1.22&#10;" BorderPane.alignment="CENTER" />
          </center>
       </BorderPane>
    </left>
@@ -131,9 +131,9 @@
                   <TextField editable="false" text="9 h" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
                   <Label text="Unen laatu:" GridPane.rowIndex="5" />
                   <Label text="Vireystila:" GridPane.rowIndex="6" />
-                  <DatePicker GridPane.columnIndex="1" />
-                  <ComboBoxChooser rivit="--valitse--&#10;erittäin huono&#10;huono&#10;kohtalainen&#10;hyvä&#10;erittäin hyvä" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                  <ComboBoxChooser rivit="--valitse--&#10;erittäin väsynyt&#10;väsynyt&#10;ihan jees&#10;pirteä&#10;erittäin energinen" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <DatePicker fx:id="kalenteri" GridPane.columnIndex="1" />
+                  <ComboBoxChooser fx:id="unenlaatuVal" rivit="--valitse--&#10;erittäin huono&#10;huono&#10;kohtalainen&#10;hyvä&#10;erittäin hyvä" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <ComboBoxChooser fx:id="vireystilaVal" rivit="--valitse--&#10;erittäin väsynyt&#10;väsynyt&#10;ihan jees&#10;pirteä&#10;erittäin energinen" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                   <TextArea prefHeight="200.0" prefWidth="200.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                </children>
             </GridPane>

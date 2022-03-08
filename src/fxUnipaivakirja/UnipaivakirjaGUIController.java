@@ -1,6 +1,7 @@
 package fxUnipaivakirja;
 
 import java.awt.Desktop;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -8,24 +9,45 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 import unipaivakirja.Kayttaja;
+import unipaivakirja.Merkinta;
 import unipaivakirja.SailoException;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 
+import fi.jyu.mit.fxgui.ComboBoxChooser;
+import fi.jyu.mit.fxgui.ListChooser;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
+
 /**
+ * Luokka unipäiväkirjan tapahtumien hoitamiseksi.
  * @author Omistaja
  * @version 10.2.2022
+ * @version 8.3.2022
  *
  */
 public class UnipaivakirjaGUIController implements Initializable{
+    
+    @FXML private ListChooser<?> chooserMerkinnat;
+    @FXML private TextField hakuehto;
+    @FXML private DatePicker kalenteri;
+    @FXML private ComboBoxChooser<?> unenlaatuVal;
+    @FXML private ComboBoxChooser<?> vireystilaVal;
+    @FXML private ComboBoxChooser<?> kayttajaValinta;
     
     private String kayttajanimi = "Nea";
     
     @Override
     public void initialize(URL url, ResourceBundle bundle) {  
         alusta();      
+    }
+
+    @FXML void handleValitseKayttaja() {
+        avaaKayttajanPaivakirja();
     }
 
 
@@ -84,6 +106,7 @@ public class UnipaivakirjaGUIController implements Initializable{
     //------------------------------------------------------------
     
     private Kayttaja kayttajanUnipaivakirja;
+    private Merkinta merkintaKohdalla;
     
     /**
      * Tallentaa muokatut tiedot.
@@ -143,6 +166,47 @@ public class UnipaivakirjaGUIController implements Initializable{
             return;
         }
     }
+    
+    
+    /**
+     * Tekee tarvittavat muut alustukset, nyt vaihdetaan GridPanen tilalle
+     * yksi iso tekstikenttä, johon voidaan tulostaa jäsenten tiedot.
+     * Alustetaan myös käyttäjälistan kuuntelija 
+     */
+    protected void alusta() {
+        /*panelJasen.setContent(areaJasen);
+        areaJasen.setFont(new Font("Courier New", 12));
+        panelJasen.setFitToHeight(true);*/
+        
+        chooserMerkinnat.clear();
+        chooserMerkinnat.addSelectionListener(e -> naytaMerkinta());
+    }
+    
+    
+    /**
+     * Näyttää listasta valitun unipäiväkirjamerkinnän tiedot, tilapäisesti yhteen isoon edit-kenttään
+     */
+    protected void naytaMerkinta() {
+        merkintaKohdalla = chooserMerkinnat.getSelectedObject();
+
+        if (merkintaKohdalla == null) return;
+
+        /*areaJasen.setText("");
+        try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaJasen)) {
+            jasenKohdalla.tulosta(os);
+        }*/
+    }
+
+    
+    /**
+     * Avaa valitun käyttäjän unipäiväkirjan
+     * @return ??
+     */
+    public boolean avaaKayttajanPaivakirja() {
+        //TODO: tämä aliohjelma!!!
+    }
+    
+    
     
     private void hae() {
         //jee
