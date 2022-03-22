@@ -86,6 +86,7 @@ public class Kayttaja {
         Kayttaja nea = new Kayttaja(), ansku = new Kayttaja();
         nea.rekisteroi();
         ansku.rekisteroi();
+        
         nea.tulosta(System.out);
         nea.taytaNeaTiedoilla();
         nea.tulosta(System.out);
@@ -100,7 +101,7 @@ public class Kayttaja {
      * @param out ??
      */
     public void tulosta(PrintStream out) {
-        out.println("Jee");
+        out.println("Käyttäjä: " + kayttajanimi);
     }
 
 }

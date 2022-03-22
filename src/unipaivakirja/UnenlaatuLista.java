@@ -10,7 +10,7 @@ import java.util.*;
  * @version 18.3.2022
  *
  */
-public class UnenlaatuLista implements Iterable<Unenlaatu>{
+public class UnenlaatuLista {
     
     private String tiedostonimi = "";
     private final int lkm = 5;
@@ -65,18 +65,13 @@ public class UnenlaatuLista implements Iterable<Unenlaatu>{
     public int getLkm() {
         return alkiot.size();
     }
-    
 
-    
-    
-    
-    
 
     /**
      * @param args ei käytössä
      */
     public static void main(String[] args) {
-    // TODO Auto-generated method stub
+        // jee jee
     
     }
 

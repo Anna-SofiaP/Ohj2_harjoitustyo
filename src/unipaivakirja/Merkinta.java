@@ -73,8 +73,8 @@ public class Merkinta {
      * Unenmäärä ja päivämäärä saadaan laskettua/tuotua erillisistä metodeista.
      */
     public void taytaM1Tiedoilla() {
-        String pvm1 = pvmKalenterista();
-        String unenmaara = laskeUnenmaara();
+        String pvm1 = "12.3.2022";          //TODO: pvmKalenterista();
+        String unenmaara = "9 h";          //TODO: laskeUnenmaara();
         taytaM1Tiedoilla(pvm1, unenmaara);
     }
     
@@ -84,8 +84,8 @@ public class Merkinta {
      * Unenmäärä ja päivämäärä saadaan laskettua/tuotua erillisistä metodeista.
      */
     public void taytaM2Tiedoilla() {
-        String pvm2 = pvmKalenterista();
-        String unenmaara = laskeUnenmaara();
+        String pvm2 = "13.2.2022";         //TODO: pvmKalenterista();
+        String unenmaara = "7 h 30 min";   //TODO: laskeUnenmaara();
         taytaM2Tiedoilla(pvm2, unenmaara);
     }
     

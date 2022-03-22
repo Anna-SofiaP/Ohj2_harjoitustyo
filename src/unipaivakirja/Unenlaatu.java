@@ -20,9 +20,10 @@ public class Unenlaatu {
     
     /**
      * Alustetaan unenlaatu
+     * @param unenlaatu uusi unenlaatuvaihtoehto
      */
-    public Unenlaatu() {
-        //EI tarvitse tehdä mitään
+    public Unenlaatu(String unenlaatu) {
+        this.unenlaatu = unenlaatu;
     }
     
     
@@ -85,7 +86,7 @@ public class Unenlaatu {
      * @param args ei käytössä
      */
     public static void main(String[] args) {
-        Unenlaatu valittu = new Unenlaatu();
+        Unenlaatu valittu = new Unenlaatu("erittäin hyvä");
         valittu.taytaUnenlaatuTiedoilla(2);
         valittu.tulosta(System.out);
     }

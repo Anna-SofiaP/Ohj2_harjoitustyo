@@ -19,7 +19,8 @@ public class KloTarkistus {
         String tunnit = aika.substring(0, 1);
         String minuutit = aika.substring(3, 4);
         
-        if (aika.charAt(2) != ':'); //virhe!!! 
+        if (aika.charAt(2) != ':'); /*TODO: tee niin, että tämä tilanne
+                                            antaa virheilmoituksen*/
         
         int tunti = 0;
         int minuutti = 0;
@@ -36,8 +37,8 @@ public class KloTarkistus {
         }
         minuutti = Integer.parseInt(minuutit);
         
-        if (tunti < 0 || tunti > 23); //virhe!!!
-        if (minuutti < 0 || minuutti > 59); //virhe!!!
+        if (tunti < 0 || tunti > 23); //TODO: virheilmoitus!!!
+        if (minuutti < 0 || minuutti > 59); //TODO: virheilmoitus!!!
     }
     
 }
