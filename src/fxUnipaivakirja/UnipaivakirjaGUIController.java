@@ -11,6 +11,8 @@ import javafx.fxml.Initializable;
 import unipaivakirja.Kayttaja;
 import unipaivakirja.Merkinta;
 import unipaivakirja.SailoException;
+import unipaivakirja.Unenlaatu;
+import unipaivakirja.Unipaivakirja;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
 import javafx.application.Platform;
@@ -32,14 +34,12 @@ import javafx.scene.control.TextField;
  */
 public class UnipaivakirjaGUIController implements Initializable{
     
-    @FXML private ListChooser<?> chooserMerkinnat;
+    @FXML private ListChooser<Merkinta> chooserMerkinnat;
     @FXML private TextField hakuehto;
     @FXML private DatePicker kalenteri;
     @FXML private ComboBoxChooser<?> unenlaatuVal;
     @FXML private ComboBoxChooser<?> vireystilaVal;
     @FXML private ComboBoxChooser<?> kayttajaValinta;
-    
-    private String kayttajanimi = "Nea";
     
     @Override
     public void initialize(URL url, ResourceBundle bundle) {  
@@ -52,7 +52,7 @@ public class UnipaivakirjaGUIController implements Initializable{
 
 
     @FXML void handleAvaa() {
-        avaa();
+        handleValitseKayttaja(); //TODO: miten saadaan aloitusikkuna avautumaan?
     }
 
     @FXML void handleHaku() {
@@ -91,8 +91,8 @@ public class UnipaivakirjaGUIController implements Initializable{
     }
 
     @FXML void handleTulosta() {
-        TulostusController tulostusCtrl = TulostusController.tulosta(null); 
-        tulostaValitut(tulostusCtrl.getTextArea()); 
+        //TulostusController tulostusCtrl = TulostusController.tulosta(null); 
+        //tulostaValitut(tulostusCtrl.getTextArea()); 
     }
 
     @FXML void handleUusiKayttaja() {
@@ -101,12 +101,14 @@ public class UnipaivakirjaGUIController implements Initializable{
 
     @FXML void handleUusiMerkinta() {
         Dialogs.showMessageDialog("Ei osata vielä lisätä uutta merkintää.");
+        uusiMerkinta();
     }
     
     //------------------------------------------------------------
     
-    private Kayttaja kayttajanUnipaivakirja;
+    private Unipaivakirja kayttajanUnipaivakirja;
     private Merkinta merkintaKohdalla;
+    private String kayttajanimi = "Nea";
     
     /**
      * Tallentaa muokatut tiedot.
@@ -119,10 +121,10 @@ public class UnipaivakirjaGUIController implements Initializable{
     /**
      * Alustaa tietyn käyttäjän unipäiväkirjan lukemalla sen 
      * valitun nimisestä tiedostosta
-     * @param nimi tiedosto josta tietyn käyttäjän unipäiväkirjan tiedot luetaan
+     * @param valittu käyttäjä, jonka unipäiväkirja avataan
      */
-    protected void lueTiedosto(String nimi) {
-        kayttajanimi = nimi;
+    protected void lueTiedosto(Kayttaja valittu) {
+        kayttajanimi = valittu.getNimi();
         setTitle("Unipäiväkirja - " + kayttajanimi);
         String virhe = "Ei osata lukea vielä";  // TODO: tähän oikea tiedoston lukeminen
             Dialogs.showMessageDialog(virhe);
@@ -138,7 +140,7 @@ public class UnipaivakirjaGUIController implements Initializable{
      * Luo uuden käyttäjän jota aletaan editoimaan 
      */
     protected void uusiKayttaja() {
-        Kayttaja uusi = new Kayttaja();
+        Kayttaja uusi = new Kayttaja("nea");
         uusi.rekisteroi();
         uusi.taytaNeaTiedoilla();
         try {
@@ -147,7 +149,7 @@ public class UnipaivakirjaGUIController implements Initializable{
             Dialogs.showMessageDialog("Ongelmia uuden luomisessa " + e.getMessage());
             return;
         }
-        hae(uusi.getKayttajaId());
+        //hae(uusi.getKayttajaId());
     }
 
     
@@ -191,6 +193,8 @@ public class UnipaivakirjaGUIController implements Initializable{
 
         if (merkintaKohdalla == null) return;
 
+        
+        
         /*areaJasen.setText("");
         try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaJasen)) {
             jasenKohdalla.tulosta(os);
@@ -199,18 +203,47 @@ public class UnipaivakirjaGUIController implements Initializable{
 
     
     /**
+     * Lisää uuden merkinnän valitulle käyttäjälle
+     */
+    public void uusiMerkinta() {
+        //Unenlaatu uusiUnenlaatu = new Unenlaatu(unenlaatuVal.getSelectedText());
+        //Vireystila uusiVireystila = new Vireystila(vireystilaVal.getSelectedText());
+    }
+    
+    /**
      * Avaa valitun käyttäjän unipäiväkirjan
      * @return ??
      */
     public boolean avaaKayttajanPaivakirja() {
-        //TODO: tämä aliohjelma!!!
-    }
-    
+        Kayttaja valittuKayttaja = new Kayttaja(kayttajaValinta.getSelectedText());
+        lueTiedosto(valittuKayttaja);
+        return true;
+    }    
     
     
     private void hae() {
         //jee
     }
+
+    
+    /**
+     * @param unipaivakirja jota käytetään tässä käyttöliittymässä
+     */
+    public void setUnipaivakirja(Unipaivakirja unipaivakirja) {
+        this.kayttajanUnipaivakirja = unipaivakirja;
+        naytaMerkinta();
+    }
+
+    
+    /**
+     * @return TODO: mitä tähän?
+     */
+    public boolean voikoSulkea() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+    
+    
 
     
     

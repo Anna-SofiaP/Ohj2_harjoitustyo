@@ -16,6 +16,13 @@ public class Kayttaja {
     
     
     /**
+     * @param kayttajanimi käyttäjän käyttäjänimi
+     */
+    public Kayttaja(String kayttajanimi) {
+        this.kayttajanimi = kayttajanimi;
+    }
+    
+    /**
      * @return käyttäjän nimi
      * @example
      * <pre name="test">
@@ -83,7 +90,7 @@ public class Kayttaja {
      * @param args ei käytössä
      */
     public static void main(String args[]) {
-        Kayttaja nea = new Kayttaja(), ansku = new Kayttaja();
+        Kayttaja nea = new Kayttaja("nea"), ansku = new Kayttaja("ansku");
         nea.rekisteroi();
         ansku.rekisteroi();
         

@@ -103,7 +103,7 @@ public class Kayttajat {
     public static void main(String[] args) {
         Kayttajat kayttajat = new Kayttajat();
         
-        Kayttaja nea = new Kayttaja(), ansku = new Kayttaja();
+        Kayttaja nea = new Kayttaja("nea"), ansku = new Kayttaja("ansku");
         nea.rekisteroi();
         nea.taytaNeaTiedoilla();
         ansku.rekisteroi();
