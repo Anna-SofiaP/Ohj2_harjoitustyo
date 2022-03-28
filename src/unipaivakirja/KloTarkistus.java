@@ -32,7 +32,7 @@ public class KloTarkistus {
         tunti = Integer.parseInt(tunnit);
             
         if (minuutit.charAt(0) == '0') {
-            minuutit = minuutit.substring(4);
+            minuutit = minuutit.substring(1);
             minuutti = Integer.parseInt(minuutit);
         }
         minuutti = Integer.parseInt(minuutit);
