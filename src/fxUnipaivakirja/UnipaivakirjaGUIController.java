@@ -11,7 +11,6 @@ import javafx.fxml.Initializable;
 import unipaivakirja.Kayttaja;
 import unipaivakirja.Merkinta;
 import unipaivakirja.SailoException;
-import unipaivakirja.Unenlaatu;
 import unipaivakirja.Unipaivakirja;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
@@ -20,8 +19,6 @@ import javafx.fxml.FXML;
 
 import fi.jyu.mit.fxgui.ComboBoxChooser;
 import fi.jyu.mit.fxgui.ListChooser;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
@@ -108,7 +105,6 @@ public class UnipaivakirjaGUIController implements Initializable{
     
     private Unipaivakirja kayttajanUnipaivakirja;
     private Merkinta merkintaKohdalla;
-    private String kayttajanimi = "Nea";
     
     /**
      * Tallentaa muokatut tiedot.
@@ -124,8 +120,7 @@ public class UnipaivakirjaGUIController implements Initializable{
      * @param valittu käyttäjä, jonka unipäiväkirja avataan
      */
     protected void lueTiedosto(Kayttaja valittu) {
-        kayttajanimi = valittu.getNimi();
-        setTitle("Unipäiväkirja - " + kayttajanimi);
+        setTitle("Unipäiväkirja - " + valittu);
         String virhe = "Ei osata lukea vielä";  // TODO: tähän oikea tiedoston lukeminen
             Dialogs.showMessageDialog(virhe);
     }
@@ -215,7 +210,8 @@ public class UnipaivakirjaGUIController implements Initializable{
      * @return ??
      */
     public boolean avaaKayttajanPaivakirja() {
-        Kayttaja valittuKayttaja = new Kayttaja(kayttajaValinta.getSelectedText());
+        String valinta = AloitusikkunaController.kysyKayttaja(null, kayttajaValinta.getSelectedText());
+        Kayttaja valittuKayttaja = new Kayttaja(valinta);
         lueTiedosto(valittuKayttaja);
         return true;
     }    

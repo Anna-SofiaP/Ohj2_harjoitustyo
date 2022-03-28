@@ -31,7 +31,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" text="Sulje">
+                  <Button mnemonicParsing="false" onAction="#handleSulje" text="Sulje">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
@@ -41,7 +41,7 @@
                   <Insets />
                </GridPane.margin>
             </HBox>
-            <Button mnemonicParsing="false" text="Lisää uusi käyttäjä">
+            <Button mnemonicParsing="false" onAction="#handleUusiKayttaja" text="Lisää uusi käyttäjä">
                <GridPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </GridPane.margin>
@@ -60,7 +60,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </HBox.margin>
             </Label>
-            <ComboBoxChooser fx:id="kayttajaValinta" rivit="Nea&#10;Anna-Sofia&#10;Liisa">
+            <ComboBoxChooser fx:id="kayttajaValinta" rivit="--Valitse--&#10;Nea&#10;Anna-Sofia&#10;Liisa">
                <HBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </HBox.margin>
