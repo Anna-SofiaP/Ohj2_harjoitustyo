@@ -39,7 +39,9 @@ public class UnipaivakirjaGUIController implements Initializable{
     @FXML private ComboBoxChooser<?> kayttajaValinta;
     
     @Override
-    public void initialize(URL url, ResourceBundle bundle) {  
+    public void initialize(URL url, ResourceBundle bundle) { 
+        ModalController.showModal(UnipaivakirjaGUIController.class.getResource(
+                "aloitusikkuna.fxml"), "Valitse käyttäjä", null, "");
         alusta();      
     }
 
@@ -227,7 +229,6 @@ public class UnipaivakirjaGUIController implements Initializable{
      */
     public void setUnipaivakirja(Unipaivakirja unipaivakirja) {
         this.kayttajanUnipaivakirja = unipaivakirja;
-        naytaMerkinta();
     }
 
     

@@ -6,8 +6,8 @@ package fxUnipaivakirja;
 import fi.jyu.mit.fxgui.ComboBoxChooser;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
+import fi.jyu.mit.fxgui.ModalControllerInterface;
 import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import unipaivakirja.Kayttaja;
 import unipaivakirja.SailoException;
@@ -19,9 +19,8 @@ import unipaivakirja.Unipaivakirja;
  * @version 28.3.2022
  *
  */
-public class AloitusikkunaController {
+public class AloitusikkunaController implements ModalControllerInterface<String>{
     
-    @FXML private TextField hakuehto;
     @FXML private ComboBoxChooser<String> kayttajaValinta;
     
     @FXML void handleValitseKayttaja() {
@@ -33,15 +32,16 @@ public class AloitusikkunaController {
     }
     
     @FXML void handleSulje() {
-        ModalController.closeStage(hakuehto);
+        ModalController.closeStage(kayttajaValinta);
     }
     
     
     /**
      * Mitä tehdään kun dialogi on näytetty
      */
+    @Override
     public void handleShown() {
-        hakuehto.requestFocus();
+        //hakuehto.requestFocus();
     }
 
     
@@ -49,17 +49,19 @@ public class AloitusikkunaController {
     //------------------------------------------------------
     
     private Unipaivakirja kayttajanUnipaivakirja;
+    private String valittuKayttaja;
 
     
     /**
      * Avaa valitun käyttäjän unipäiväkirjan
-     * @return ??
      */
-    public boolean avaaKayttajanPaivakirja() {
-        String valinta = AloitusikkunaController.kysyKayttaja(null, kayttajaValinta.getSelectedText());
+    public void avaaKayttajanPaivakirja() {
+        valittuKayttaja = kayttajaValinta.getSelectedText();
+        ModalController.closeStage(kayttajaValinta);
+        /*String valinta = kysyKayttaja(null, kayttajaValinta.getSelectedText());
         Kayttaja valittuKayttaja = new Kayttaja(valinta);
         lueTiedosto(valittuKayttaja);
-        return true;
+        return true;*/
     }    
     
     
@@ -109,6 +111,17 @@ public class AloitusikkunaController {
                 AloitusikkunaController.class.getResource("aloitusikkuna.fxml"),
                 "Unipäiväkirja",
                 modalityStage, oletus);
+    }
+
+    @Override
+    public String getResult() {
+        return valittuKayttaja;
+    }
+
+    @Override
+    public void setDefault(String arg0) {
+        // TODO Auto-generated method stub
+        
     }
 
 
