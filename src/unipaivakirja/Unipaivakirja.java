@@ -11,6 +11,7 @@ package unipaivakirja;
  */
 public class Unipaivakirja {
     private final Kayttajat kayttajat = new Kayttajat();
+    private final Merkinnat merkinnat = new Merkinnat();
     
     
     /**
@@ -122,5 +123,14 @@ public class Unipaivakirja {
             System.out.println(ex.getMessage());
         }
     }
+
+
+    public void asetaKayttaja(String selectedText) {
+        // TODO Auto-generated method stub
+        kayttajat.aseta(selectedText);
+    }
+    
+    
+    
 
 }

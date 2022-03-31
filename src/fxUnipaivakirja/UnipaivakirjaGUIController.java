@@ -1,7 +1,6 @@
 package fxUnipaivakirja;
 
 import java.awt.Desktop;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -20,7 +19,11 @@ import javafx.fxml.FXML;
 import fi.jyu.mit.fxgui.ComboBoxChooser;
 import fi.jyu.mit.fxgui.ListChooser;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 /**
  * Luokka unipäiväkirjan tapahtumien hoitamiseksi.
@@ -36,7 +39,8 @@ public class UnipaivakirjaGUIController implements Initializable{
     @FXML private DatePicker kalenteri;
     @FXML private ComboBoxChooser<?> unenlaatuVal;
     @FXML private ComboBoxChooser<?> vireystilaVal;
-    @FXML private ComboBoxChooser<?> kayttajaValinta;
+    //@FXML private ComboBoxChooser<String> kayttajaValinta;
+    @FXML private ScrollPane panelMerkinta;
     
     @Override
     public void initialize(URL url, ResourceBundle bundle) { 
@@ -46,6 +50,7 @@ public class UnipaivakirjaGUIController implements Initializable{
     }
 
     @FXML void handleValitseKayttaja() {
+        kysyKayttaja(null, "");
         avaaKayttajanPaivakirja();
     }
 
@@ -107,6 +112,8 @@ public class UnipaivakirjaGUIController implements Initializable{
     
     private Unipaivakirja kayttajanUnipaivakirja;
     private Merkinta merkintaKohdalla;
+    private String valittu;
+    private TextArea tekstilaatikko = new TextArea();
     
     /**
      * Tallentaa muokatut tiedot.
@@ -121,16 +128,16 @@ public class UnipaivakirjaGUIController implements Initializable{
      * valitun nimisestä tiedostosta
      * @param valittu käyttäjä, jonka unipäiväkirja avataan
      */
-    protected void lueTiedosto(Kayttaja valittu) {
+    /*protected void lueTiedosto(Kayttaja valittu) {
         setTitle("Unipäiväkirja - " + valittu);
         String virhe = "Ei osata lukea vielä";  // TODO: tähän oikea tiedoston lukeminen
             Dialogs.showMessageDialog(virhe);
-    }
+    }*/
 
 
-    private void setTitle(String title) {
-        ModalController.getStage(hakuehto).setTitle(title);
-    }
+    /*private void setTitle(String title) {
+        ModalController.getStage(kayttajaValinta).setTitle(title);
+    }*/
     
     
     /**
@@ -173,9 +180,9 @@ public class UnipaivakirjaGUIController implements Initializable{
      * Alustetaan myös käyttäjälistan kuuntelija 
      */
     protected void alusta() {
-        /*panelJasen.setContent(areaJasen);
-        areaJasen.setFont(new Font("Courier New", 12));
-        panelJasen.setFitToHeight(true);*/
+        panelMerkinta.setContent(tekstilaatikko);
+        tekstilaatikko.setFont(new Font("Courier New", 12));
+        panelMerkinta.setFitToHeight(true);
         
         chooserMerkinnat.clear();
         chooserMerkinnat.addSelectionListener(e -> naytaMerkinta());
@@ -212,11 +219,29 @@ public class UnipaivakirjaGUIController implements Initializable{
      * @return ??
      */
     public boolean avaaKayttajanPaivakirja() {
-        String valinta = AloitusikkunaController.kysyKayttaja(null, kayttajaValinta.getSelectedText());
+        //kayttajaValinta.getSelectedObject();
+        valittu = "Nea";
+        //ModalController.closeStage(kayttajaValinta);
+        String valinta = "Nea";
         Kayttaja valittuKayttaja = new Kayttaja(valinta);
-        lueTiedosto(valittuKayttaja);
+        //lueTiedosto(valittuKayttaja);
         return true;
-    }    
+    }
+    
+    
+    /**
+     * Luodaan käyttäjänkysymisdialogi ja palautetaan comboboxchooserista valittu
+     * käyttäjänimi
+     * @param modalityStage mille ollaan modaalisia, null = sovellukselle
+     * @param oletus mitä käyttäjää näytetään oletuksena
+     * @return null jos painetaan Cancel, muuten valittu nimi
+     */
+    public static String kysyKayttaja(Stage modalityStage, String oletus) {
+        return ModalController.showModal(
+                AloitusikkunaController.class.getResource("aloitusikkuna.fxml"),
+                "Unipäiväkirja",
+                modalityStage, oletus);
+    }
     
     
     private void hae() {
@@ -238,6 +263,17 @@ public class UnipaivakirjaGUIController implements Initializable{
     public boolean voikoSulkea() {
         // TODO Auto-generated method stub
         return false;
+    }
+    
+    
+    public String getResult() {
+        return "testi";
+    }
+
+    
+    public void setDefault(String arg0) {
+        // TODO Auto-generated method stub
+        
     }
     
     

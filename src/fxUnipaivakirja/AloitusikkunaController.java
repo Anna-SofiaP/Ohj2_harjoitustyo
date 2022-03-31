@@ -54,15 +54,19 @@ public class AloitusikkunaController implements ModalControllerInterface<String>
     
     /**
      * Avaa valitun käyttäjän unipäiväkirjan
+     * @return ??
      */
-    public void avaaKayttajanPaivakirja() {
-        valittuKayttaja = kayttajaValinta.getSelectedText();
+    public boolean avaaKayttajanPaivakirja() {
+        //kayttajanUnipaivakirja.asetaKayttaja(kayttajaValinta.getSelectedText());
+        Dialogs.showMessageDialog(kayttajaValinta.getSelectedText());
+        kayttajaValinta.setSelectedIndex(0);
+        //kayttajanUnipaivakirja.annaKayttaja(kayttajaValinta.getSelectedIndex());
         ModalController.closeStage(kayttajaValinta);
         /*String valinta = kysyKayttaja(null, kayttajaValinta.getSelectedText());
         Kayttaja valittuKayttaja = new Kayttaja(valinta);
-        lueTiedosto(valittuKayttaja);
-        return true;*/
-    }    
+        lueTiedosto(valittuKayttaja);*/
+        return true;
+    }   
     
     
     /**
@@ -113,16 +117,26 @@ public class AloitusikkunaController implements ModalControllerInterface<String>
                 modalityStage, oletus);
     }
 
+    
     @Override
     public String getResult() {
         return valittuKayttaja;
     }
 
+    
     @Override
     public void setDefault(String arg0) {
         // TODO Auto-generated method stub
         
     }
-
+    
+    
+    /**
+     * @return TODO: mitä tähän?
+     */
+    public boolean voikoSulkea() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
 }
