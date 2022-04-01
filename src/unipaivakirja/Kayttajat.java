@@ -131,7 +131,6 @@ public class Kayttajat {
     public void aseta(String selectedText) {
         // TODO Auto-generated method stub
         Kayttaja uusi = new Kayttaja(selectedText);
-        uusi.
     }
 
 }

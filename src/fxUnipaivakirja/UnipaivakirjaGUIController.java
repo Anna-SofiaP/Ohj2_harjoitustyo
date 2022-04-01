@@ -2,17 +2,20 @@ package fxUnipaivakirja;
 
 import java.awt.Desktop;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 import unipaivakirja.Kayttaja;
+import unipaivakirja.Merkinnat;
 import unipaivakirja.Merkinta;
 import unipaivakirja.SailoException;
 import unipaivakirja.Unipaivakirja;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
+import fi.jyu.mit.fxgui.TextAreaOutputStream;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 
@@ -56,11 +59,11 @@ public class UnipaivakirjaGUIController implements Initializable{
 
 
     @FXML void handleAvaa() {
-        handleValitseKayttaja(); //TODO: miten saadaan aloitusikkuna avautumaan?
+        handleValitseKayttaja();
     }
 
     @FXML void handleHaku() {
-        hae();
+        //hae();
     }
 
     @FXML void handleLopeta() {
@@ -104,7 +107,7 @@ public class UnipaivakirjaGUIController implements Initializable{
     }
 
     @FXML void handleUusiMerkinta() {
-        Dialogs.showMessageDialog("Ei osata vielä lisätä uutta merkintää.");
+        //Dialogs.showMessageDialog("Ei osata vielä lisätä uutta merkintää.");
         uusiMerkinta();
     }
     
@@ -112,8 +115,9 @@ public class UnipaivakirjaGUIController implements Initializable{
     
     private Unipaivakirja kayttajanUnipaivakirja;
     private Merkinta merkintaKohdalla;
-    private String valittu;
+    //private String valittu;
     private TextArea tekstilaatikko = new TextArea();
+    private Merkinnat merkinnat = new Merkinnat();
     
     /**
      * Tallentaa muokatut tiedot.
@@ -196,13 +200,11 @@ public class UnipaivakirjaGUIController implements Initializable{
         merkintaKohdalla = chooserMerkinnat.getSelectedObject();
 
         if (merkintaKohdalla == null) return;
-
         
-        
-        /*areaJasen.setText("");
-        try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaJasen)) {
-            jasenKohdalla.tulosta(os);
-        }*/
+        tekstilaatikko.setText("");
+        try (PrintStream os = TextAreaOutputStream.getTextPrintStream(tekstilaatikko)) {
+            merkintaKohdalla.tulosta(os);
+        }
     }
 
     
@@ -210,9 +212,21 @@ public class UnipaivakirjaGUIController implements Initializable{
      * Lisää uuden merkinnän valitulle käyttäjälle
      */
     public void uusiMerkinta() {
+        Merkinta uusi = new Merkinta();
+        uusi.merkinnanLisays();
+        uusi.taytaM1Tiedoilla();
+        try {
+            merkinnat.lisaa(uusi);
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog("Ongelmia uuden luomisessa " + e.getMessage());
+            return;
+        }
+        hae(uusi.getMerkintaid());
+
         //Unenlaatu uusiUnenlaatu = new Unenlaatu(unenlaatuVal.getSelectedText());
         //Vireystila uusiVireystila = new Vireystila(vireystilaVal.getSelectedText());
     }
+    
     
     /**
      * Avaa valitun käyttäjän unipäiväkirjan
@@ -220,10 +234,10 @@ public class UnipaivakirjaGUIController implements Initializable{
      */
     public boolean avaaKayttajanPaivakirja() {
         //kayttajaValinta.getSelectedObject();
-        valittu = "Nea";
+        //valittu = "Nea";
         //ModalController.closeStage(kayttajaValinta);
-        String valinta = "Nea";
-        Kayttaja valittuKayttaja = new Kayttaja(valinta);
+        //String valinta = "Nea";
+        //Kayttaja valittuKayttaja = new Kayttaja("Nea");
         //lueTiedosto(valittuKayttaja);
         return true;
     }
@@ -244,8 +258,18 @@ public class UnipaivakirjaGUIController implements Initializable{
     }
     
     
-    private void hae() {
-        //jee
+    private void hae(int merkintaid) {
+        chooserMerkinnat.clear();
+
+        int index = 0;
+        //tässä haetaan merkinnöistä kaikki merkinnät joiden käyttäjäid täsmää tämänhetkiseen käyttäjään
+        for (int i = 0; i < merkinnat.annaKayttajanMerkinnat(0).size(); i++) { //TODO: nollan tilalle jotain!
+            Merkinta merkinta = merkinnat.anna(i);
+            if (merkinta.getMerkintaid() == merkintaid) index = i;
+            chooserMerkinnat.add(merkinta.getPvm(), merkinta);
+        }
+        chooserMerkinnat.setSelectedIndex(index); // tästä tulee muutosviesti joka näyttää merkinnän
+
     }
 
     
@@ -266,11 +290,17 @@ public class UnipaivakirjaGUIController implements Initializable{
     }
     
     
+    /**
+     * @return ??       //TODO: mitä tähän?
+     */
     public String getResult() {
         return "testi";
     }
 
     
+    /**
+     * @param arg0 ??   //TODO: mitä tähän?
+     */
     public void setDefault(String arg0) {
         // TODO Auto-generated method stub
         

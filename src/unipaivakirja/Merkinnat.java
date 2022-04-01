@@ -3,6 +3,9 @@
  */
 package unipaivakirja;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Luokka käyttäjän unipäiväkirjan merkinnöille. Osaa lisätä uuden merkinnän.
  * @author Omistaja
@@ -49,9 +52,23 @@ public class Merkinnat {
      * </pre>
      */
     public void lisaa(Merkinta merkinta) throws SailoException {
-        if (lkm >= alkiot.length) throw new SailoException("Liikaa alkioita");
+        if (lkm >= alkiot.length) kasvataTaulukkoa();
+            //throw new SailoException("Liikaa alkioita");
         alkiot[lkm] = merkinta;
         lkm++;
+    }
+    
+    
+    /**
+     * Kasvatetaan merkinnät-taulukon kokoa
+     */
+    public void kasvataTaulukkoa() {
+        int uusiKoko = alkiot.length + 10;
+        Merkinta alkiot2[] = new Merkinta[uusiKoko];
+        for (int i = 0; i < alkiot.length; i++) {
+            alkiot2[i] = alkiot[i];
+        }
+        alkiot = alkiot2;
     }
     
     
@@ -125,6 +142,23 @@ public class Merkinnat {
             System.out.println(ex.getMessage());
         }
     
+    }
+
+
+    /**
+     * @param kayttajaId sen käyttäjän id, jonka merkinnät haetaan alkiot-taulukosta
+     * @return tiettyyn käyttäjään kytketyt merkinnät listana
+     */
+    public List<Merkinta> annaKayttajanMerkinnat(int kayttajaId) {
+        List<Merkinta> kayttajanMerkinnat = new ArrayList<Merkinta>();
+        //Alustetaan apulista johon tallennetaan kaikki löytyneet merkinnät
+        //Forissa käydään kaikki merkinnät läpi ja lisätään listaan kaikki täsmäävät id:t
+        for (int i = 0; i < this.getLkm(); i++) {
+            if (alkiot[i].getKayttajaId() == kayttajaId)
+                kayttajanMerkinnat.add(alkiot[i]);
+        }
+        //palautetaan lista
+        return kayttajanMerkinnat;
     }
     
     

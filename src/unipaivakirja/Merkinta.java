@@ -14,6 +14,7 @@ import java.util.Date;
  *
  */
 public class Merkinta {
+    private int kayttajaid;
     private int merkintaid;
     private String pvm = "";
     private String nukkumaanKlo = "";
@@ -130,6 +131,14 @@ public class Merkinta {
         merkintaid = seuraavaNro;
         seuraavaNro++;
         return merkintaid;
+    }
+    
+    
+    /**
+     * @return käyttäjän id-numeron, johon merkintä on kytketty
+     */
+    public int getKayttajaId() {
+        return kayttajaid;
     }
     
     
