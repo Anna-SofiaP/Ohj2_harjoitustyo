@@ -79,9 +79,24 @@ public class Kayttaja {
     /**
      * Palauttaa käyttäjän käyttäjäid:n.
      * @return käyttäjän käyttäjäid
+     * @example
+     * <pre name="test">
+     *   Kayttaja nea = new Kayttaja();
+     *   nea.taytaNeaTiedoilla();
+     *   nea.getKayttajaId() =R= 1;
+     * </pre>
      */
     public int getKayttajaId() {
         return kayttajaid;
+    }
+    
+
+    /**
+     * Tulostaa käyttäjän tiedot
+     * @param out ??
+     */
+    public void tulosta(PrintStream out) {
+        out.println("Käyttäjä: " + kayttajanimi);
     }
     
     
@@ -101,16 +116,5 @@ public class Kayttaja {
         ansku.taytaAnskuTiedoilla();
         ansku.tulosta(System.out);
     }
-
-
-    /**
-     * Tulostaa käyttäjän tiedot
-     * @param out ??
-     */
-    public void tulosta(PrintStream out) {
-        out.println("Käyttäjä: " + kayttajanimi);
-    }
-
-
 
 }

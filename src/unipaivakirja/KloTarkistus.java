@@ -14,6 +14,15 @@ public class KloTarkistus {
      * Tarkistetaan, onko syötetty kellonaika hyväksyttävää muotoa: "hh:mm".
      * TODO: mistä tätä funktiota kutsutaan
      * @param aika kellonaika, joka tarkistetaan
+     * @example
+     * <pre name="test">
+     *  kellonajanTarkistus("15:05") === true;
+     *  kellonajanTarkistus("09:00") === true;
+     *  kellonajanTarkistus("23:46") === true;
+     *  kellonajanTarkistus("26:40") === false;
+     *  kellonajanTarkistus("00:67") === false;
+     *  kellonajanTarkistus("6:30") === false;
+     * </pre>
      */
     public static void kellonajanTarkistus(String aika) {
         String tunnit = aika.substring(0, 1);

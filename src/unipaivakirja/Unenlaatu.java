@@ -29,12 +29,21 @@ public class Unenlaatu {
     
     /**
      * Alustetaan tietyn unipäiväkirjamerkinnän unenlaatu.  
-     * @param merkintaid merkinnän viitenumero 
+     * @param unenlaatuid merkinnän viitenumero 
      */
-    public Unenlaatu(int merkintaid) {
-        this.merkintaid = merkintaid;
+    public Unenlaatu(int unenlaatuid) {
+        this.unenlaatuid = unenlaatuid;
     }
     
+    
+    /**
+     * @param unenlaatu unenlaatuvaihtoehto
+     * @param unenlaatuid tietyn unenlaadun id-numero
+     */
+    public Unenlaatu(String unenlaatu, int unenlaatuid)  {
+        this.unenlaatu = unenlaatu;
+        this.unenlaatuid = unenlaatuid;
+    }
     
     /**
      * Apumetodi, jolla saadaan täytettyä testiarvot Unenlaadulle.

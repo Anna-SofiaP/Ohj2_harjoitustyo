@@ -21,8 +21,8 @@ public class Merkinta {
     private String heratysKlo = "";
     private String unenMaara = "";
     private String lisatiedot = "";
-    //private Unenlaatu unenlaatu = new Unenlaatu();
-    //private Vireystila vireystila = new Vireystila();
+    //private Unenlaatu unenlaatu;
+    //private Vireystila vireystila;
     
     private static int seuraavaNro = 1;
     
@@ -52,6 +52,8 @@ public class Merkinta {
         heratysKlo = "6:00";
         unenMaara = unenmaara;
         lisatiedot = "Heräilin muutaman kerran yön aikana.";
+        //unenlaatu = new Unenlaatu("Erinomainen");
+        //vireystila = new Vireystila("Energinen");
     }
     
     
@@ -66,6 +68,8 @@ public class Merkinta {
         heratysKlo = "6:00";
         unenMaara = unenmaara;
         lisatiedot = "Nukuin kuin tukki.";
+        //unenlaatu = new Unenlaatu("Kohtalainen");
+        //vireystila = new Vireystila("Ihan jees");
     }
     
     
@@ -99,7 +103,7 @@ public class Merkinta {
         out.println(String.format("%03d", merkintaid, 3) + "  " + pvm);
         out.println("Nukkumaanmenoaika: " + nukkumaanKlo + " Heräämisaika: " + heratysKlo + " Unen määrä: " + unenMaara);
         out.println("Lisätiedot: " + lisatiedot);
-        //out.print("Unenlaatu: " + unenlaatu + " Vireystila: " + vireystila);
+        //out.print("Unenlaatu: " + unenlaatu.toString() + " Vireystila: " + vireystila.toString());
     }
     
     
@@ -145,6 +149,12 @@ public class Merkinta {
     /**
      * Palauttaa merkinnän id-numeron.
      * @return merkinnän id-numero
+     * @example
+     * <pre name="test">
+     *   Merkinta pvm1 = new Merkinta();
+     *   pvm1.merkinnanLisays();
+     *   pvm1.getMerkintaId() =R= 1;
+     * </pre>
      */
     public int getMerkintaid() {
         return merkintaid;

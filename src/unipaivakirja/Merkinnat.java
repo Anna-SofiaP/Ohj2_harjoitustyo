@@ -48,7 +48,7 @@ public class Merkinnat {
      * merkinnat.anna(3) === pvm1; #THROWS IndexOutOfBoundsException 
      * merkinnat.lisaa(pvm1); merkinnat.getLkm() === 4;
      * merkinnat.lisaa(pvm1); merkinnat.getLkm() === 5;
-     * merkinnat.lisaa(pvm1);  #THROWS SailoException
+     * merkinnat.lisaa(pvm1); merkinnat.getLkm() === 6;
      * </pre>
      */
     public void lisaa(Merkinta merkinta) throws SailoException {
@@ -61,6 +61,19 @@ public class Merkinnat {
     
     /**
      * Kasvatetaan merkinnät-taulukon kokoa
+     * @example
+     * <pre name="test">
+     *  Merkinnat merkinnat = new Merkinnat();
+     *  Merkinta alkiot[] = new Merkinta[3];
+     *  Merkinta pvm1 = new Merkinta(), pvm2 = new Merkinta(), pvm3 = new Merkinta();
+     *  merkinnat.lisaa(pvm1); merkinnat.getLkm() === 1;
+     *  merkinnat.lisaa(pvm2); merkinnat.getLkm() === 2;
+     *  merkinnat.lisaa(pvm3); merkinnat.getLkm() === 3;
+     *  alkiot.length === 3;
+     *  merkinnat.lisaa(pvm1); merkinnat.getLkm() === 4;
+     *  merkinnat.lisaa(pvm3); merkinnat.getLkm() === 5;
+     *  alkiot.length === 13; 
+     * </pre>
      */
     public void kasvataTaulukkoa() {
         int uusiKoko = alkiot.length + 10;

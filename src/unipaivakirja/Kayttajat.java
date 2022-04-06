@@ -58,7 +58,7 @@ public class Kayttajat {
      * Palauttaa viitteen i:nteen käyttäjään
      * @param i monennenko käyttäjän viite halutaan
      * @return viite käyttäjään, jonka indeksi listassa alkiot on i
-     * @throws IndexOutOfBoundsException jos indeksi i ei ole sallittu
+     * @throws IndexOutOfBoundsException jos indeksi i ei ole sallittu 
      */
     public Kayttaja anna(int i) throws IndexOutOfBoundsException {
         if (i < 0 || lkm <= i )
