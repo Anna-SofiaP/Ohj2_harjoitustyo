@@ -26,7 +26,7 @@ public class Kayttaja {
      * @return käyttäjän nimi
      * @example
      * <pre name="test">
-     *   Kayttaja nea = new Kayttaja();
+     *   Kayttaja nea = new Kayttaja("Nea");
      *   nea.taytaNeaTiedoilla();
      *   nea.getNimi() =R= "Nea";
      * </pre>
@@ -59,10 +59,10 @@ public class Kayttaja {
      * @return käyttäjän uusi kayttajaid
      * @example
      * <pre name="test">
-     *   Kayttaja nea = new Kayttaja();
+     *   Kayttaja nea = new Kayttaja("Nea");
      *   nea.getKayttajaId() === 1;
      *   nea.rekisteroi();
-     *   Kayttaja ansku = new Kayttaja();
+     *   Kayttaja ansku = new Kayttaja("Ansku");
      *   ansku.rekisteroi();
      *   int n1 = nea.getKayttajaId();
      *   int n2 = ansku.getKayttajaId();
@@ -81,9 +81,9 @@ public class Kayttaja {
      * @return käyttäjän käyttäjäid
      * @example
      * <pre name="test">
-     *   Kayttaja nea = new Kayttaja();
+     *   Kayttaja nea = new Kayttaja("Nea");
      *   nea.taytaNeaTiedoilla();
-     *   nea.getKayttajaId() =R= 1;
+     *   nea.getKayttajaId() === 1;
      * </pre>
      */
     public int getKayttajaId() {

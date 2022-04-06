@@ -44,13 +44,12 @@ public class Merkinta {
     /**
      * Apumetodi, jolla saadaan täytettyä testiarvot merkinnälle.
      * @param pvm1 merkinnän päivämäärä
-     * @param unenmaara laskettuna nukkumaanmnoajasta ja heräämisajasta.
      */
-    public void taytaM1Tiedoilla(String pvm1, String unenmaara) {
+    public void taytaM1Tiedoilla(String pvm1) {
         this.pvm = pvm1;
         nukkumaanKlo = "21:00";
         heratysKlo = "6:00";
-        unenMaara = unenmaara;
+        unenMaara = laskeUnenmaara();
         lisatiedot = "Heräilin muutaman kerran yön aikana.";
         //unenlaatu = new Unenlaatu("Erinomainen");
         //vireystila = new Vireystila("Energinen");
@@ -60,13 +59,12 @@ public class Merkinta {
     /**
      * Apumetodi, jolla saadaan täytettyä testiarvot merkinnälle.
      * @param pvm2 merkinnän päivämäärä
-     * @param unenmaara laskettuna nukkumaanmnoajasta ja heräämisajasta.
      */
-    public void taytaM2Tiedoilla(String pvm2, String unenmaara) {
+    public void taytaM2Tiedoilla(String pvm2) {
         this.pvm = pvm2;
         nukkumaanKlo = "21:30";
         heratysKlo = "6:00";
-        unenMaara = unenmaara;
+        unenMaara = laskeUnenmaara();
         lisatiedot = "Nukuin kuin tukki.";
         //unenlaatu = new Unenlaatu("Kohtalainen");
         //vireystila = new Vireystila("Ihan jees");
@@ -78,9 +76,8 @@ public class Merkinta {
      * Unenmäärä ja päivämäärä saadaan laskettua/tuotua erillisistä metodeista.
      */
     public void taytaM1Tiedoilla() {
-        String pvm1 = "12.3.2022";          //TODO: pvmKalenterista();
-        String unenmaara = "9 h";          //TODO: laskeUnenmaara();
-        taytaM1Tiedoilla(pvm1, unenmaara);
+        String pvm1 = "12.3.2022"; //TODO: pvmKalenterista();
+        taytaM1Tiedoilla(pvm1);
     }
     
     
@@ -90,8 +87,7 @@ public class Merkinta {
      */
     public void taytaM2Tiedoilla() {
         String pvm2 = "13.2.2022";         //TODO: pvmKalenterista();
-        String unenmaara = "7 h 30 min";   //TODO: laskeUnenmaara();
-        taytaM2Tiedoilla(pvm2, unenmaara);
+        taytaM2Tiedoilla(pvm2);
     }
     
     
@@ -153,7 +149,7 @@ public class Merkinta {
      * <pre name="test">
      *   Merkinta pvm1 = new Merkinta();
      *   pvm1.merkinnanLisays();
-     *   pvm1.getMerkintaId() =R= 1;
+     *   pvm1.getMerkintaid() === 1;
      * </pre>
      */
     public int getMerkintaid() {
@@ -194,7 +190,7 @@ public class Merkinta {
         long eroH = (eroMilliSek / (60 * 60 * 1000)) % 24;
         
         this.unenMaara = eroH + " h " + eroMin + " min";
-        return unenMaara;
+        return "" + unenMaara.toString();
     }
     
 
@@ -202,12 +198,12 @@ public class Merkinta {
      * @param args ei käytössä
      */
     public static void main(String[] args) {
-        Merkinta pvm1 = new Merkinta(), pvm2 = new Merkinta();
-        pvm1.merkinnanLisays();
+        Merkinta merkinta1 = new Merkinta(), pvm2 = new Merkinta();
+        merkinta1.merkinnanLisays();
         pvm2.merkinnanLisays();
-        pvm1.tulosta(System.out);
-        pvm1.taytaM1Tiedoilla();
-        pvm1.tulosta(System.out);
+        merkinta1.tulosta(System.out);
+        merkinta1.taytaM1Tiedoilla();
+        merkinta1.tulosta(System.out);
 
         pvm2.taytaM2Tiedoilla();
         pvm2.tulosta(System.out);

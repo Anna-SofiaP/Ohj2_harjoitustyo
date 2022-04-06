@@ -66,6 +66,16 @@ public class UnenlaatuLista {
     /**
      * Palauttaa unenlaatuvaihtoehtojen lukumäärän
      * @return unenlaatuvaihtoehtojen lukumäärä
+     * @example
+     * <pre name="test">
+     *   UnenlaatuLista alkiot = new UnenlaatuLista();
+     *   alkiot.lisaa(new Unenlaatu("erittäin hyvä"));
+     *   alkiot.lisaa(new Unenlaatu("hyvä"));
+     *   alkiot.lisaa(new Unenlaatu("kohtalainen"));
+     *   alkiot.lisaa(new Unenlaatu("huono"));
+     *   alkiot.lisaa(new Unenlaatu("erittäin huono"));
+     *   alkiot.getLkm() =R= 5;
+     * </pre>
      */
     public int getLkm() {
         return alkiot.size();

@@ -41,19 +41,19 @@ public class Unipaivakirja {
      * <pre name="test">
      * #THROWS SailoException
      * Unipaivakirja unipaivakirja = new Unipaivakirja();
-     * Kayttaja nea = new Kayttaja(), anksu = new Kayttaja();
+     * Kayttaja nea = new Kayttaja("Nea"), ansku = new Kayttaja("Ansku");
      * nea.rekisteroi(); ansku.rekisteroi();
      * unipaivakirja.getKayttajia() === 0;
      * unipaivakirja.lisaa(nea); unipaivakirja.getKayttajia() === 1;
-     * unipaivakirja.lisaa(anksu); unipaivakirja.getKayttajia() === 2;
+     * unipaivakirja.lisaa(ansku); unipaivakirja.getKayttajia() === 2;
      * unipaivakirja.lisaa(nea); unipaivakirja.getKayttajia() === 3;
      * unipaivakirja.getKayttajia() === 3;
      * unipaivakirja.annaKayttaja(0) === nea;
-     * unipaivakirja.annaKayttaja(1) === anksu;
+     * unipaivakirja.annaKayttaja(1) === ansku;
      * unipaivakirja.annaKayttaja(2) === nea;
      * unipaivakirja.annaKayttaja(3) === nea; #THROWS IndexOutOfBoundsException 
-     * unipaivakirja.lisaa(nea); kerho.getKayttajia() === 4;
-     * unipaivakirja.lisaa(nea); kerho.getKayttajia() === 5;
+     * unipaivakirja.lisaa(nea); unipaivakirja.getKayttajia() === 4;
+     * unipaivakirja.lisaa(nea); unipaivakirja.getKayttajia() === 5;
      * unipaivakirja.lisaa(nea);            #THROWS SailoException
      * </pre>
      */
@@ -67,6 +67,18 @@ public class Unipaivakirja {
      * @param i monesko käyttäjä palautetaan
      * @return viite i:teen käyttäjään
      * @throws IndexOutOfBoundsException jos i väärin
+     * @exmaple
+     * <pre name="test">
+     *  Unipaivakirja unipaivakirja = new Unipaivakirja();
+     *  Kayttaja nea = new Kayttaja("Nea"), ansku = new Kayttaja("Ansku");
+     *  nea.rekisteroi();
+     *  nea.rekisteroi();
+     *  unipaivakirja.lisaa(nea);
+     *  unipaivakirja.lisaa(ansku);
+     *  unipaivakirja.annaKayttaja(0) === nea;
+     *  unipaivakirja.annaKayttaja(1) === ansku;
+     *  unipaivakirja.annaKayttaja(5); #THROWS IndexOutOfBoundsException;
+     * </pre>
      */
     public Kayttaja annaKayttaja(int i) throws IndexOutOfBoundsException {
         return kayttajat.anna(i);
@@ -125,10 +137,10 @@ public class Unipaivakirja {
     }
 
 
-    public void asetaKayttaja(String selectedText) {
+    /*public void asetaKayttaja(String selectedText) {
         // TODO Auto-generated method stub
         kayttajat.aseta(selectedText);
-    }
+    }*/
     
     
     

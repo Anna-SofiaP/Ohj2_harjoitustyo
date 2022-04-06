@@ -31,7 +31,7 @@ public class Kayttajat {
      * #THROWS SailoException
      * <pre name="test">
      * Kayttajat kayttajat = new Kayttajat();
-     * Kayttaja nea = new Kayttaja(), ansku = new Kayttaja();
+     * Kayttaja nea = new Kayttaja("Nea"), ansku = new Kayttaja("Ansku");
      * kayttajat.getLkm() === 3;
      * kayttajat.lisaa(nea); kayttajat.getLkm() === 1;
      * kayttajat.lisaa(ansku); kayttajat.getLkm() === 2;
@@ -128,9 +128,9 @@ public class Kayttajat {
     }
 
 
-    public void aseta(String selectedText) {
+    /*public void aseta(String selectedText) {
         // TODO Auto-generated method stub
         Kayttaja uusi = new Kayttaja(selectedText);
-    }
+    }*/
 
 }
