@@ -63,13 +63,13 @@ public class VireystilaLista {
      * @return vireystilavaihtoehtojen lukumäärä
      * @example
      * <pre name="test">
-     *   Collection<Vireystila> alkiot = new ArrayList<Vireystila>(lkm);
+     *   VireystilaLista alkiot = new VireystilaLista();
      *   alkiot.lisaa(new Vireystila("erittäin energinen"));
      *   alkiot.lisaa(new Vireystila("pirteä"));
      *   alkiot.lisaa(new Vireystila("ihan jees"));
      *   alkiot.lisaa(new Vireystila("väsynyt"));
      *   alkiot.lisaa(new Vireystila("erittäin väsynyt"));
-     *   alkiot.getLkm() =R= 5;
+     *   alkiot.getLkm() === 5;
      * </pre>
      */
     public int getLkm() {

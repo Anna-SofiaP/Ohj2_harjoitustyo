@@ -3,6 +3,11 @@
  */
 package unipaivakirja;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 /**
  * @author Omistaja
  * @version 2.3.2022
@@ -10,9 +15,11 @@ package unipaivakirja;
  */
 public class Kayttajat {
     private static final int MAX_KAYTTAJIA = 5;
-    private int lkm = 3;
-    private String tiedostonimi = "";
-    private Kayttaja alkiot[] = new Kayttaja[MAX_KAYTTAJIA];
+    private int lkm = 0;
+    private String tiedostonPerusNimi = "";
+    private Kayttaja[] alkiot = new Kayttaja[MAX_KAYTTAJIA];
+    private String kokoNimi = "";
+    private boolean muutettu = false;
     
     
     /**
@@ -26,13 +33,11 @@ public class Kayttajat {
     /**
      * Lisää uuden käyttäjän tietorakenteeseen.
      * @param kayttaja lisättävän käyttäjän viite
-     * @throws SailoException jos tietorakenne on jo täynnä
      * @example
-     * #THROWS SailoException
      * <pre name="test">
      * Kayttajat kayttajat = new Kayttajat();
      * Kayttaja nea = new Kayttaja("Nea"), ansku = new Kayttaja("Ansku");
-     * kayttajat.getLkm() === 3;
+     * kayttajat.getLkm() === 0;
      * kayttajat.lisaa(nea); kayttajat.getLkm() === 1;
      * kayttajat.lisaa(ansku); kayttajat.getLkm() === 2;
      * kayttajat.lisaa(nea); kayttajat.getLkm() === 3;
@@ -44,13 +49,37 @@ public class Kayttajat {
      * kayttajat.anna(3) === nea; #THROWS IndexOutOfBoundsException
      * kayttajat.lisaa(nea); kayttajat.getLkm() === 4;
      * kayttajat.lisaa(nea); kayttajat.getLkm() === 5;
-     * kayttajat.lisaa(nea); #THROWS SailoException
+     * kayttajat.lisaa(nea); kayttajat.getLkm() === 6;
      * </pre>
      */
-    public void lisaa(Kayttaja kayttaja) throws SailoException {
-        if (lkm >= alkiot.length) throw new SailoException("Liikaa alkioita");
+    public void lisaa(Kayttaja kayttaja) {
+        if (lkm >= alkiot.length) 
+            kasvataTaulukkoa();
         alkiot[lkm] = kayttaja;
         lkm++;
+    }
+    
+    
+    /**
+     * Kasvatetaan merkinnät-taulukon kokoa
+     * @example
+     * <pre name="test">
+     *  Kayttajat kayttajat = new Kayttajat();
+     *  Kayttaja nea = new Kayttaja("Nea"), ansku = new Kayttaja("Ansku"), liisa = new Kayttaja("Liisa");
+     *  kayttajat.lisaa(nea); kayttajat.getLkm() === 1;
+     *  kayttajat.lisaa(ansku); kayttajat.getLkm() === 2;
+     *  kayttajat.lisaa(liisa); kayttajat.getLkm() === 3;
+     *  kayttajat.lisaa(nea); kayttajat.getLkm() === 4;
+     *  kayttajat.lisaa(ansku); kayttajat.getLkm() === 5; 
+     * </pre>
+     */
+    public void kasvataTaulukkoa() {
+        int uusiKoko = alkiot.length + 10;
+        Kayttaja alkiot2[] = new Kayttaja[uusiKoko];
+        for (int i = 0; i < alkiot.length; i++) {
+            alkiot2[i] = alkiot[i];
+        }
+        alkiot = alkiot2;
     }
     
     
@@ -73,9 +102,57 @@ public class Kayttajat {
      * @throws SailoException jos lukeminen epäonnistuu
      */
     public void lueTiedostosta(String hakemisto) throws SailoException {
-        tiedostonimi = hakemisto + "/kayttajat.dat";
-        throw new SailoException("Ei osata vielä lukea tiedostoa " + tiedostonimi);
+        setTiedostonPerusNimi(hakemisto);
+        try ( BufferedReader fi = new BufferedReader(new FileReader(getTiedostonNimi())) ) {
+            kokoNimi = fi.readLine();
+            if ( kokoNimi == null ) throw new SailoException("Käyttäjän nimi puuttuu");
+            String rivi = fi.readLine();
+            if ( rivi == null ) throw new SailoException("Maksimikoko puuttuu");
+            // int maxKoko = Mjonot.erotaInt(rivi,10); // tehdään jotakin
+
+            while ( (rivi = fi.readLine()) != null ) {
+                rivi = rivi.trim();
+                if ( "".equals(rivi) || rivi.charAt(0) == ';' ) continue;
+                Kayttaja kayttaja = new Kayttaja();
+                //kayttaja.parse(rivi); // voisi olla virhekäsittely
+                lisaa(kayttaja);
+            }
+            muutettu = false;
+        } catch ( FileNotFoundException e ) {
+            throw new SailoException("Tiedosto " + getTiedostonNimi() + " ei aukea");
+        } catch ( IOException e ) {
+            throw new SailoException("Ongelmia tiedoston kanssa: " + e.getMessage());
+        }
     }
+    
+    
+    /**
+     * Asettaa tiedoston perusnimen ilman tarkenninta
+     * @param tiedosto tallennustiedoston perusnimi
+     */
+    public void setTiedostonPerusNimi(String tiedosto) {
+        tiedostonPerusNimi = tiedosto;
+    }
+
+
+    /**
+     * Palauttaa tiedoston nimen, jota käytetään tallennukseen
+     * @return tallennustiedoston nimi
+     */
+    public String getTiedostonPerusNimi() {
+        return tiedostonPerusNimi;
+    }
+
+    
+    /**
+     * Palauttaa tiedoston nimen, jota käytetään tallennukseen
+     * @return tallennustiedoston nimi
+     */
+    public String getTiedostonNimi() {
+        return getTiedostonPerusNimi() + ".dat";
+    }
+
+
     
     
     /**
@@ -83,7 +160,7 @@ public class Kayttajat {
      * @throws SailoException jos talletus epäonnistuu
      */
     public void talleta() throws SailoException {
-        throw new SailoException("Ei osata vielä lukea tiedostoa " + tiedostonimi);
+        throw new SailoException("Ei osata vielä lukea tiedostoa " + tiedostonPerusNimi);
     }
     
     
@@ -94,6 +171,7 @@ public class Kayttajat {
     public int getLkm() {
         return lkm;
     }
+
     
 
     /**
@@ -109,28 +187,23 @@ public class Kayttajat {
         ansku.rekisteroi();
         ansku.taytaAnskuTiedoilla();
         
-        try {
-            kayttajat.lisaa(nea);
-            kayttajat.lisaa(ansku);
-            
-            System.out.println("Käyttäjät testi");
-            
-            for (int i = 0; i < kayttajat.getLkm(); i++) {
-                Kayttaja kayttaja = kayttajat.anna(i);
-                System.out.println("Käyttäjä nro: " + i);
-                kayttaja.tulosta(System.out);
-            }
-            
-        } catch (SailoException ex) {
-            System.out.println(ex.getMessage());
+        kayttajat.lisaa(nea);
+        kayttajat.lisaa(ansku);
+        
+        System.out.println("Käyttäjät testi");
+        
+        for (int i = 0; i < kayttajat.getLkm(); i++) {
+            Kayttaja kayttaja = kayttajat.anna(i);
+            System.out.println("Käyttäjä nro: " + i);
+            kayttaja.tulosta(System.out);
         }
     
     }
 
 
-    /*public void aseta(String selectedText) {
-        // TODO Auto-generated method stub
+    public Kayttaja aseta(String selectedText) {
         Kayttaja uusi = new Kayttaja(selectedText);
-    }*/
+        return uusi;
+    }
 
 }

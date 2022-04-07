@@ -74,7 +74,7 @@ public class UnenlaatuLista {
      *   alkiot.lisaa(new Unenlaatu("kohtalainen"));
      *   alkiot.lisaa(new Unenlaatu("huono"));
      *   alkiot.lisaa(new Unenlaatu("erittäin huono"));
-     *   alkiot.getLkm() =R= 5;
+     *   alkiot.getLkm() === 5;
      * </pre>
      */
     public int getLkm() {

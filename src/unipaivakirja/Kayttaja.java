@@ -2,6 +2,8 @@ package unipaivakirja;
 
 import java.io.PrintStream;
 
+import fi.jyu.mit.ohj2.Mjonot;
+
 /**
  * Unipäiväkirjan käyttäjä
  * @author Omistaja
@@ -13,6 +15,12 @@ public class Kayttaja {
     private String kayttajanimi = "";
     
     private static int seuraavaNro = 1;
+    
+    
+    
+    public Kayttaja() {
+        //oletusmuodostaja
+    }
     
     
     /**
@@ -60,7 +68,7 @@ public class Kayttaja {
      * @example
      * <pre name="test">
      *   Kayttaja nea = new Kayttaja("Nea");
-     *   nea.getKayttajaId() === 1;
+     *   nea.getKayttajaId() === 0;
      *   nea.rekisteroi();
      *   Kayttaja ansku = new Kayttaja("Ansku");
      *   ansku.rekisteroi();
@@ -98,6 +106,25 @@ public class Kayttaja {
     public void tulosta(PrintStream out) {
         out.println("Käyttäjä: " + kayttajanimi);
     }
+    
+    
+    /*public void parse(String rivi) {
+        StringBuffer sb = new StringBuffer(rivi);
+        setTunnusNro(Mjonot.erota(sb, '|', getKayttajaId()));
+        nimi = Mjonot.erota(sb, '|', nimi);
+        hetu = Mjonot.erota(sb, '|', hetu);
+        katuosoite = Mjonot.erota(sb, '|', katuosoite);
+        postinumero = Mjonot.erota(sb, '|', postinumero);
+        postiosoite = Mjonot.erota(sb, '|', postiosoite);
+        kotipuhelin = Mjonot.erota(sb, '|', kotipuhelin);
+        tyopuhelin = Mjonot.erota(sb, '|', tyopuhelin);
+        autopuhelin = Mjonot.erota(sb, '|', autopuhelin);
+        liittymisvuosi = Mjonot.erota(sb, '|', liittymisvuosi);
+        jmaksu = Mjonot.erota(sb, '|', jmaksu);
+        maksu = Mjonot.erota(sb, '|', maksu);
+        lisatietoja = Mjonot.erota(sb, '|', lisatietoja);
+    }*/
+
     
     
     /**

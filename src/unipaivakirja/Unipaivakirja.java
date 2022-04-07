@@ -36,10 +36,8 @@ public class Unipaivakirja {
     /**
      * Lisää unipäiväkirjaan uuden käyttäjän
      * @param kayttaja lisättävä käyttäjä
-     * @throws SailoException jos lisäystä ei voida tehdä
      * @example
      * <pre name="test">
-     * #THROWS SailoException
      * Unipaivakirja unipaivakirja = new Unipaivakirja();
      * Kayttaja nea = new Kayttaja("Nea"), ansku = new Kayttaja("Ansku");
      * nea.rekisteroi(); ansku.rekisteroi();
@@ -54,10 +52,10 @@ public class Unipaivakirja {
      * unipaivakirja.annaKayttaja(3) === nea; #THROWS IndexOutOfBoundsException 
      * unipaivakirja.lisaa(nea); unipaivakirja.getKayttajia() === 4;
      * unipaivakirja.lisaa(nea); unipaivakirja.getKayttajia() === 5;
-     * unipaivakirja.lisaa(nea);            #THROWS SailoException
+     * unipaivakirja.lisaa(nea);
      * </pre>
      */
-    public void lisaa(Kayttaja kayttaja) throws SailoException {
+    public void lisaa(Kayttaja kayttaja) {
         kayttajat.lisaa(kayttaja);
     }
     
@@ -77,21 +75,23 @@ public class Unipaivakirja {
      *  unipaivakirja.lisaa(ansku);
      *  unipaivakirja.annaKayttaja(0) === nea;
      *  unipaivakirja.annaKayttaja(1) === ansku;
-     *  unipaivakirja.annaKayttaja(5); #THROWS IndexOutOfBoundsException;
+     *  unipaivakirja.annaKayttaja(5); #THROWS IndexOutOfBoundsException
      * </pre>
      */
     public Kayttaja annaKayttaja(int i) throws IndexOutOfBoundsException {
+        if (i < 0 || kayttajat.getLkm() <= i)
+            throw new IndexOutOfBoundsException("Laiton indeksi: " + i);
         return kayttajat.anna(i);
     }
     
     
     /**
      * Lukee unipäiväkirjan tiedot tiedostosta
-     * @param nimi jota käyteään lukemisessa
+     * @param kayttaja jota käyteään lukemisessa
      * @throws SailoException jos lukeminen epäonnistuu
      */
-    public void lueTiedostosta(String nimi) throws SailoException {
-        kayttajat.lueTiedostosta(nimi);
+    public void lueTiedostosta(String kayttaja) throws SailoException {
+        kayttajat.lueTiedostosta(kayttaja);
     }
     
     
@@ -111,36 +111,28 @@ public class Unipaivakirja {
     public static void main(String[] args) {
         Unipaivakirja unipaivakirja = new Unipaivakirja();
 
-        try {
-            // kerho.lueTiedostosta("kelmit");
+        Kayttaja nea = new Kayttaja("nea"), ansku = new Kayttaja("ansku");
+        nea.rekisteroi();
+        nea.taytaNeaTiedoilla();
+        ansku.rekisteroi();
+        ansku.taytaAnskuTiedoilla();
 
-            Kayttaja nea = new Kayttaja("nea"), ansku = new Kayttaja("ansku");
-            nea.rekisteroi();
-            nea.taytaNeaTiedoilla();
-            ansku.rekisteroi();
-            ansku.taytaAnskuTiedoilla();
+        unipaivakirja.lisaa(nea);
+        unipaivakirja.lisaa(ansku);
 
-            unipaivakirja.lisaa(nea);
-            unipaivakirja.lisaa(ansku);
+        System.out.println("============= Kerhon testi =================");
 
-            System.out.println("============= Kerhon testi =================");
-
-            for (int i = 0; i < unipaivakirja.getKayttajia(); i++) {
-                Kayttaja kayttaja = unipaivakirja.annaKayttaja(i);
-                System.out.println("Käyttäjä paikassa: " + i);
-                kayttaja.tulosta(System.out);
-            }
-
-        } catch (SailoException ex) {
-            System.out.println(ex.getMessage());
+        for (int i = 0; i < unipaivakirja.getKayttajia(); i++) {
+            Kayttaja kayttaja = unipaivakirja.annaKayttaja(i);
+            System.out.println("Käyttäjä paikassa: " + i);
+            kayttaja.tulosta(System.out);
         }
     }
 
 
-    /*public void asetaKayttaja(String selectedText) {
-        // TODO Auto-generated method stub
-        kayttajat.aseta(selectedText);
-    }*/
+    public Kayttaja asetaKayttaja(String selectedText) {
+        return kayttajat.aseta(selectedText);
+    }
     
     
     

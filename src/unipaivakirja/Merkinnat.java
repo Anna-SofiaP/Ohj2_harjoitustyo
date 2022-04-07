@@ -30,10 +30,8 @@ public class Merkinnat {
     /**
      * Lisää uuden merkinnän tietorakenteeseen.  Ottaa merkinnän omistukseensa.
      * @param merkinta lisättävän merkinnän viite.  Huom tietorakenne muuttuu omistajaksi
-     * @throws SailoException jos tietorakenne on jo täynnä
      * @example
      * <pre name="test">
-     * #THROWS SailoException 
      * Merkinnat merkinnat = new Merkinnat();
      * Merkinta pvm1 = new Merkinta(), pvm2 = new Merkinta();
      * merkinnat.getLkm() === 0;
@@ -51,7 +49,7 @@ public class Merkinnat {
      * merkinnat.lisaa(pvm1); merkinnat.getLkm() === 6;
      * </pre>
      */
-    public void lisaa(Merkinta merkinta) throws SailoException {
+    public void lisaa(Merkinta merkinta) {
         if (lkm >= alkiot.length) kasvataTaulukkoa();
             //throw new SailoException("Liikaa alkioita");
         alkiot[lkm] = merkinta;
@@ -64,15 +62,12 @@ public class Merkinnat {
      * @example
      * <pre name="test">
      *  Merkinnat merkinnat = new Merkinnat();
-     *  Merkinta alkiot[] = new Merkinta[3];
      *  Merkinta pvm1 = new Merkinta(), pvm2 = new Merkinta(), pvm3 = new Merkinta();
      *  merkinnat.lisaa(pvm1); merkinnat.getLkm() === 1;
      *  merkinnat.lisaa(pvm2); merkinnat.getLkm() === 2;
      *  merkinnat.lisaa(pvm3); merkinnat.getLkm() === 3;
-     *  alkiot.length === 3;
      *  merkinnat.lisaa(pvm1); merkinnat.getLkm() === 4;
-     *  merkinnat.lisaa(pvm3); merkinnat.getLkm() === 5;
-     *  alkiot.length === 13; 
+     *  merkinnat.lisaa(pvm3); merkinnat.getLkm() === 5; 
      * </pre>
      */
     public void kasvataTaulukkoa() {
@@ -139,20 +134,15 @@ public class Merkinnat {
         pvm2.merkinnanLisays();
         pvm2.taytaM2Tiedoilla();
 
-        try {
-            merkinnat.lisaa(pvm1);
-            merkinnat.lisaa(pvm2);
+        merkinnat.lisaa(pvm1);
+        merkinnat.lisaa(pvm2);
 
-            System.out.println("============= Merkinnät testi =================");
+        System.out.println("============= Merkinnät testi =================");
 
-            for (int i = 0; i < merkinnat.getLkm(); i++) {
-                Merkinta merkinta = merkinnat.anna(i);
-                System.out.println("Merkinta nro: " + i);
-                merkinta.tulosta(System.out);
-            }
-
-        } catch (SailoException ex) {
-            System.out.println(ex.getMessage());
+        for (int i = 0; i < merkinnat.getLkm(); i++) {
+            Merkinta merkinta = merkinnat.anna(i);
+            System.out.println("Merkinta nro: " + i);
+            merkinta.tulosta(System.out);
         }
     
     }

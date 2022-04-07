@@ -50,6 +50,7 @@ public class AloitusikkunaController implements ModalControllerInterface<String>
     
     private Unipaivakirja kayttajanUnipaivakirja;
     private String valittuKayttaja;
+    private Kayttaja valittu;
 
     
     /**
@@ -57,16 +58,24 @@ public class AloitusikkunaController implements ModalControllerInterface<String>
      * @return ??
      */
     public boolean avaaKayttajanPaivakirja() {
-        //kayttajanUnipaivakirja.asetaKayttaja(kayttajaValinta.getSelectedText());
-        Dialogs.showMessageDialog(kayttajaValinta.getSelectedText());
-        kayttajaValinta.setSelectedIndex(0);
+        //valittu = kayttajanUnipaivakirja.asetaKayttaja(kayttajaValinta.getSelectedText());
+        //Dialogs.showMessageDialog(kayttajaValinta.getSelectedText());
+        //kayttajaValinta.setSelectedIndex(0);
         //kayttajanUnipaivakirja.annaKayttaja(kayttajaValinta.getSelectedIndex());
+        valittuKayttaja = kayttajaValinta.getSelectedText();
         ModalController.closeStage(kayttajaValinta);
         /*String valinta = kysyKayttaja(null, kayttajaValinta.getSelectedText());
-        Kayttaja valittuKayttaja = new Kayttaja(valinta);
-        lueTiedosto(valittuKayttaja);*/
+        Kayttaja valittuKayttaja = new Kayttaja(valinta);*/
         return true;
-    }   
+    } 
+    
+    
+    /**
+     * @param unipaivakirja jota käytetään tässä käyttöliittymässä
+     */
+    public void setUnipaivakirja(Unipaivakirja unipaivakirja) {
+        this.kayttajanUnipaivakirja = unipaivakirja;
+    }
     
     
     /**
@@ -74,7 +83,7 @@ public class AloitusikkunaController implements ModalControllerInterface<String>
      * valitun nimisestä tiedostosta
      * @param valittu käyttäjä, jonka unipäiväkirja avataan
      */
-    protected void lueTiedosto(Kayttaja valittu) {
+    protected void lueTiedosto(String valittu) {
         setTitle("Unipäiväkirja - " + valittu);
         String virhe = "Ei osata lukea vielä";  // TODO: tähän oikea tiedoston lukeminen
             Dialogs.showMessageDialog(virhe);
@@ -93,28 +102,7 @@ public class AloitusikkunaController implements ModalControllerInterface<String>
         Kayttaja uusi = new Kayttaja("nea");
         uusi.rekisteroi();
         uusi.taytaNeaTiedoilla();
-        try {
-            kayttajanUnipaivakirja.lisaa(uusi);
-        } catch (SailoException e) {
-            Dialogs.showMessageDialog("Ongelmia uuden luomisessa " + e.getMessage());
-            return;
-        }
-        //hae(uusi.getKayttajaId());
-    }
-    
-    
-    /**
-     * Luodaan käyttäjänkysymisdialogi ja palautetaan comboboxchooserista valittu
-     * käyttäjänimi
-     * @param modalityStage mille ollaan modaalisia, null = sovellukselle
-     * @param oletus mitä käyttäjää näytetään oletuksena
-     * @return null jos painetaan Cancel, muuten valittu nimi
-     */
-    public static String kysyKayttaja(Stage modalityStage, String oletus) {
-        return ModalController.showModal(
-                AloitusikkunaController.class.getResource("aloitusikkuna.fxml"),
-                "Unipäiväkirja",
-                modalityStage, oletus);
+        kayttajanUnipaivakirja.lisaa(uusi);
     }
 
     

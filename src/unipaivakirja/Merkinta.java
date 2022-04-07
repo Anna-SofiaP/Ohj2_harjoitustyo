@@ -28,12 +28,31 @@ public class Merkinta {
     
     
     /**
+     * Oletusmuodostaja
+     */
+    public Merkinta() {
+        //oletusmuodostaja
+    }
+    
+    
+    /**
+     * Muodostaja
+     * @param nukkumaanKlo merkinnän nukkumaanmenoaika
+     * @param heratysKlo merkinnän heräämisaika
+     */
+    public Merkinta(String nukkumaanKlo, String heratysKlo) {
+        this.nukkumaanKlo = nukkumaanKlo;
+        this.heratysKlo = heratysKlo;
+    }
+    
+    
+    /**
      * @return merkinnän päivämäärä
      * @example
      * <pre name="test">
      *   Merkinta pvm1 = new Merkinta();
      *   pvm1.taytaM1Tiedoilla();
-     *   pvm1.getPvm() =R= "16.3.2022 .*";
+     *   pvm1.getPvm() === "12.3.2022";
      * </pre>
      */
     public String getPvm() {
@@ -49,7 +68,7 @@ public class Merkinta {
         this.pvm = pvm1;
         nukkumaanKlo = "21:00";
         heratysKlo = "6:00";
-        unenMaara = laskeUnenmaara();
+        unenMaara = "9 h";                    //laskeUnenmaara();
         lisatiedot = "Heräilin muutaman kerran yön aikana.";
         //unenlaatu = new Unenlaatu("Erinomainen");
         //vireystila = new Vireystila("Energinen");
@@ -64,7 +83,7 @@ public class Merkinta {
         this.pvm = pvm2;
         nukkumaanKlo = "21:30";
         heratysKlo = "6:00";
-        unenMaara = laskeUnenmaara();
+        unenMaara = "8 h 30 min";                    //laskeUnenmaara();
         lisatiedot = "Nukuin kuin tukki.";
         //unenlaatu = new Unenlaatu("Kohtalainen");
         //vireystila = new Vireystila("Ihan jees");
@@ -76,7 +95,7 @@ public class Merkinta {
      * Unenmäärä ja päivämäärä saadaan laskettua/tuotua erillisistä metodeista.
      */
     public void taytaM1Tiedoilla() {
-        String pvm1 = "12.3.2022"; //TODO: pvmKalenterista();
+        String pvm1 = "12.3.2022";          //TODO: pvmKalenterista();
         taytaM1Tiedoilla(pvm1);
     }
     
@@ -158,27 +177,47 @@ public class Merkinta {
     
     
     /**
+     * @return merkinnän nukkumaanmenoaika
+     */
+    public String getNukkumaanKlo() {
+        return this.nukkumaanKlo;
+    }
+    
+    
+    /**
+     * @return merkinnän heräämisaika
+     */
+    public String getHeratysKlo() {
+        return this.heratysKlo;
+    }
+    
+    
+    /**
      * laskee unen määrän
      * @return unen määrä
      * @throws Exception jos laskeminen ei onnistu
      * @example
      * <pre name="test">
-     *  String nukkumaanKlo = "21:00";
-     *  String heratysKlo = "6:00";
+     * #import java.text.SimpleDateFormat;
+     * #import java.util.Date;
+     *  Merkinta merkinta = new Merkinta("21:00", "5:30");
      *  SimpleDateFormat unenmaara = new SimpleDateFormat("HH:mm");
-     *  Date nukkumaan = unenmaara.parse(nukkumaanKlo);
-     *  Date heratys = unenmaara.parse(heratysKlo);
-     *  laskeUnenmaara() === "9 h 0 min";
-     *  nukkumaanKlo = "1:45";
-     *  heratysKlo = "9:00";
-     *  unenmaara = new SimpleDateFormat("HH:mm");
-     *  nukkumaan = unenmaara.parse(nukkumaanKlo);
-     *  heratys = unenmaara.parse(heratysKlo);
-     *  laskeUnenmaara() === "7 h 15 min";
+     *  try {
+     *      unenmaara.parse(merkinta.getNukkumaanKlo());
+     *      unenmaara.parse(merkinta.getHeratysKlo());
+     *      merkinta.laskeUnenmaara() === "8 h 30 min";
+     *      Merkinta merkinta2 = new Merkinta("1:00", "9:15");
+     *      unenmaara = new SimpleDateFormat("HH:mm");
+     *      unenmaara.parse(merkinta2.getNukkumaanKlo());
+     *      unenmaara.parse(merkinta2.getHeratysKlo());
+     *      merkinta2.laskeUnenmaara() === "8 h 15 min";
+     *  } catch(Exception e) {
+     *      1 === 0;
+     *  }
      * </pre>
      */
-    public String laskeUnenmaara() throws Exception{
-        SimpleDateFormat unenmaara = new SimpleDateFormat("HH:mm");
+    public String laskeUnenmaara() throws Exception{                    //TODO: tee tämä ohjelma niin, että se toimii oikein, ja että
+        SimpleDateFormat unenmaara = new SimpleDateFormat("HH:mm");     //      testit menee läpi!!!
         
         Date nukkumaan = unenmaara.parse(nukkumaanKlo);
         Date heratys = unenmaara.parse(heratysKlo);
