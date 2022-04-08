@@ -26,14 +26,13 @@ public class UnipaivakirjaMain extends Application {
             scene.getStylesheets().add(getClass().getResource("unipaivakirja.css").toExternalForm());
             primaryStage.setScene(scene);
             primaryStage.setTitle("Unipaivakirja");
-            Unipaivakirja unipaivakirja = new Unipaivakirja();
-            unipaivakirjaCtrl.setUnipaivakirja(unipaivakirja);
+            //Unipaivakirja unipaivakirja = new Unipaivakirja();
+            //unipaivakirjaCtrl.setUnipaivakirja(unipaivakirja);
             primaryStage.show();
             
             primaryStage.setOnCloseRequest((event) -> {
                 if (!unipaivakirjaCtrl.voikoSulkea()) event.consume();
             });
-            
             
             //if (!unipaivakirjaCtrl.avaaKayttajanPaivakirja()) Platform.exit();
         } catch(Exception e) {

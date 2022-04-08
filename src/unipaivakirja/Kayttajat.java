@@ -7,6 +7,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Omistaja
@@ -16,7 +18,7 @@ import java.io.IOException;
 public class Kayttajat {
     private static final int MAX_KAYTTAJIA = 5;
     private int lkm = 0;
-    private String tiedostonPerusNimi = "";
+    private String tiedostonPerusNimi = "kayttajat";
     private Kayttaja[] alkiot = new Kayttaja[MAX_KAYTTAJIA];
     private String kokoNimi = "";
     private boolean muutettu = false;
@@ -83,6 +85,15 @@ public class Kayttajat {
     }
     
     
+    public List<Kayttaja> annaKayttajat() {
+        List<Kayttaja> kayttajat = new ArrayList<>();
+        for (int i = 0; i < getLkm(); i++) {
+            kayttajat.add(alkiot[i]);
+        }
+        return kayttajat;
+    }
+    
+    
     /**
      * Palauttaa viitteen i:nteen käyttäjään
      * @param i monennenko käyttäjän viite halutaan
@@ -98,11 +109,11 @@ public class Kayttajat {
     
     /**
      * Lukee käyttäjän tiedostosta
-     * @param hakemisto tiedoston hakemisto
+     * @param tiedosto tiedoston perusnimi
      * @throws SailoException jos lukeminen epäonnistuu
      */
-    public void lueTiedostosta(String hakemisto) throws SailoException {
-        setTiedostonPerusNimi(hakemisto);
+    public void lueTiedostosta(String tiedosto) throws SailoException {
+        setTiedostonPerusNimi(tiedosto);
         try ( BufferedReader fi = new BufferedReader(new FileReader(getTiedostonNimi())) ) {
             kokoNimi = fi.readLine();
             if ( kokoNimi == null ) throw new SailoException("Käyttäjän nimi puuttuu");
@@ -114,7 +125,7 @@ public class Kayttajat {
                 rivi = rivi.trim();
                 if ( "".equals(rivi) || rivi.charAt(0) == ';' ) continue;
                 Kayttaja kayttaja = new Kayttaja();
-                //kayttaja.parse(rivi); // voisi olla virhekäsittely
+                kayttaja.parse(rivi); // voisi olla virhekäsittely
                 lisaa(kayttaja);
             }
             muutettu = false;
@@ -124,6 +135,16 @@ public class Kayttajat {
             throw new SailoException("Ongelmia tiedoston kanssa: " + e.getMessage());
         }
     }
+    
+    
+   /**
+    * Luetaan aikaisemmin annetun nimisestä tiedostosta
+    * @throws SailoException jos tulee poikkeus
+    */
+   public void lueTiedostosta() throws SailoException {
+       lueTiedostosta(getTiedostonPerusNimi());
+   }
+
     
     
     /**
@@ -150,17 +171,6 @@ public class Kayttajat {
      */
     public String getTiedostonNimi() {
         return getTiedostonPerusNimi() + ".dat";
-    }
-
-
-    
-    
-    /**
-     * Tallentaa käyttäjät tiedostoon
-     * @throws SailoException jos talletus epäonnistuu
-     */
-    public void talleta() throws SailoException {
-        throw new SailoException("Ei osata vielä lukea tiedostoa " + tiedostonPerusNimi);
     }
     
     
@@ -204,6 +214,12 @@ public class Kayttajat {
     public Kayttaja aseta(String selectedText) {
         Kayttaja uusi = new Kayttaja(selectedText);
         return uusi;
+    }
+
+
+    public void talleta() {
+        // TODO Auto-generated method stub
+        
     }
 
 }

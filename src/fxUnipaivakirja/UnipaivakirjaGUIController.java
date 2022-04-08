@@ -42,24 +42,26 @@ public class UnipaivakirjaGUIController implements Initializable{
     @FXML private DatePicker kalenteri;
     @FXML private ComboBoxChooser<?> unenlaatuVal;
     @FXML private ComboBoxChooser<?> vireystilaVal;
-    @FXML private ComboBoxChooser<String> kayttajaValinta;
+    //@FXML private ComboBoxChooser<String> kayttajaValinta;
     @FXML private ScrollPane panelMerkinta;
     
     @Override
     public void initialize(URL url, ResourceBundle bundle) { 
-        ModalController.showModal(UnipaivakirjaGUIController.class.getResource(
-                "aloitusikkuna.fxml"), "Valitse käyttäjä", null, "");
+        kayttajanUnipaivakirja = new Unipaivakirja();
+        valittuKayttaja = ModalController.<Kayttaja,AloitusikkunaController>showModal(UnipaivakirjaGUIController.class.getResource(
+                "aloitusikkuna.fxml"), "Valitse käyttäjä", null, null, ctrl -> ctrl.setUnipaivakirja(kayttajanUnipaivakirja));
         alusta();      
     }
 
-    @FXML void handleValitseKayttaja() {
-        avaaKayttajanPaivakirja();
-    }
+    /*@FXML void handleValitseKayttaja(String valittuKayttaja) {
+        avaaKayttajanPaivakirja(valittuKayttaja);
+    }*/
 
 
     @FXML void handleAvaa() {
-        handleValitseKayttaja();
+        //handleValitseKayttaja(valitseKayttaja());
     }
+
 
     @FXML void handleHaku() {
         //hae();
@@ -107,16 +109,22 @@ public class UnipaivakirjaGUIController implements Initializable{
 
     @FXML void handleUusiMerkinta() {
         //Dialogs.showMessageDialog("Ei osata vielä lisätä uutta merkintää.");
-        uusiMerkinta();
+        //uusiMerkinta();
     }
     
     //------------------------------------------------------------
     
     private Unipaivakirja kayttajanUnipaivakirja;
     private Merkinta merkintaKohdalla;
-    //private String valittu;
+    private Kayttaja valittuKayttaja;
     private TextArea tekstilaatikko = new TextArea();
     private Merkinnat merkinnat = new Merkinnat();
+    
+    
+    /*public String valitseKayttaja() {
+        valittu = kayttajaValinta.getSelectedText();
+        return valittu;
+    }*/
     
     /**
      * Tallentaa muokatut tiedot.
@@ -135,19 +143,15 @@ public class UnipaivakirjaGUIController implements Initializable{
     
     
     /**
-     * Alustaa tietyn käyttäjän unipäiväkirjan lukemalla sen 
-     * valitun nimisestä tiedostosta
-     * @param valittu käyttäjä, jonka unipäiväkirja avataan
-     * @return null jos tiedoston lukeminen onnistuu, muuten virhe tekstinä
+     * Alustaa tietyn käyttäjän merkinnat lukemalla valitun nimisestä tiedostosta
+     * @return null, jos tiedoston lukeminen onnistui, muuten virhe
      */
-    protected String lueTiedosto(String valittu) {
-        setTitle("Unipäiväkirja - " + valittu);
+    protected String lueTiedosto() {
+        setTitle("Unipäiväkirja - " + valittuKayttaja.getNimi());
         try {
-            kayttajanUnipaivakirja.lueTiedostosta(valittu);
-            hae(1);         //TODO: tähän tulee sen käyttäjän id, joka on valittu comboboxchooserista.
+            valittuKayttaja.lueTiedostosta();        //TODO: tähän tulee sen käyttäjän id, joka on valittu comboboxchooserista?
             return null;
         } catch(SailoException e) {
-            hae(1);
             String virhe = e.getMessage();
             if (virhe != null) Dialogs.showMessageDialog(virhe);
             return virhe;
@@ -156,7 +160,7 @@ public class UnipaivakirjaGUIController implements Initializable{
 
 
     private void setTitle(String title) {
-        ModalController.getStage(kayttajaValinta).setTitle(title);
+        //ModalController.getStage(kayttajaValinta).setTitle(title);
     }
     
     
@@ -224,31 +228,32 @@ public class UnipaivakirjaGUIController implements Initializable{
     /**
      * Lisää uuden merkinnän valitulle käyttäjälle
      */
-    public void uusiMerkinta() {
+    /*public void uusiMerkinta() {
         Merkinta uusi = new Merkinta();
         uusi.merkinnanLisays();
         uusi.taytaM1Tiedoilla();
         merkinnat.lisaa(uusi);
-        hae(uusi.getMerkintaid());
+        haeMerkinnat(uusi.getMerkintaid());
 
         //Unenlaatu uusiUnenlaatu = new Unenlaatu(unenlaatuVal.getSelectedText());
         //Vireystila uusiVireystila = new Vireystila(vireystilaVal.getSelectedText());
-    }
+    }*/
     
     
     /**
      * Avaa valitun käyttäjän unipäiväkirjan
+     * @param valittuKayttaja käyttäjä joka on valittu comboboxchooserista
      * @return ??
      */
-    public boolean avaaKayttajanPaivakirja() {
-        //kayttajaValinta.getSelectedObject();
+    /*public boolean avaaKayttajanPaivakirja(String valittuKayttaja) {
         //valittu = "Nea";
         //ModalController.closeStage(kayttajaValinta);
         //String valinta = "Nea";
         //Kayttaja valittuKayttaja = new Kayttaja("Nea");
-        lueTiedosto(kysyKayttaja(null, ""));
+        lueTiedosto(kysyKayttaja(null, valittuKayttaja));
+        //lueTiedosto(kysyKayttaja(null, ""));
         return true;
-    }
+    }*/
     
     
     /**
@@ -258,19 +263,19 @@ public class UnipaivakirjaGUIController implements Initializable{
      * @param oletus mitä käyttäjää näytetään oletuksena
      * @return null jos painetaan Cancel, muuten valittu nimi
      */
-    public static String kysyKayttaja(Stage modalityStage, String oletus) {
+    /*public static String kysyKayttaja(Stage modalityStage, String oletus) {
         return ModalController.showModal(
                 AloitusikkunaController.class.getResource("aloitusikkuna.fxml"),
                 "Unipäiväkirja",
                 modalityStage, oletus);
-    }
+    }*/
     
     
     /**
      * haetaan käyttäjän merkintöjen tiedot listaan
      * @param merkintaid ??
      */
-    private void hae(int merkintaid) {
+    private void haeMerkinnat(int merkintaid) {
         chooserMerkinnat.clear();
 
         int index = 0;

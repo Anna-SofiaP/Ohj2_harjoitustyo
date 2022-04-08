@@ -3,6 +3,10 @@
  */
 package unipaivakirja;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Unipaivakirja-luokka, joka huolehtii käyttäjistä.
  * @author Omistaja
@@ -10,8 +14,8 @@ package unipaivakirja;
  *
  */
 public class Unipaivakirja {
-    private final Kayttajat kayttajat = new Kayttajat();
-    private final Merkinnat merkinnat = new Merkinnat();
+    private Kayttajat kayttajat = new Kayttajat();
+    private Merkinnat merkinnat = new Merkinnat();
     
     
     /**
@@ -85,14 +89,36 @@ public class Unipaivakirja {
     }
     
     
+    public List<Kayttaja> annaKayttajat() {
+        return kayttajat.annaKayttajat();
+    }
+    
+    
     /**
      * Lukee unipäiväkirjan tiedot tiedostosta
-     * @param kayttaja jota käyteään lukemisessa
+     * @param tiedosto jota käyteään lukemisessa
      * @throws SailoException jos lukeminen epäonnistuu
      */
-    public void lueTiedostosta(String kayttaja) throws SailoException {
-        kayttajat.lueTiedostosta(kayttaja);
+    public void lueTiedostosta(String tiedosto) throws SailoException {
+        kayttajat = new Kayttajat();
+        
+        setTiedosto(tiedosto);
+        kayttajat.lueTiedostosta();
     }
+    
+    
+    /**
+     * Asettaa tiedostojen perusnimet
+     * @param nimi uusi nimi
+     */
+    public void setTiedosto(String nimi) {
+        File dir = new File(nimi);
+        dir.mkdirs();
+        String hakemistonNimi = "data";
+        if ( !nimi.isEmpty() ) hakemistonNimi = hakemistonNimi +"/";
+        kayttajat.setTiedostonPerusNimi(hakemistonNimi + "kayttajat");
+    }
+    
     
     
     /**

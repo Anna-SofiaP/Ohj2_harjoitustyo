@@ -7,6 +7,7 @@ import fi.jyu.mit.fxgui.ComboBoxChooser;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import unipaivakirja.Kayttaja;
@@ -19,20 +20,20 @@ import unipaivakirja.Unipaivakirja;
  * @version 28.3.2022
  *
  */
-public class AloitusikkunaController implements ModalControllerInterface<String>{
+public class AloitusikkunaController implements ModalControllerInterface<Kayttaja>{
     
-    @FXML private ComboBoxChooser<String> kayttajaValinta;
+    @FXML private ComboBoxChooser<Kayttaja> kayttajaValinta;
     
     @FXML void handleValitseKayttaja() {
         avaaKayttajanPaivakirja();
     }
     
     @FXML void handleUusiKayttaja() {
-        uusiKayttaja();
+        //uusiKayttaja();
     }
     
     @FXML void handleSulje() {
-        ModalController.closeStage(kayttajaValinta);
+        Platform.exit();
     }
     
     
@@ -41,7 +42,7 @@ public class AloitusikkunaController implements ModalControllerInterface<String>
      */
     @Override
     public void handleShown() {
-        //hakuehto.requestFocus();
+        listaaKayttajat();
     }
 
     
@@ -49,24 +50,16 @@ public class AloitusikkunaController implements ModalControllerInterface<String>
     //------------------------------------------------------
     
     private Unipaivakirja kayttajanUnipaivakirja;
-    private String valittuKayttaja;
-    private Kayttaja valittu;
+    private Kayttaja valittuKayttaja;
+    //private Kayttaja valittu;
 
     
     /**
      * Avaa valitun käyttäjän unipäiväkirjan
-     * @return ??
      */
-    public boolean avaaKayttajanPaivakirja() {
-        //valittu = kayttajanUnipaivakirja.asetaKayttaja(kayttajaValinta.getSelectedText());
-        //Dialogs.showMessageDialog(kayttajaValinta.getSelectedText());
-        //kayttajaValinta.setSelectedIndex(0);
-        //kayttajanUnipaivakirja.annaKayttaja(kayttajaValinta.getSelectedIndex());
-        valittuKayttaja = kayttajaValinta.getSelectedText();
+    public void avaaKayttajanPaivakirja() {
+        valittuKayttaja = kayttajaValinta.getSelectedObject();
         ModalController.closeStage(kayttajaValinta);
-        /*String valinta = kysyKayttaja(null, kayttajaValinta.getSelectedText());
-        Kayttaja valittuKayttaja = new Kayttaja(valinta);*/
-        return true;
     } 
     
     
@@ -75,45 +68,60 @@ public class AloitusikkunaController implements ModalControllerInterface<String>
      */
     public void setUnipaivakirja(Unipaivakirja unipaivakirja) {
         this.kayttajanUnipaivakirja = unipaivakirja;
+        lueTiedosto("kayttajat");
+    }
+    
+    
+    public void listaaKayttajat() {
+        kayttajaValinta.clear();
+        for (Kayttaja kayttaja : kayttajanUnipaivakirja.annaKayttajat()) {
+            kayttajaValinta.add(kayttaja.getNimi(), kayttaja);
+        }
     }
     
     
     /**
      * Alustaa tietyn käyttäjän unipäiväkirjan lukemalla sen 
      * valitun nimisestä tiedostosta
-     * @param valittu käyttäjä, jonka unipäiväkirja avataan
+     * @param tiedosto tiedosto, mistä käyttäjät luetaan
+     * @return null, jos tiedoston luku onnistuu, jos ei niin virhe
      */
-    protected void lueTiedosto(String valittu) {
-        setTitle("Unipäiväkirja - " + valittu);
-        String virhe = "Ei osata lukea vielä";  // TODO: tähän oikea tiedoston lukeminen
-            Dialogs.showMessageDialog(virhe);
+    protected String lueTiedosto(String tiedosto) {            //TODO: tämän pitää osata lukea kayttajat.dat!!!!!
+        try {
+            kayttajanUnipaivakirja.lueTiedostosta(tiedosto);
+            return null;
+        } catch (SailoException e) {
+            String virhe = e.getMessage(); 
+            if ( virhe != null ) Dialogs.showMessageDialog(virhe);
+            return virhe;
+        }
     }
     
     
-    private void setTitle(String title) {
+    /*private void setTitle(String title) {
         ModalController.getStage(kayttajaValinta).setTitle(title);
-    }
+    }*/
     
     
     /**
      * Luo uuden käyttäjän jota aletaan editoimaan 
      */
-    protected void uusiKayttaja() {
+    /*protected void uusiKayttaja() {
         Kayttaja uusi = new Kayttaja("nea");
         uusi.rekisteroi();
         uusi.taytaNeaTiedoilla();
         kayttajanUnipaivakirja.lisaa(uusi);
-    }
+    }*/
 
     
     @Override
-    public String getResult() {
+    public Kayttaja getResult() {
         return valittuKayttaja;
     }
 
     
     @Override
-    public void setDefault(String arg0) {
+    public void setDefault(Kayttaja arg0) {
         // TODO Auto-generated method stub
         
     }
@@ -122,9 +130,9 @@ public class AloitusikkunaController implements ModalControllerInterface<String>
     /**
      * @return TODO: mitä tähän?
      */
-    public boolean voikoSulkea() {
+    /*public boolean voikoSulkea() {
         // TODO Auto-generated method stub
         return false;
-    }
+    }*/
 
 }

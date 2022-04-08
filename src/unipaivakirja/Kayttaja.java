@@ -108,25 +108,38 @@ public class Kayttaja {
     }
     
     
-    /*public void parse(String rivi) {
-        StringBuffer sb = new StringBuffer(rivi);
-        setTunnusNro(Mjonot.erota(sb, '|', getKayttajaId()));
-        nimi = Mjonot.erota(sb, '|', nimi);
-        hetu = Mjonot.erota(sb, '|', hetu);
-        katuosoite = Mjonot.erota(sb, '|', katuosoite);
-        postinumero = Mjonot.erota(sb, '|', postinumero);
-        postiosoite = Mjonot.erota(sb, '|', postiosoite);
-        kotipuhelin = Mjonot.erota(sb, '|', kotipuhelin);
-        tyopuhelin = Mjonot.erota(sb, '|', tyopuhelin);
-        autopuhelin = Mjonot.erota(sb, '|', autopuhelin);
-        liittymisvuosi = Mjonot.erota(sb, '|', liittymisvuosi);
-        jmaksu = Mjonot.erota(sb, '|', jmaksu);
-        maksu = Mjonot.erota(sb, '|', maksu);
-        lisatietoja = Mjonot.erota(sb, '|', lisatietoja);
-    }*/
+    /**
+     * Palauttaa käyttäjän tiedot merkkijonona jonka voi tallentaa tiedostoon.
+     * @return käyttäjä tolppaeroteltuna merkkijonona 
+     * @example
+     * <pre name="test">
+     * </pre>  
+     */
+    @Override
+    public String toString() {
+        return "" + getKayttajaId() + "|" + kayttajanimi + "|";
+    }
 
     
     
+    /**
+     * Pilkotaan kayttajat.dat tiedostosta saadun rivin tiedot
+     * @param rivi tiedostosta luettu rivi, joka pilkotaan
+     */
+    public void parse(String rivi) {
+        StringBuffer sb = new StringBuffer(rivi);
+        setKayttajaId(Mjonot.erota(sb, '|', getKayttajaId()));
+        kayttajanimi = Mjonot.erota(sb, '|', kayttajanimi);
+    }
+
+    
+    
+    private void setKayttajaId(int id) {
+        this.kayttajaid = id; 
+        if (kayttajaid >= seuraavaNro) seuraavaNro = kayttajaid + 1;
+    }
+
+
     /**
      * Testiohjelma käyttäjälle.
      * @param args ei käytössä
