@@ -8,6 +8,8 @@ import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import fi.jyu.mit.ohj2.Mjonot;
+
 /**
  * @author Omistaja
  * @version 8.3.2022
@@ -34,6 +36,10 @@ public class Merkinta {
         //oletusmuodostaja
     }
     
+    
+    public Merkinta(int kayttajaid) {
+        this.kayttajaid = kayttajaid;
+    }
     
     /**
      * Muodostaja
@@ -63,8 +69,10 @@ public class Merkinta {
     /**
      * Apumetodi, jolla saadaan täytettyä testiarvot merkinnälle.
      * @param pvm1 merkinnän päivämäärä
+     * @param merkintanro merkinnän id-numero
      */
-    public void taytaM1Tiedoilla(String pvm1) {
+    public void taytaM1Tiedoilla(String pvm1, int merkintanro) {
+        //this.merkintaid = merkintanro;
         this.pvm = pvm1;
         nukkumaanKlo = "21:00";
         heratysKlo = "6:00";
@@ -93,10 +101,11 @@ public class Merkinta {
     /**
      * Apumetodi, jolla saadaan täytettyä testiarvot merkinnälle.
      * Unenmäärä ja päivämäärä saadaan laskettua/tuotua erillisistä metodeista.
+     * @param merkintanro merkinnän id-numero
      */
-    public void taytaM1Tiedoilla() {
+    public void taytaM1Tiedoilla(int merkintanro) {
         String pvm1 = "12.3.2022";          //TODO: pvmKalenterista();
-        taytaM1Tiedoilla(pvm1);
+        taytaM1Tiedoilla(pvm1, merkintanro);
     }
     
     
@@ -192,6 +201,42 @@ public class Merkinta {
     }
     
     
+    public void parse(String rivi) {
+        StringBuffer sb = new StringBuffer(rivi);
+        kayttajaid = Mjonot.erota(sb, '|', kayttajaid);
+        setMerkintaId(Mjonot.erota(sb, '|', getMerkintaid()));
+        pvm = Mjonot.erota(sb, '|', pvm);
+        nukkumaanKlo = (Mjonot.erota(sb, '|', nukkumaanKlo));
+        heratysKlo = (Mjonot.erota(sb, '|', heratysKlo));
+        unenMaara = (Mjonot.erota(sb, '|', unenMaara));
+        lisatiedot = (Mjonot.erota(sb, '|', lisatiedot));
+    }
+    
+    
+    @Override
+    public String toString() {
+        return "" +
+                getKayttajaId() + "|" +
+                getMerkintaid() + "|" +
+                pvm + "|" +
+                nukkumaanKlo + "|" +
+                heratysKlo + "|" +
+                unenMaara + "|" +
+                lisatiedot;
+    }
+
+    
+    
+    /**
+     * @param merkintanro merkinnän id-numero
+     */
+    public void setMerkintaId(int merkintanro) {
+        merkintaid = merkintanro;
+        if ( merkintaid >= seuraavaNro ) seuraavaNro = merkintaid + 1;
+
+    }
+
+
     /**
      * laskee unen määrän
      * @return unen määrä
@@ -241,7 +286,7 @@ public class Merkinta {
         merkinta1.merkinnanLisays();
         pvm2.merkinnanLisays();
         merkinta1.tulosta(System.out);
-        merkinta1.taytaM1Tiedoilla();
+        //merkinta1.taytaM1Tiedoilla(5);
         merkinta1.tulosta(System.out);
 
         pvm2.taytaM2Tiedoilla();

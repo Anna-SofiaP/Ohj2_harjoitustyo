@@ -101,9 +101,11 @@ public class Unipaivakirja {
      */
     public void lueTiedostosta(String tiedosto) throws SailoException {
         kayttajat = new Kayttajat();
+        merkinnat = new Merkinnat();
         
         setTiedosto(tiedosto);
         kayttajat.lueTiedostosta();
+        merkinnat.lueTiedostosta();
     }
     
     
@@ -117,6 +119,7 @@ public class Unipaivakirja {
         String hakemistonNimi = "data";
         if ( !nimi.isEmpty() ) hakemistonNimi = hakemistonNimi +"/";
         kayttajat.setTiedostonPerusNimi(hakemistonNimi + "kayttajat");
+        merkinnat.setTiedostonPerusNimi(hakemistonNimi + "merkinnat");
     }
     
     
@@ -158,6 +161,21 @@ public class Unipaivakirja {
 
     public Kayttaja asetaKayttaja(String selectedText) {
         return kayttajat.aseta(selectedText);
+    }
+    
+    
+    /**
+     * @param kayttajaId sen käyttäjän id, jonka merkinnät haetaan alkiot-taulukosta
+     * @return tiettyyn käyttäjään kytketyt merkinnät listana
+     */
+    public List<Merkinta> annaKayttajanMerkinnat(int kayttajaId) {
+        return merkinnat.annaKayttajanMerkinnat(kayttajaId);
+    }
+
+
+    public void lisaa(Merkinta merkinta) {
+        merkinnat.lisaa(merkinta);
+        
     }
     
     

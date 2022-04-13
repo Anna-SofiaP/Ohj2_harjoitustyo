@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 import unipaivakirja.Kayttaja;
@@ -47,10 +48,11 @@ public class UnipaivakirjaGUIController implements Initializable{
     
     @Override
     public void initialize(URL url, ResourceBundle bundle) { 
-        kayttajanUnipaivakirja = new Unipaivakirja();
+        setUnipaivakirja(new Unipaivakirja());
         valittuKayttaja = ModalController.<Kayttaja,AloitusikkunaController>showModal(UnipaivakirjaGUIController.class.getResource(
                 "aloitusikkuna.fxml"), "Valitse käyttäjä", null, null, ctrl -> ctrl.setUnipaivakirja(kayttajanUnipaivakirja));
-        alusta();      
+        alusta();
+        haeMerkinnat(0);
     }
 
     /*@FXML void handleValitseKayttaja(String valittuKayttaja) {
@@ -109,7 +111,7 @@ public class UnipaivakirjaGUIController implements Initializable{
 
     @FXML void handleUusiMerkinta() {
         //Dialogs.showMessageDialog("Ei osata vielä lisätä uutta merkintää.");
-        //uusiMerkinta();
+        uusiMerkinta();
     }
     
     //------------------------------------------------------------
@@ -118,7 +120,6 @@ public class UnipaivakirjaGUIController implements Initializable{
     private Merkinta merkintaKohdalla;
     private Kayttaja valittuKayttaja;
     private TextArea tekstilaatikko = new TextArea();
-    private Merkinnat merkinnat = new Merkinnat();
     
     
     /*public String valitseKayttaja() {
@@ -149,13 +150,12 @@ public class UnipaivakirjaGUIController implements Initializable{
     protected String lueTiedosto() {
         setTitle("Unipäiväkirja - " + valittuKayttaja.getNimi());
         try {
-            valittuKayttaja.lueTiedostosta();        //TODO: tähän tulee sen käyttäjän id, joka on valittu comboboxchooserista?
-            return null;
-        } catch(SailoException e) {
-            String virhe = e.getMessage();
-            if (virhe != null) Dialogs.showMessageDialog(virhe);
-            return virhe;
-        }
+            kayttajanUnipaivakirja.lueTiedostosta("data");
+        } catch (SailoException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }  //TODO: tähän tulee sen käyttäjän id, joka on valittu comboboxchooserista?
+        return null;
     }
 
 
@@ -228,16 +228,14 @@ public class UnipaivakirjaGUIController implements Initializable{
     /**
      * Lisää uuden merkinnän valitulle käyttäjälle
      */
-    /*public void uusiMerkinta() {
-        Merkinta uusi = new Merkinta();
-        uusi.merkinnanLisays();
-        uusi.taytaM1Tiedoilla();
-        merkinnat.lisaa(uusi);
-        haeMerkinnat(uusi.getMerkintaid());
-
-        //Unenlaatu uusiUnenlaatu = new Unenlaatu(unenlaatuVal.getSelectedText());
-        //Vireystila uusiVireystila = new Vireystila(vireystilaVal.getSelectedText());
-    }*/
+    public void uusiMerkinta() {
+        //if ( merkintaKohdalla == null ) return; 
+        Merkinta merk = new Merkinta(valittuKayttaja.getKayttajaId()); 
+        merk.merkinnanLisays(); 
+        merk.taytaM1Tiedoilla(merkintaKohdalla.getMerkintaid()); 
+        kayttajanUnipaivakirja.lisaa(merk);
+        haeMerkinnat(merk.getMerkintaid());
+    }
     
     
     /**
@@ -272,6 +270,19 @@ public class UnipaivakirjaGUIController implements Initializable{
     
     
     /**
+     * Tulostaa käyttäjän merkinnät
+     * @param os tietovirta johon tulostetaan
+     * @param merkinta tulostettava merkinta
+     */
+    public void tulosta(PrintStream os, final Merkinta merkinta) {
+        os.println("----------------------------------------------");
+        merkinta.tulosta(os);
+        os.println("----------------------------------------------");   
+    }
+
+    
+    
+    /**
      * haetaan käyttäjän merkintöjen tiedot listaan
      * @param merkintaid ??
      */
@@ -279,9 +290,10 @@ public class UnipaivakirjaGUIController implements Initializable{
         chooserMerkinnat.clear();
 
         int index = 0;
+        List<Merkinta> merkinnat = kayttajanUnipaivakirja.annaKayttajanMerkinnat(valittuKayttaja.getKayttajaId());
         //tässä haetaan merkinnöistä kaikki merkinnät joiden käyttäjäid täsmää tämänhetkiseen käyttäjään
-        for (int i = 0; i < merkinnat.annaKayttajanMerkinnat(0).size(); i++) { //TODO: nollan tilalle jotain!
-            Merkinta merkinta = merkinnat.anna(i);
+        for (int i = 0; i < merkinnat.size(); i++) { //TODO: nollan tilalle jotain!
+            Merkinta merkinta = merkinnat.get(i);
             if (merkinta.getMerkintaid() == merkintaid) index = i;
             chooserMerkinnat.add(merkinta.getPvm(), merkinta);
         }
@@ -295,6 +307,8 @@ public class UnipaivakirjaGUIController implements Initializable{
      */
     public void setUnipaivakirja(Unipaivakirja unipaivakirja) {
         this.kayttajanUnipaivakirja = unipaivakirja;
+        //lueTiedosto();
+        //haeMerkinnat(0);
     }
 
     

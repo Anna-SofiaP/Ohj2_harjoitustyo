@@ -3,6 +3,10 @@
  */
 package unipaivakirja;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +19,11 @@ import java.util.List;
 public class Merkinnat {
     private static final int MAX_MERKINTOJA = 5;
     private int lkm = 0;
-    private String tiedostonimi = "";
     private Merkinta alkiot[] = new Merkinta[MAX_MERKINTOJA];
+    private String kokoNimi = "";
+    
+    private boolean muutettu = false;
+    private String tiedostonPerusNimi = "";
     
     
     /**
@@ -94,14 +101,70 @@ public class Merkinnat {
     
     
     /**
-     * Lukee merkinnät tiedostosta.  Kesken.
-     * @param hakemisto tiedoston hakemisto
+     * Lukee merkinnät tiedostosta käyttäjäId:n perusteella. 
+     * @param tiedosto tiedoston nimi
      * @throws SailoException jos lukeminen epäonnistuu
      */
-    public void lueTiedostosta(String hakemisto) throws SailoException {
-        tiedostonimi = hakemisto + "/nimet.dat";
-        throw new SailoException("Ei osata vielä lukea tiedostoa " + tiedostonimi);
+    public void lueTiedostosta(String tiedosto) throws SailoException {
+        setTiedostonPerusNimi(tiedosto);
+        try ( BufferedReader fi = new BufferedReader(new FileReader(getTiedostonNimi())) ) {
+            kokoNimi = fi.readLine();
+            if ( kokoNimi == null ) throw new SailoException("Käyttäjän nimi puuttuu");
+            String rivi = fi.readLine();
+            if ( rivi == null ) throw new SailoException("Maksimikoko puuttuu");
+
+            while ( (rivi = fi.readLine()) != null ) {
+                rivi = rivi.trim();
+                if ( "".equals(rivi) || rivi.charAt(0) == ';' ) continue;
+                Merkinta merkinta = new Merkinta();
+                merkinta.parse(rivi); // voisi olla virhekäsittely
+                lisaa(merkinta);
+            }
+            muutettu = false;
+
+        } catch ( FileNotFoundException e ) {
+            throw new SailoException("Tiedosto " + getTiedostonNimi() + " ei aukea");
+        } catch ( IOException e ) {
+            throw new SailoException("Ongelmia tiedoston kanssa: " + e.getMessage());
+        }
+
     }
+    
+    
+    /** Luetaan aikaisemmin annetun nimisestä tiedostosta
+    * @throws SailoException jos tulee poikkeus
+    */
+   public void lueTiedostosta() throws SailoException {
+       lueTiedostosta(getTiedostonPerusNimi());
+   }
+   
+   
+   /**
+    * Asettaa tiedoston perusnimen ilan tarkenninta
+    * @param tiedosto tallennustiedoston perusnimi
+    */
+   public void setTiedostonPerusNimi(String tiedosto) {
+       tiedostonPerusNimi = tiedosto;
+   }
+
+
+   /**
+    * Palauttaa tiedoston nimen, jota käytetään tallennukseen
+    * @return tallennustiedoston nimi
+    */
+   public String getTiedostonPerusNimi() {
+       return tiedostonPerusNimi;
+   }
+
+
+   /**
+    * Palauttaa tiedoston nimen, jota käytetään tallennukseen
+    * @return tallennustiedoston nimi
+    */
+   public String getTiedostonNimi() {
+       return tiedostonPerusNimi + ".dat";
+   }
+
     
     
     /**
@@ -109,7 +172,7 @@ public class Merkinnat {
      * @throws SailoException jos talletus epäonnistuu
      */
     public void talleta() throws SailoException {
-        throw new SailoException("Ei osata vielä tallettaa tiedostoa " + tiedostonimi);
+        throw new SailoException("Ei osata vielä tallettaa tiedostoa " + tiedostonPerusNimi);
     }
 
 
@@ -130,7 +193,7 @@ public class Merkinnat {
 
         Merkinta pvm1 = new Merkinta(), pvm2 = new Merkinta();
         pvm1.merkinnanLisays();
-        pvm1.taytaM1Tiedoilla();
+        //pvm1.taytaM1Tiedoilla(5);
         pvm2.merkinnanLisays();
         pvm2.taytaM2Tiedoilla();
 
