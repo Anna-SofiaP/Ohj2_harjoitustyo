@@ -130,6 +130,7 @@ public class Unipaivakirja {
      */
     public void talleta() throws SailoException {
         kayttajat.talleta();
+        merkinnat.talleta();
         // TODO: yritä tallettaa toinen vaikka toinen epäonnistuisi
     }
     

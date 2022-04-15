@@ -4,11 +4,16 @@
 package unipaivakirja;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Luokka käyttäjän unipäiväkirjan merkinnöille. Osaa lisätä uuden merkinnän.
@@ -16,7 +21,7 @@ import java.util.List;
  * @version 8.3.2022
  *
  */
-public class Merkinnat {
+public class Merkinnat implements Iterable<Merkinta>{
     private static final int MAX_MERKINTOJA = 5;
     private int lkm = 0;
     private Merkinta alkiot[] = new Merkinta[MAX_MERKINTOJA];
@@ -172,8 +177,48 @@ public class Merkinnat {
      * @throws SailoException jos talletus epäonnistuu
      */
     public void talleta() throws SailoException {
-        throw new SailoException("Ei osata vielä tallettaa tiedostoa " + tiedostonPerusNimi);
+        if ( !muutettu ) return;
+
+        File fbak = new File(getBakNimi());
+        File ftiedosto = new File(getTiedostonNimi());
+        fbak.delete(); // if .. System.err.println("Ei voi tuhota");
+        ftiedosto.renameTo(fbak); // if .. System.err.println("Ei voi nimetä");
+
+        try ( PrintWriter fo = new PrintWriter(new FileWriter(ftiedosto.getCanonicalPath())) ) {
+            fo.println(getKokoNimi());
+            fo.println(alkiot.length);
+            for (Merkinta merkinta : this) {
+                fo.println(merkinta.toString());
+            }
+            //} catch ( IOException e ) { // ei heitä poikkeusta
+            //  throw new SailoException("Tallettamisessa ongelmia: " + e.getMessage());
+        } catch ( FileNotFoundException ex ) {
+            throw new SailoException("Tiedosto " + ftiedosto.getName() + " ei aukea");
+        } catch ( IOException ex ) {
+            throw new SailoException("Tiedoston " + ftiedosto.getName() + " kirjoittamisessa ongelmia");
+        }
+
+        muutettu = false;
     }
+    
+    
+    /**
+     * Palauttaa varakopiotiedoston nimen
+     * @return varakopiotiedoston nimi
+     */
+    public String getBakNimi() {
+        return tiedostonPerusNimi + ".bak";
+    }
+
+    
+    /**
+     * Palauttaa merkintöjen koko nimen
+     * @return merkintöjen koko nimi merkkijononna
+     */
+    public String getKokoNimi() {
+        return kokoNimi;
+    }
+
 
 
     /**
@@ -228,6 +273,47 @@ public class Merkinnat {
     }
     
     
+    /**
+     * @author Omistaja
+     * @version 15.4.2022
+     *
+     */
+    public class MerkinnatIterator implements Iterator<Merkinta> {
+        private int kohdalla = 0;
+
+
+        /**
+         * Onko olemassa vielä seuraavaa merkintää
+         * @see java.util.Iterator#hasNext()
+         * @return true jos on vielä merkintöjä
+         */
+        @Override
+        public boolean hasNext() {
+            return kohdalla < getLkm();
+        }
+
+
+        /**
+         * Annetaan seuraava merkintä
+         * @return seuraava merkintä
+         * @throws NoSuchElementException jos seuraava alkiota ei enää ole
+         * @see java.util.Iterator#next()
+         */
+        @Override
+        public Merkinta next() throws NoSuchElementException {
+            if ( !hasNext() ) throw new NoSuchElementException("Ei oo");
+            return anna(kohdalla++);
+        }
+    }
     
+    
+    /**
+     * Palautetaan iteraattori merkinnöistä.
+     * @return merkintä iteraattori
+     */
+    @Override
+    public Iterator<Merkinta> iterator() {
+        return new MerkinnatIterator();
+    }  
 
 }

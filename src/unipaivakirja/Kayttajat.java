@@ -4,18 +4,23 @@
 package unipaivakirja;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * @author Omistaja
  * @version 2.3.2022
  *
  */
-public class Kayttajat {
+public class Kayttajat implements Iterable<Kayttaja>{
     private static final int MAX_KAYTTAJIA = 5;
     private int lkm = 0;
     private String tiedostonPerusNimi = "kayttajat";
@@ -217,9 +222,92 @@ public class Kayttajat {
     }
 
 
-    public void talleta() {
-        // TODO Auto-generated method stub
-        
+    /**
+     * Tallentaa käyttäjän unitiedot tiedostoon
+     * @throws SailoException jos talletus ei onnistu
+     */
+    public void talleta() throws SailoException {
+        if ( !muutettu ) return;
+
+        File fbak = new File(getBakNimi());
+        File ftiedosto = new File(getTiedostonNimi());
+        fbak.delete(); // if .. System.err.println("Ei voi tuhota");
+        ftiedosto.renameTo(fbak); // if .. System.err.println("Ei voi nimetä");
+
+        try ( PrintWriter fo = new PrintWriter(new FileWriter(ftiedosto.getCanonicalPath())) ) {
+            fo.println(getKokoNimi());
+            fo.println(alkiot.length);
+            for (Kayttaja kayttaja : this) {
+                fo.println(kayttaja.toString());
+            }
+            //} catch ( IOException e ) { // ei heitä poikkeusta
+            //  throw new SailoException("Tallettamisessa ongelmia: " + e.getMessage());
+        } catch ( FileNotFoundException ex ) {
+            throw new SailoException("Tiedosto " + ftiedosto.getName() + " ei aukea");
+        } catch ( IOException ex ) {
+            throw new SailoException("Tiedoston " + ftiedosto.getName() + " kirjoittamisessa ongelmia");
+        }
+
+        muutettu = false;
+    }
+    
+    
+    /**
+     * Palauttaa varakopiotiedoston nimen
+     * @return varakopiotiedoston nimi
+     */
+    public String getBakNimi() {
+        return tiedostonPerusNimi + ".bak";
     }
 
+    
+    /**
+     * Palauttaa käyttäjän unipäiväkirjan koko nimen
+     * @return käyttäjän unipäiväkirjan koko nimi merkkijononna
+     */
+    public String getKokoNimi() {
+        return kokoNimi;
+    }
+    
+    
+    /**
+     * @author Omistaja
+     * @version 15.4.2022
+     *
+     */
+    public class KayttajatIterator implements Iterator<Kayttaja> {
+        private int kohdalla = 0;
+
+        
+        /**
+         * Onko olemassa vielä seuraavaa käyttäjää
+         * @see java.util.Iterator#hasNext()
+         * @return true jos on vielä käyttäjiä
+         */
+        @Override
+        public boolean hasNext() {
+            return kohdalla < getLkm();
+        }
+
+
+        /**
+         * Annetaan seuraava käyttäjä
+         * @return seuraava käyttäjä
+         * @throws NoSuchElementException jos seuraavaa alkiota ei enää ole
+         * @see java.util.Iterator#next()
+         */
+        @Override
+        public Kayttaja next() throws NoSuchElementException {
+            if ( !hasNext() ) throw new NoSuchElementException("Ei ole");
+            return anna(kohdalla++);
+        }
+        
+    }
+              
+        @Override
+        public Iterator<Kayttaja> iterator() {
+            return new KayttajatIterator();
+        }
+
 }
+
