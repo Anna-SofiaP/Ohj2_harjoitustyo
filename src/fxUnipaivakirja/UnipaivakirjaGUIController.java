@@ -134,6 +134,7 @@ public class UnipaivakirjaGUIController implements Initializable{
     private String tallenna() {
         try {
             kayttajanUnipaivakirja.talleta();
+            Dialogs.showMessageDialog("Muutokset tallennettu!");
             return null;
         } catch(SailoException ex) {
             Dialogs.showMessageDialog("Tallennuksessa ongelmia! " + ex.getMessage());

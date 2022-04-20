@@ -18,6 +18,9 @@ public class Kayttaja {
     
     
     
+    /**
+     * Oletusmuodostaja
+     */
     public Kayttaja() {
         //oletusmuodostaja
     }
@@ -101,7 +104,7 @@ public class Kayttaja {
 
     /**
      * Tulostaa käyttäjän tiedot
-     * @param out ??
+     * @param out tietovirta johon tulostetaan
      */
     public void tulosta(PrintStream out) {
         out.println("Käyttäjä: " + kayttajanimi);
@@ -113,6 +116,9 @@ public class Kayttaja {
      * @return käyttäjä tolppaeroteltuna merkkijonona 
      * @example
      * <pre name="test">
+     *   Kayttaja kayttaja = new Kayttaja("Liisa");
+     *   kayttaja.parse("3|Liisa|");
+     *   kayttaja.toString().startsWith("3|Liisa|") === true;
      * </pre>  
      */
     @Override
@@ -125,6 +131,20 @@ public class Kayttaja {
     /**
      * Pilkotaan kayttajat.dat tiedostosta saadun rivin tiedot
      * @param rivi tiedostosta luettu rivi, joka pilkotaan
+     * @example
+     * <pre name="test">
+     *   Kayttaja kayttaja = new Kayttaja("Liisa");
+     *   kayttaja.parse("3|Liisa|");
+     *   kayttaja.getKayttajaId() === 3;
+     *   kayttaja.toString().startsWith("3|Liisa|") === true;
+     *
+     *   kayttaja.rekisteroi();
+     *   int n = kayttaja.getKayttajaId();
+     *   kayttaja.parse(""+(n+20));       // Otetaan merkkijonosta vain tunnusnumero
+     *   kayttaja.rekisteroi();           // ja tarkistetaan että seuraavalla kertaa tulee yhtä isompi
+     *   kayttaja.getKayttajaId() === n+20+1;   
+     * </pre>
+
      */
     public void parse(String rivi) {
         StringBuffer sb = new StringBuffer(rivi);

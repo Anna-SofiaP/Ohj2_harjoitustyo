@@ -66,6 +66,7 @@ public class Merkinnat implements Iterable<Merkinta>{
             //throw new SailoException("Liikaa alkioita");
         alkiot[lkm] = merkinta;
         lkm++;
+        muutettu = true;
     }
     
     
@@ -109,6 +110,38 @@ public class Merkinnat implements Iterable<Merkinta>{
      * Lukee merkinnät tiedostosta käyttäjäId:n perusteella. 
      * @param tiedosto tiedoston nimi
      * @throws SailoException jos lukeminen epäonnistuu
+     * <pre name="test">
+     * #THROWS SailoException 
+     * #import java.io.File;
+     * #import java.util.Iterator;
+     * 
+     *  Merkinnat merkinnat = new Merkinnat();
+     *  Merkinta merk1 = new Merkinta(), merk2 = new Merkinta();
+     *  merk1.taytaM1Tiedoilla();
+     *  merk2.taytaM2Tiedoilla();
+     *  String hakemisto = "testiKayttajat";
+     *  String tiedNimi = hakemisto+"/tmerkinnat";
+     *  File ftied = new File(tiedNimi+".dat");
+     *  File dir = new File(hakemisto);
+     *  dir.mkdir();
+     *  ftied.delete();
+     *  merkinnat.lueTiedostosta(tiedNimi); #THROWS SailoException
+     *  merkinnat.lisaa(merk1);
+     *  merkinnat.lisaa(merk2);
+     *  merkinnat.talleta();
+     *  merkinnat = new Merkinnat();            // Poistetaan vanhat luomalla uusi
+     *  merkinnat.lueTiedostosta(tiedNimi);     // johon ladataan tiedot tiedostosta.
+     *  Iterator<Merkinta> i = merkinnat.iterator();
+     *  i.next().toString() === merk1.toString();
+     *  i.next().toString() === merk2.toString();
+     *  i.hasNext() === false;
+     *  merkinnat.lisaa(merk1);
+     *  merkinnat.talleta();
+     *  ftied.delete() === true;
+     *  File fbak = new File(tiedNimi+".bak");
+     *  fbak.delete() === true;
+     *  dir.delete() === true;
+     * </pre>
      */
     public void lueTiedostosta(String tiedosto) throws SailoException {
         setTiedostonPerusNimi(tiedosto);
@@ -228,32 +261,6 @@ public class Merkinnat implements Iterable<Merkinta>{
     public int getLkm() {
         return lkm;
     }
-    
-    
-    /**
-     * @param args ei käytössä
-     */
-    public static void main(String[] args) {
-        Merkinnat merkinnat = new Merkinnat();
-
-        Merkinta pvm1 = new Merkinta(), pvm2 = new Merkinta();
-        pvm1.merkinnanLisays();
-        //pvm1.taytaM1Tiedoilla(5);
-        pvm2.merkinnanLisays();
-        pvm2.taytaM2Tiedoilla();
-
-        merkinnat.lisaa(pvm1);
-        merkinnat.lisaa(pvm2);
-
-        System.out.println("============= Merkinnät testi =================");
-
-        for (int i = 0; i < merkinnat.getLkm(); i++) {
-            Merkinta merkinta = merkinnat.anna(i);
-            System.out.println("Merkinta nro: " + i);
-            merkinta.tulosta(System.out);
-        }
-    
-    }
 
 
     /**
@@ -276,6 +283,45 @@ public class Merkinnat implements Iterable<Merkinta>{
     /**
      * @author Omistaja
      * @version 15.4.2022
+     * 
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException 
+     * #PACKAGEIMPORT
+     * #import java.util.*;
+     * 
+     * Merkinnat merkinnat = new Merkinnat();
+     * Merkinta merk1 = new Merkinta(), merk2 = new Merkinta();
+     * merk1.merkinnanLisays(); merk2.merkinnanLisays();
+     *
+     * merkinnat.lisaa(merk1); 
+     * merkinnat.lisaa(merk2); 
+     * merkinnat.lisaa(merk1); 
+     * 
+     * StringBuffer ids = new StringBuffer(30);
+     * for (Merkinta merkinta:merkinnat)   // Kokeillaan for-silmukan toimintaa
+     *   ids.append(" "+merkinta.getMerkintaid());           
+     * 
+     * String tulos = " " + merk1.getMerkintaid() + " " + merk2.getMerkintaid() + " " + merk1.getMerkintaid();
+     * 
+     * ids.toString() === tulos; 
+     * 
+     * ids = new StringBuffer(30);
+     * for (Iterator<Merkinta>  i=merkinnat.iterator(); i.hasNext(); ) { // ja iteraattorin toimintaa
+     *   Merkinta merkinta = i.next();
+     *   ids.append(" "+merkinta.getMerkintaid());           
+     * }
+     * 
+     * ids.toString() === tulos;
+     * 
+     * Iterator<Merkinta>  i=merkinnat.iterator();
+     * i.next() == merk1  === true;
+     * i.next() == merk2  === true;
+     * i.next() == merk1  === true;
+     * 
+     * i.next();  #THROWS NoSuchElementException
+     *  
+     * </pre>
      *
      */
     public class MerkinnatIterator implements Iterator<Merkinta> {
@@ -314,6 +360,32 @@ public class Merkinnat implements Iterable<Merkinta>{
     @Override
     public Iterator<Merkinta> iterator() {
         return new MerkinnatIterator();
-    }  
+    } 
+    
+    
+    /**
+     * @param args ei käytössä
+     */
+    public static void main(String[] args) {
+        Merkinnat merkinnat = new Merkinnat();
+
+        Merkinta pvm1 = new Merkinta(), pvm2 = new Merkinta();
+        pvm1.merkinnanLisays();
+        //pvm1.taytaM1Tiedoilla(5);
+        pvm2.merkinnanLisays();
+        pvm2.taytaM2Tiedoilla();
+
+        merkinnat.lisaa(pvm1);
+        merkinnat.lisaa(pvm2);
+
+        System.out.println("============= Merkinnät testi =================");
+
+        for (int i = 0; i < merkinnat.getLkm(); i++) {
+            Merkinta merkinta = merkinnat.anna(i);
+            System.out.println("Merkinta nro: " + i);
+            merkinta.tulosta(System.out);
+        }
+    
+    }
 
 }

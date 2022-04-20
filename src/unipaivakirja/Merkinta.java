@@ -37,6 +37,10 @@ public class Merkinta {
     }
     
     
+    /**
+     * Muodostaja
+     * @param kayttajaid sen käyttäjän käyttäjä-id, jonka merkintä on kyseessä
+     */
     public Merkinta(int kayttajaid) {
         this.kayttajaid = kayttajaid;
     }
@@ -69,9 +73,8 @@ public class Merkinta {
     /**
      * Apumetodi, jolla saadaan täytettyä testiarvot merkinnälle.
      * @param pvm1 merkinnän päivämäärä
-     * @param merkintanro merkinnän id-numero
      */
-    public void taytaM1Tiedoilla(String pvm1, int merkintanro) {
+    public void taytaM1Tiedoilla(String pvm1) {
         //this.merkintaid = merkintanro;
         this.pvm = pvm1;
         nukkumaanKlo = "21:00";
@@ -101,11 +104,10 @@ public class Merkinta {
     /**
      * Apumetodi, jolla saadaan täytettyä testiarvot merkinnälle.
      * Unenmäärä ja päivämäärä saadaan laskettua/tuotua erillisistä metodeista.
-     * @param merkintanro merkinnän id-numero
      */
-    public void taytaM1Tiedoilla(int merkintanro) {
+    public void taytaM1Tiedoilla() {
         String pvm1 = "12.3.2022";          //TODO: pvmKalenterista();
-        taytaM1Tiedoilla(pvm1, merkintanro);
+        taytaM1Tiedoilla(pvm1);
     }
     
     
@@ -201,6 +203,17 @@ public class Merkinta {
     }
     
     
+    /**
+     * Pilkkoo merkinnän tiedot "|"-merkin kohdalta
+     * @param rivi merkintä, jonka tiedot pilkotaan
+     * @example
+     * <pre name="test">
+     *   Merkinta merkinta = new Merkinta(3);
+     *   merkinta.parse("3|5|12.3.2015");
+     *   merkinta.getMerkintaid() === 5;
+     *   merkinta.toString().startsWith("3|5|12.3.2015|") === true; // on enemmäkin kuin 3 kenttää, siksi loppu | 
+     * </pre>
+     */
     public void parse(String rivi) {
         StringBuffer sb = new StringBuffer(rivi);
         kayttajaid = Mjonot.erota(sb, '|', kayttajaid);
@@ -213,6 +226,16 @@ public class Merkinta {
     }
     
     
+    /**
+     * Palauttaa merkinnän tiedot merkkijonona jonka voi tallentaa tiedostoon.
+     * @return merkintä eroteltuna merkkijonona "|"-merkin kohdalta
+     * @example
+     * <pre name="test">
+     *   Merkinta merkinta = new Merkinta();
+     *   merkinta.parse("3|5|12.3.2015");
+     *   merkinta.toString().startsWith("3|5|12.3.2015|") === true; // on enemmäkin kuin 3 kenttää, siksi loppu |
+     * </pre>  
+     */   
     @Override
     public String toString() {
         return "" +

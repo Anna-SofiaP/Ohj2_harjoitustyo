@@ -64,6 +64,7 @@ public class Kayttajat implements Iterable<Kayttaja>{
             kasvataTaulukkoa();
         alkiot[lkm] = kayttaja;
         lkm++;
+        muutettu = true;
     }
     
     
@@ -90,6 +91,10 @@ public class Kayttajat implements Iterable<Kayttaja>{
     }
     
     
+    /**
+     * Luodaan kayttajat-lista ja lisätään sinne kaikki unipäiväkirjan käyttäjät
+     * @return listan käyttäjistä
+     */
     public List<Kayttaja> annaKayttajat() {
         List<Kayttaja> kayttajat = new ArrayList<>();
         for (int i = 0; i < getLkm(); i++) {
@@ -116,6 +121,40 @@ public class Kayttajat implements Iterable<Kayttaja>{
      * Lukee käyttäjän tiedostosta
      * @param tiedosto tiedoston perusnimi
      * @throws SailoException jos lukeminen epäonnistuu
+     * 
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException 
+     * #import java.io.File;
+     * #import java.util.Iterator;
+     * 
+     *  Kayttajat kayttajat = new Kayttajat();
+     *  Kayttaja nea = new Kayttaja(), ansku = new Kayttaja();
+     *  nea.taytaNeaTiedoilla();
+     *  ansku.taytaAnskuTiedoilla();
+     *  String hakemisto = "testiKayttajat";
+     *  String tiedNimi = hakemisto+"/tkayttajat";
+     *  File ftied = new File(tiedNimi+".dat");
+     *  File dir = new File(hakemisto);
+     *  dir.mkdir();
+     *  ftied.delete();
+     *  kayttajat.lueTiedostosta(tiedNimi); #THROWS SailoException
+     *  kayttajat.lisaa(nea);
+     *  kayttajat.lisaa(ansku);
+     *  kayttajat.talleta();
+     *  kayttajat = new Kayttajat();            // Poistetaan vanhat luomalla uusi
+     *  kayttajat.lueTiedostosta(tiedNimi);     // johon ladataan tiedot tiedostosta.
+     *  Iterator<Kayttaja> i = kayttajat.iterator();
+     *  i.next().toString() === nea.toString();
+     *  i.next().toString() === ansku.toString();
+     *  i.hasNext() === false;
+     *  kayttajat.lisaa(nea);
+     *  kayttajat.talleta();
+     *  ftied.delete() === true;
+     *  File fbak = new File(tiedNimi+".bak");
+     *  fbak.delete() === true;
+     *  dir.delete() === true;
+     * </pre>
      */
     public void lueTiedostosta(String tiedosto) throws SailoException {
         setTiedostonPerusNimi(tiedosto);
@@ -187,35 +226,12 @@ public class Kayttajat implements Iterable<Kayttaja>{
         return lkm;
     }
 
-    
 
     /**
-     * Testiohjelma
-     * @param args ei käytössä
+     * Asettaan käyttäjän tiedot sen perusteella, mikä käyttäjä on valittu käyttäjävalikosta.
+     * @param selectedText käyttäjä, joka on valittu käyttäjävalikosta
+     * @return se käyttäjä, joka valittiin käyttäjävalikosta
      */
-    public static void main(String[] args) {
-        Kayttajat kayttajat = new Kayttajat();
-        
-        Kayttaja nea = new Kayttaja("nea"), ansku = new Kayttaja("ansku");
-        nea.rekisteroi();
-        nea.taytaNeaTiedoilla();
-        ansku.rekisteroi();
-        ansku.taytaAnskuTiedoilla();
-        
-        kayttajat.lisaa(nea);
-        kayttajat.lisaa(ansku);
-        
-        System.out.println("Käyttäjät testi");
-        
-        for (int i = 0; i < kayttajat.getLkm(); i++) {
-            Kayttaja kayttaja = kayttajat.anna(i);
-            System.out.println("Käyttäjä nro: " + i);
-            kayttaja.tulosta(System.out);
-        }
-    
-    }
-
-
     public Kayttaja aseta(String selectedText) {
         Kayttaja uusi = new Kayttaja(selectedText);
         return uusi;
@@ -271,8 +287,48 @@ public class Kayttajat implements Iterable<Kayttaja>{
     
     
     /**
+     * luokka käyttäjien iteroimiseksi
      * @author Omistaja
      * @version 15.4.2022
+     * 
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException 
+     * #PACKAGEIMPORT
+     * #import java.util.*;
+     * 
+     * Kayttajat kayttajat = new Kayttajat();
+     * Kayttaja nea = new Kayttaja(), ansku = new Kayttaja();
+     * nea.rekisteroi(); ansku.rekisteroi();
+     *
+     * kayttajat.lisaa(nea); 
+     * kayttajat.lisaa(ansku); 
+     * kayttajat.lisaa(nea); 
+     * 
+     * StringBuffer ids = new StringBuffer(30);
+     * for (Kayttaja kayttaja:kayttajat)   // Kokeillaan for-silmukan toimintaa
+     *   ids.append(" "+kayttaja.getKayttajaId());           
+     * 
+     * String tulos = " " + nea.getKayttajaId() + " " + ansku.getKayttajaId() + " " + nea.getKayttajaId();
+     * 
+     * ids.toString() === tulos; 
+     * 
+     * ids = new StringBuffer(30);
+     * for (Iterator<Kayttaja>  i=kayttajat.iterator(); i.hasNext(); ) { // ja iteraattorin toimintaa
+     *   Kayttaja kayttaja = i.next();
+     *   ids.append(" "+kayttaja.getKayttajaId());           
+     * }
+     * 
+     * ids.toString() === tulos;
+     * 
+     * Iterator<Kayttaja>  i=kayttajat.iterator();
+     * i.next() == nea  === true;
+     * i.next() == ansku  === true;
+     * i.next() == nea  === true;
+     * 
+     * i.next();  #THROWS NoSuchElementException
+     *  
+     * </pre> 
      *
      */
     public class KayttajatIterator implements Iterator<Kayttaja> {
@@ -307,6 +363,33 @@ public class Kayttajat implements Iterable<Kayttaja>{
         @Override
         public Iterator<Kayttaja> iterator() {
             return new KayttajatIterator();
+        }
+        
+        
+        /**
+         * Testiohjelma
+         * @param args ei käytössä
+         */
+        public static void main(String[] args) {
+            Kayttajat kayttajat = new Kayttajat();
+            
+            Kayttaja nea = new Kayttaja("nea"), ansku = new Kayttaja("ansku");
+            nea.rekisteroi();
+            nea.taytaNeaTiedoilla();
+            ansku.rekisteroi();
+            ansku.taytaAnskuTiedoilla();
+            
+            kayttajat.lisaa(nea);
+            kayttajat.lisaa(ansku);
+            
+            System.out.println("Käyttäjät testi");
+            
+            for (int i = 0; i < kayttajat.getLkm(); i++) {
+                Kayttaja kayttaja = kayttajat.anna(i);
+                System.out.println("Käyttäjä nro: " + i);
+                kayttaja.tulosta(System.out);
+            }
+        
         }
 
 }
