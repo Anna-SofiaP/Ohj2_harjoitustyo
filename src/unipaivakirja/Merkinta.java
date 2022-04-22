@@ -5,7 +5,9 @@ package unipaivakirja;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 import fi.jyu.mit.ohj2.Mjonot;
@@ -67,6 +69,14 @@ public class Merkinta {
      */
     public String getPvm() {
         return pvm;
+    }
+    
+    
+    /**
+     * @return päivämäärä LocalDate tyyppinä
+     */
+    public LocalDate getPvmDate() {
+        return LocalDate.parse(pvm);
     }
 
     
@@ -314,6 +324,14 @@ public class Merkinta {
 
         pvm2.taytaM2Tiedoilla();
         pvm2.tulosta(System.out);
+    }
+
+
+    /**
+     * @return unipäiväkirjamerkinnän lisätiedot
+     */
+    public String getLisatiedot() {
+        return this.lisatiedot;
     }
 
 }

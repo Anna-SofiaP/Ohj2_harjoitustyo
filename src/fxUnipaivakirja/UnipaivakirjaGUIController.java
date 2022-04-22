@@ -13,7 +13,9 @@ import unipaivakirja.Kayttaja;
 import unipaivakirja.Merkinnat;
 import unipaivakirja.Merkinta;
 import unipaivakirja.SailoException;
+import unipaivakirja.Unenlaatu;
 import unipaivakirja.Unipaivakirja;
+import unipaivakirja.Vireystila;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.TextAreaOutputStream;
@@ -40,11 +42,16 @@ public class UnipaivakirjaGUIController implements Initializable{
     
     @FXML private ListChooser<Merkinta> chooserMerkinnat;
     @FXML private TextField hakuehto;
-    @FXML private DatePicker kalenteri;
-    @FXML private ComboBoxChooser<?> unenlaatuVal;
-    @FXML private ComboBoxChooser<?> vireystilaVal;
     //@FXML private ComboBoxChooser<String> kayttajaValinta;
     @FXML private ScrollPane panelMerkinta;
+    
+    @FXML private DatePicker kalenteri;
+    @FXML private TextField editNukkumaan;
+    @FXML private TextField editHeratys;
+    @FXML private TextField editUnenmaara;
+    @FXML private TextField editLisatiedot;
+    @FXML private ComboBoxChooser<Unenlaatu> editUnenlaatu;
+    @FXML private ComboBoxChooser<Vireystila> editVireystila;
     
     @Override
     public void initialize(URL url, ResourceBundle bundle) { 
@@ -119,7 +126,8 @@ public class UnipaivakirjaGUIController implements Initializable{
     private Unipaivakirja kayttajanUnipaivakirja;
     private Merkinta merkintaKohdalla;
     private Kayttaja valittuKayttaja;
-    private TextArea tekstilaatikko = new TextArea();
+    //private TextArea tekstilaatikko = new TextArea();
+    private TextField edits[];
     
     
     /*public String valitseKayttaja() {
@@ -174,7 +182,22 @@ public class UnipaivakirjaGUIController implements Initializable{
         uusi.taytaNeaTiedoilla();
         kayttajanUnipaivakirja.lisaa(uusi);
     }
-
+    
+    
+    /**
+     * Tyhjentää tekstikentät
+     * @param edits taulukko, jossa tyhjennettäviä tekstikenttiä
+     * @param pvm kalenterivalikko
+     * @param unenlaatu unenlaatuvalikko
+     * @param vireystila vireystilavalikko
+     */
+    public static void tyhjenna(TextField[] edits, DatePicker pvm, ComboBoxChooser<Unenlaatu> unenlaatu, ComboBoxChooser<Vireystila> vireystila) {
+        for (TextField edit : edits)
+            edit.setText("");
+        pvm.setValue(null);
+        unenlaatu.setValue(null);
+        vireystila.setValue(null);
+    }
     
     
     /**
@@ -199,30 +222,39 @@ public class UnipaivakirjaGUIController implements Initializable{
      * Alustetaan myös käyttäjälistan kuuntelija 
      */
     protected void alusta() {
-        panelMerkinta.setContent(tekstilaatikko);
-        tekstilaatikko.setFont(new Font("Courier New", 12));
-        panelMerkinta.setFitToHeight(true);
-        
         chooserMerkinnat.clear();
         chooserMerkinnat.addSelectionListener(e -> naytaMerkinta());
+        
+        edits = new TextField[]{editNukkumaan, editHeratys, editUnenmaara, editLisatiedot};
     }
     
     
     /**
-     * Näyttää listasta valitun unipäiväkirjamerkinnän tiedot, tilapäisesti yhteen isoon edit-kenttään
+     * Näyttää listasta valitun unipäiväkirjamerkinnän tiedot
      */
     protected void naytaMerkinta() {
         merkintaKohdalla = chooserMerkinnat.getSelectedObject();
 
         if (merkintaKohdalla == null) {
-            tekstilaatikko.clear();
             return;
         }
         
-        tekstilaatikko.setText("");
-        try (PrintStream os = TextAreaOutputStream.getTextPrintStream(tekstilaatikko)) {
-            merkintaKohdalla.tulosta(os);
-        }
+        //tekstilaatikko.setText("");
+        //try (PrintStream os = TextAreaOutputStream.getTextPrintStream(tekstilaatikko)) {
+            //merkintaKohdalla.tulosta(os);
+        //}
+        
+        naytaUnimerkinta(edits, merkintaKohdalla, kalenteri, editUnenlaatu, editVireystila);
+    }
+    
+    
+    public void naytaUnimerkinta(TextField[] edits, Merkinta merkinta, DatePicker pvm, ComboBoxChooser<Unenlaatu> unenlaatu, ComboBoxChooser<Vireystila> vireystila) {
+        pvm.setValue(merkinta.getPvmDate());
+        edits[0].setText(merkinta.getNukkumaanKlo());
+        edits[1].setText(merkinta.getHeratysKlo());
+        edits[2].setText(merkinta.laskeUnenmaara());
+        edits[3].setText(merkinta.getLisatiedot());
+        
     }
 
     
@@ -233,7 +265,7 @@ public class UnipaivakirjaGUIController implements Initializable{
         //if ( merkintaKohdalla == null ) return; 
         Merkinta merk = new Merkinta(valittuKayttaja.getKayttajaId()); 
         merk.merkinnanLisays(); 
-        merk.taytaM1Tiedoilla(merkintaKohdalla.getMerkintaid()); 
+        merk.taytaM1Tiedoilla(); 
         kayttajanUnipaivakirja.lisaa(merk);
         haeMerkinnat(merk.getMerkintaid());
     }
