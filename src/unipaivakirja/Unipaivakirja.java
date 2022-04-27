@@ -247,6 +247,19 @@ public class Unipaivakirja {
     }
     
     
+    /** 
+     * Korvaa merkinnän tietorakenteessa.  Ottaa merkinnän omistukseensa. 
+     * Etsitään samalla tunnusnumerolla oleva merkintä.  Jos ei löydy, 
+     * niin lisätään uutena merkintänä. 
+     * @param merkinta viite lisättävään merkintään
+     * @throws SailoException jos tietorakenne on jo täynnä 
+     */ 
+    public void korvaaTaiLisaa(Merkinta merkinta) throws SailoException { 
+        merkinnat.korvaaTaiLisaa(merkinta); 
+    } 
+
+    
+    
     
 
 }

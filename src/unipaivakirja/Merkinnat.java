@@ -71,6 +71,47 @@ public class Merkinnat implements Iterable<Merkinta>{
     
     
     /**
+     * Korvaa merkinnän tietorakenteessa.  Ottaa merkinnän omistukseensa.
+     * Etsitään samalla tunnusnumerolla oleva merkintä.  Jos ei löydy,
+     * niin lisätään uutena merkintänä.
+     * @param merkinta viite lisättävään merkintään
+     * @throws SailoException jos tietorakenne on jo täynnä
+     * <pre name="test">
+     * #THROWS SailoException,CloneNotSupportedException
+     * #PACKAGEIMPORT
+     * Jasenet jasenet = new Jasenet();
+     * Jasen aku1 = new Jasen(), aku2 = new Jasen();
+     * aku1.rekisteroi(); aku2.rekisteroi();
+     * jasenet.getLkm() === 0;
+     * jasenet.korvaaTaiLisaa(aku1); jasenet.getLkm() === 1;
+     * jasenet.korvaaTaiLisaa(aku2); jasenet.getLkm() === 2;
+     * Jasen aku3 = aku1.clone();
+     * aku3.setPostinumero("00130");
+     * Iterator<Jasen> it = jasenet.iterator();
+     * it.next() == aku1 === true;
+     * jasenet.korvaaTaiLisaa(aku3); jasenet.getLkm() === 2;
+     * it = jasenet.iterator();
+     * Jasen j0 = it.next();
+     * j0 === aku3;
+     * j0 == aku3 === true;
+     * j0 == aku1 === false;
+     * </pre>
+     */
+    public void korvaaTaiLisaa(Merkinta merkinta) throws SailoException {
+        int id = merkinta.getMerkintaid();
+        for (int i = 0; i < lkm; i++) {
+            if ( alkiot[i].getMerkintaid() == id ) {
+                alkiot[i] = merkinta;
+                muutettu = true;
+                return;
+            }
+        }
+        lisaa(merkinta);
+    }
+
+    
+    
+    /**
      * Kasvatetaan merkinnät-taulukon kokoa
      * @example
      * <pre name="test">

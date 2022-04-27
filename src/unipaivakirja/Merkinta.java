@@ -310,6 +310,29 @@ public class Merkinta {
         return "" + unenMaara.toString();
     }
     
+    
+    /**
+     * Tehdään identtinen klooni merkinnästä
+     * @return Object kloonattu merkintä
+     * @example
+     * <pre name="test">
+     * #THROWS CloneNotSupportedException 
+     *   Jasen jasen = new Jasen();
+     *   jasen.parse("   3  |  Ankka Aku   | 123");
+     *   Jasen kopio = jasen.clone();
+     *   kopio.toString() === jasen.toString();
+     *   jasen.parse("   4  |  Ankka Tupu   | 123");
+     *   kopio.toString().equals(jasen.toString()) === false;
+     * </pre>
+     */
+    @Override
+    public Merkinta clone() throws CloneNotSupportedException {
+        Merkinta uusi;
+        uusi = (Merkinta) super.clone();
+        return uusi;
+    }
+
+    
 
     /**
      * @param args ei käytössä
