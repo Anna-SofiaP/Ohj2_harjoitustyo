@@ -25,8 +25,8 @@ public class Merkinta {
     private String heratysKlo = "";
     private String unenMaara = "";
     private String lisatiedot = "";
-    //private Unenlaatu unenlaatu;
-    //private Vireystila vireystila;
+    private String unenlaatu = "";
+    private String vireystila = "";
     
     private static int seuraavaNro = 1;
     
@@ -76,6 +76,7 @@ public class Merkinta {
      * @return päivämäärä LocalDate tyyppinä
      */
     public LocalDate getPvmDate() {
+        if (pvm == "" || pvm == null) return LocalDate.now();
         return LocalDate.parse(pvm);
     }
 
@@ -139,7 +140,7 @@ public class Merkinta {
         out.println(String.format("%03d", merkintaid, 3) + "  " + pvm);
         out.println("Nukkumaanmenoaika: " + nukkumaanKlo + " Heräämisaika: " + heratysKlo + " Unen määrä: " + unenMaara);
         out.println("Lisätiedot: " + lisatiedot);
-        //out.print("Unenlaatu: " + unenlaatu.toString() + " Vireystila: " + vireystila.toString());
+        out.print("Unenlaatu: " + unenlaatu + " Vireystila: " + vireystila);
     }
     
     
@@ -233,6 +234,8 @@ public class Merkinta {
         heratysKlo = (Mjonot.erota(sb, '|', heratysKlo));
         unenMaara = (Mjonot.erota(sb, '|', unenMaara));
         lisatiedot = (Mjonot.erota(sb, '|', lisatiedot));
+        unenlaatu = (Mjonot.erota(sb, '|', unenlaatu));
+        vireystila = (Mjonot.erota(sb, '|', vireystila));
     }
     
     
@@ -255,7 +258,9 @@ public class Merkinta {
                 nukkumaanKlo + "|" +
                 heratysKlo + "|" +
                 unenMaara + "|" +
-                lisatiedot;
+                lisatiedot + "|" +
+                unenlaatu + "|" +
+                vireystila;
     }
 
     
@@ -272,8 +277,9 @@ public class Merkinta {
 
     /**
      * laskee unen määrän
+     * @param nukkumaan nukkumaanmenoaika textfieldistä
+     * @param heratys heräämisaika textfieldistä
      * @return unen määrä
-     * @throws Exception jos laskeminen ei onnistu
      * @example
      * <pre name="test">
      * #import java.text.SimpleDateFormat;
@@ -294,20 +300,83 @@ public class Merkinta {
      *  }
      * </pre>
      */
-    public String laskeUnenmaara() throws Exception{                    //TODO: tee tämä ohjelma niin, että se toimii oikein, ja että
-        SimpleDateFormat unenmaara = new SimpleDateFormat("HH:mm");     //      testit menee läpi!!!
+    public String laskeUnenmaara(String nukkumaan, String heratys) {                    //TODO: tee tämä ohjelma niin, että se toimii oikein, ja että
+        String[] nukkumaanKlo = nukkumaan.split(":");
+        String[] heratysKlo = heratys.split(":");
         
-        Date nukkumaan = unenmaara.parse(nukkumaanKlo);
-        Date heratys = unenmaara.parse(heratysKlo);
+        int tunti1 = 0;
+        int tunti2 = 0;
         
-        long eroMilliSek = Math.abs(heratys.getTime() - nukkumaan.getTime());
+        if (nukkumaanKlo[0].length() == 1) tunti1 = Integer.parseInt(nukkumaanKlo[0]);
+        else
+            if (nukkumaanKlo[0].charAt(0) == '0') {
+                String uusi = "" + nukkumaanKlo[0].charAt(1);
+                tunti1 = Integer.parseInt(uusi);
+            }
+        tunti1 = Integer.parseInt(nukkumaanKlo[0]);
         
-        long eroMin = (eroMilliSek / (60 * 1000)) % 60;
+        if (heratysKlo[0].length() == 1) tunti2 = Integer.parseInt(heratysKlo[0]);
+        else
+            if (heratysKlo[0].charAt(0) == '0') {
+                String uusi = "" + heratysKlo[0].charAt(1);
+                tunti2 = Integer.parseInt(uusi);
+            }
+        tunti2 = Integer.parseInt(heratysKlo[0]);
         
-        long eroH = (eroMilliSek / (60 * 60 * 1000)) % 24;
+        int minuutit1 = 0;
+        int minuutit2 = 0;
         
-        this.unenMaara = eroH + " h " + eroMin + " min";
-        return "" + unenMaara.toString();
+        if (nukkumaanKlo[1].charAt(0) == '0') {
+            String uusi = "" + nukkumaanKlo[1].charAt(1);
+            minuutit1 = Integer.parseInt(uusi);
+        }
+        minuutit1 = Integer.parseInt(nukkumaanKlo[1]);
+        
+        if (heratysKlo[1].charAt(0) == '0') {
+            String uusi = "" + heratysKlo[1].charAt(1);
+            minuutit2 = Integer.parseInt(uusi);
+        }
+        minuutit2 = Integer.parseInt(heratysKlo[1]);
+        
+        int tunnit = 0;
+        int minuutit = 0;
+        
+        if (minuutit1 == 0) {                    //Jos menee tasatunteina nukkumaan
+            if (tunti1 > tunti2) {                  //Jos menee nukkumaan ennen puoltayötä
+                minuutit = minuutit2;
+                tunnit = 24 - tunti1 + tunti2;
+            }
+            else if (tunti1 < tunti2) {               //Jos menee nukkumaan puolen yön jälkeen
+                minuutit = minuutit2;
+                tunnit = tunti2 - tunti1;
+            }
+        }
+        else if (minuutit1 > 0) {                     //Jos EI mene tasatunteina nukkumaan
+            if (tunti1 > tunti2) {                  //Jos menee nukkumaan ennen puoltayötä
+                minuutit = 60 - minuutit1;
+                tunnit = 24 - tunti1 + tunti2 - 1;
+                if (minuutit2 > 0) {                     //Jos EI herää tasatunteina
+                    minuutit += minuutit2;
+                    if (minuutit > 60) {                      //Jos minuutit menee yli 60
+                        tunnit++;
+                        minuutit -= 60;
+                    }
+                }
+            }
+            else if (tunti1 < tunti2) {             //Jos menee nukkumaan puolen yön jälkeen
+                if (minuutit1 < minuutit2) {
+                    tunnit = tunti2 - tunti1;
+                    minuutit = minuutit2 - minuutit1;
+                }
+                else if (minuutit2 < minuutit1) {
+                    minuutit = minuutit1 + minuutit2 - 60;
+                    tunnit = tunti2 - tunti1 + 1;
+                }
+            }
+        }
+
+        return "" + tunnit + " h " + minuutit + " min" ;
+        
     }
     
     
@@ -347,6 +416,11 @@ public class Merkinta {
 
         pvm2.taytaM2Tiedoilla();
         pvm2.tulosta(System.out);
+        
+        /*System.out.println(laskeUnenmaara("21:20", "07:15"));   //9 h 55 min
+        System.out.println(laskeUnenmaara("1:00", "10:45"));    //9 h 45 min
+        System.out.println(laskeUnenmaara("22:00", "2:00"));    //4 h 0 min
+        System.out.println(laskeUnenmaara("5:10", "09:55"));    //4 h 45 min*/
     }
 
 
@@ -356,5 +430,87 @@ public class Merkinta {
     public String getLisatiedot() {
         return this.lisatiedot;
     }
+
+
+    public String setNukkumaanKlo(String s) {
+        nukkumaanKlo = s;
+        return null;
+    }
+
+
+    public String setHeratysKlo(String s) {
+        heratysKlo = s;
+        return null;
+    }
+
+
+    public String setUnenmaara(String s) {
+        unenMaara = s;
+        return null;
+    }
+
+
+    public String setLisatiedot(String s) {
+        lisatiedot = s;
+        return null;
+    }
+
+
+    public String setPvmDate(String s) {
+        pvm = s;
+        return null;
+    }
+
+
+    public String setUnenlaatu(String s) {
+        unenlaatu = s;
+        return null;
+    }
+
+
+    public String setVireystila(String s) {
+        vireystila = s;
+        return null;
+    }
+
+
+    public int getKenttia() {
+        return 3;
+    }
+    
+    
+    /**
+     * Eka kenttä joka on mielekäs kysyttäväksi
+     * @return ekan kentän indeksi
+     */
+    public int ekaKentta() {
+        return 1;
+    }
+
+
+    public String getKysymys(int k) {
+        switch ( k ) {
+        case 0: return "Nukkumaanmenoaika";
+        case 1: return "Heräämisaika";
+        case 2: return "Unen määrä";
+        default: return "Äääliö";
+        }
+    }
+
+
+    public String getUnenmaara() {
+        return this.unenMaara;
+    }
+
+
+    public String getUnenlaatu() {
+        return this.unenlaatu;
+    }
+
+
+    public String getVireystila() {
+        return this.vireystila;
+    }
+    
 
 }

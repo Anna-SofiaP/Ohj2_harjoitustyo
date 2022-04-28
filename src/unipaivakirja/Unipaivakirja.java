@@ -29,11 +29,13 @@ public class Unipaivakirja {
     
     /**
      * Poistaa käyttäjistä ne joilla on nro. Kesken.
-     * @param nro sen käyttäjän id-numero, joka poistetaan
+     * @param poistettava se käyttäjä, joka poistetaan
      * @return montako jäsentä poistettiin
      */
-    public int poista(@SuppressWarnings("unused") int nro) {
-        return 0;
+    public int poista(Merkinta poistettava) {
+        if ( poistettava == null ) return 0;
+        int ret = merkinnat.poista(poistettava.getMerkintaid());
+        return ret;
     }
     
     
@@ -256,6 +258,14 @@ public class Unipaivakirja {
      */ 
     public void korvaaTaiLisaa(Merkinta merkinta) throws SailoException { 
         merkinnat.korvaaTaiLisaa(merkinta); 
+    }
+
+
+    public int poista(Kayttaja poistettava) {
+        if (poistettava == null) return 0;
+        int ret = kayttajat.poista(poistettava.getKayttajaId());
+        //merkinnat.poistaKayttajanMerkinnat(poistettava.getKayttajaId());
+        return ret;
     } 
 
     

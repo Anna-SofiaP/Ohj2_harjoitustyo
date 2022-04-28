@@ -72,6 +72,9 @@ public class AloitusikkunaController implements ModalControllerInterface<Kayttaj
     }
     
     
+    /**
+     * Listaa käyttäjät käyttäjä-valikkoon
+     */
     public void listaaKayttajat() {
         kayttajaValinta.clear();
         for (Kayttaja kayttaja : kayttajanUnipaivakirja.annaKayttajat()) {
@@ -100,17 +103,6 @@ public class AloitusikkunaController implements ModalControllerInterface<Kayttaj
     
     /*private void setTitle(String title) {
         ModalController.getStage(kayttajaValinta).setTitle(title);
-    }*/
-    
-    
-    /**
-     * Luo uuden käyttäjän jota aletaan editoimaan 
-     */
-    /*protected void uusiKayttaja() {
-        Kayttaja uusi = new Kayttaja("nea");
-        uusi.rekisteroi();
-        uusi.taytaNeaTiedoilla();
-        kayttajanUnipaivakirja.lisaa(uusi);
     }*/
 
     

@@ -429,4 +429,100 @@ public class Merkinnat implements Iterable<Merkinta>{
     
     }
 
+
+    /** 
+     * Poistaa merkinnän jolla on valittu id-numero  
+     * @param id poistettavan merkinnän id-numero 
+     * @return 1 jos poistettiin, 0 jos ei löydy 
+     * @example 
+     * <pre name="test"> 
+     * #THROWS SailoException  
+     * Jasenet jasenet = new Jasenet(); 
+     * Jasen aku1 = new Jasen(), aku2 = new Jasen(), aku3 = new Jasen(); 
+     * aku1.rekisteroi(); aku2.rekisteroi(); aku3.rekisteroi(); 
+     * int id1 = aku1.getTunnusNro(); 
+     * jasenet.lisaa(aku1); jasenet.lisaa(aku2); jasenet.lisaa(aku3); 
+     * jasenet.poista(id1+1) === 1; 
+     * jasenet.annaId(id1+1) === null; jasenet.getLkm() === 2; 
+     * jasenet.poista(id1) === 1; jasenet.getLkm() === 1; 
+     * jasenet.poista(id1+3) === 0; jasenet.getLkm() === 1; 
+     * </pre> 
+     *  
+     */ 
+    public int poista(int id) { 
+        int ind = etsiId(id); 
+        if (ind < 0) return 0; 
+        lkm--; 
+        for (int i = ind; i < lkm; i++) 
+            alkiot[i] = alkiot[i + 1]; 
+        alkiot[lkm] = null; 
+        muutettu = true; 
+        return 1; 
+    } 
+    
+    
+    /** 
+     * Etsii merkinnän id:n perusteella 
+     * @param id tunnusnumero, jonka mukaan etsitään 
+     * @return löytyneen merkinnän indeksi tai -1 jos ei löydy 
+     * <pre name="test"> 
+     * #THROWS SailoException  
+     * Jasenet jasenet = new Jasenet(); 
+     * Jasen aku1 = new Jasen(), aku2 = new Jasen(), aku3 = new Jasen(); 
+     * aku1.rekisteroi(); aku2.rekisteroi(); aku3.rekisteroi(); 
+     * int id1 = aku1.getTunnusNro(); 
+     * jasenet.lisaa(aku1); jasenet.lisaa(aku2); jasenet.lisaa(aku3); 
+     * jasenet.etsiId(id1+1) === 1; 
+     * jasenet.etsiId(id1+2) === 2; 
+     * </pre> 
+     */ 
+    public int etsiId(int id) { 
+        for (int i = 0; i < lkm; i++) 
+            if (id == alkiot[i].getMerkintaid()) return i; 
+        return -1; 
+    }
+
+
+    /**
+     * Poistaa kaikki tietyn tietyn käyttäjän merkinnät
+     * @param id viite siihen, mihin liittyvät tietueet poistetaan
+     * @return montako poistettiin 
+     * @example
+     * <pre name="test">
+     *  Harrastukset harrasteet = new Harrastukset();
+     *  Harrastus pitsi21 = new Harrastus(); pitsi21.vastaaPitsinNyplays(2);
+     *  Harrastus pitsi11 = new Harrastus(); pitsi11.vastaaPitsinNyplays(1);
+     *  Harrastus pitsi22 = new Harrastus(); pitsi22.vastaaPitsinNyplays(2); 
+     *  Harrastus pitsi12 = new Harrastus(); pitsi12.vastaaPitsinNyplays(1); 
+     *  Harrastus pitsi23 = new Harrastus(); pitsi23.vastaaPitsinNyplays(2); 
+     *  harrasteet.lisaa(pitsi21);
+     *  harrasteet.lisaa(pitsi11);
+     *  harrasteet.lisaa(pitsi22);
+     *  harrasteet.lisaa(pitsi12);
+     *  harrasteet.lisaa(pitsi23);
+     *  harrasteet.poistaJasenenHarrastukset(2) === 3;  harrasteet.getLkm() === 2;
+     *  harrasteet.poistaJasenenHarrastukset(3) === 0;  harrasteet.getLkm() === 2;
+     *  List<Harrastus> h = harrasteet.annaHarrastukset(2);
+     *  h.size() === 0; 
+     *  h = harrasteet.annaHarrastukset(1);
+     *  h.get(0) === pitsi11;
+     *  h.get(1) === pitsi12;
+     * </pre>
+     */
+    /*public int poistaJasenenHarrastukset(int id) {
+        int n = 0;
+        for (Iterator<Merkinta> it = alkiot.iterator(); it.hasNext();) {
+            Merkinta har = it.next();
+            if ( har.getMerkintaid() == id ) {
+                it.remove();
+                n++;
+            }
+        }
+        if (n > 0) muutettu = true;
+        return n;
+    }*/
+ 
+
+
+
 }

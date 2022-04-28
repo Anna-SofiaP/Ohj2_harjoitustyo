@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import fi.jyu.mit.fxgui.ComboBoxChooser?>
 <?import fi.jyu.mit.fxgui.ListChooser?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -126,15 +125,15 @@
                   <Label text="Heräämisaika:" GridPane.rowIndex="2" />
                   <Label text="Unen määrä:" GridPane.rowIndex="3" />
                   <Label text="Lisätietoja:" GridPane.rowIndex="4" />
-                  <TextField fx:id="editNukkumaan" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
-                  <TextField fx:id="editHeratys" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
-                  <TextField fx:id="editUnenmaara" editable="false" text="9 h" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
+                  <TextField fx:id="editNukkumaan" editable="false" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+                  <TextField fx:id="editHeratys" editable="false" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
+                  <TextField fx:id="editUnenmaara" editable="false" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
                   <Label text="Unen laatu:" GridPane.rowIndex="5" />
                   <Label text="Vireystila:" GridPane.rowIndex="6" />
-                  <DatePicker fx:id="kalenteri" GridPane.columnIndex="1" />
-                  <ComboBoxChooser fx:id="editUnenlaatu" rivit="--valitse--&#10;erittäin huono&#10;huono&#10;kohtalainen&#10;hyvä&#10;erittäin hyvä" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                  <ComboBoxChooser fx:id="editVireystila" rivit="--valitse--&#10;erittäin väsynyt&#10;väsynyt&#10;ihan jees&#10;pirteä&#10;erittäin energinen" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                  <TextArea fx:id="editLisatiedot" prefHeight="200.0" prefWidth="200.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <DatePicker fx:id="kalenteri" editable="false" GridPane.columnIndex="1" />
+                  <TextArea fx:id="editLisatiedot" editable="false" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField fx:id="editUnenlaatu" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <TextField fx:id="editVireystila" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                </children>
             </GridPane>
          </content>
