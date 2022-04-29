@@ -192,6 +192,7 @@ public class UnipaivakirjaGUIController implements Initializable{
         if ( !Dialogs.showQuestionDialog("Käyttäjän poisto", "Poistetaanko käyttäjä: " + kayttaja.getNimi(), "Kyllä", "Ei"))
             return;
         kayttajanUnipaivakirja.poista(kayttaja);
+        avaa();
     }
     
     
