@@ -196,14 +196,9 @@ public class UnipaivakirjaGUIController implements Initializable{
     }
     
     
-    /**
-     * Luo uuden käyttäjän jota aletaan editoimaan 
-     */
-    protected void uusiKayttaja() {
-        Kayttaja uusi = new Kayttaja("nea");
-        uusi.rekisteroi();
-        uusi.taytaNeaTiedoilla();
-        kayttajanUnipaivakirja.lisaa(uusi);
+    private void uusiKayttaja() {
+        valittuKayttaja = ModalController.<Kayttaja,UusiKayttajaController>showModal(UnipaivakirjaGUIController.class.getResource(
+                "Uusikayttaja.fxml"), "Luo uusi käyttäjä", null, null, ctrl -> ctrl.setUnipaivakirja(kayttajanUnipaivakirja));
     }
     
     

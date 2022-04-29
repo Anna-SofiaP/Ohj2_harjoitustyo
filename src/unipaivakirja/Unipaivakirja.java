@@ -27,23 +27,6 @@ public class Unipaivakirja {
     }
     
     
-    /** 
-     * Poistaa tämän merkinnän 
-     * @param merkinta poistettava merkintä
-     * @example
-     * <pre name="test">
-     * #THROWS Exception
-     *   alustaKerho();
-     *   kerho.annaHarrastukset(aku1).size() === 2;
-     *   kerho.poistaHarrastus(pitsi11);
-     *   kerho.annaHarrastukset(aku1).size() === 1;
-     */ 
-    public void poista(Merkinta merkinta) { 
-        merkinnat.poista(merkinta.getMerkintaid()); 
-    } 
-
-    
-    
     /**
      * Lisää unipäiväkirjaan uuden käyttäjän
      * @param kayttaja lisättävä käyttäjä
@@ -260,6 +243,22 @@ public class Unipaivakirja {
         merkinnat.poistaKayttajanMerkinnat(kayttaja.getKayttajaId()); 
         return ret; 
     }
+    
+    
+    /** 
+     * Poistaa tämän merkinnän 
+     * @param merkinta poistettava merkintä
+     * @example
+     * <pre name="test">
+     * #THROWS Exception
+     *   alustaKerho();
+     *   kerho.annaHarrastukset(aku1).size() === 2;
+     *   kerho.poistaHarrastus(pitsi11);
+     *   kerho.annaHarrastukset(aku1).size() === 1;
+     */ 
+    public void poista(Merkinta merkinta) { 
+        merkinnat.poista(merkinta.getMerkintaid()); 
+    } 
     
     
     /** 
