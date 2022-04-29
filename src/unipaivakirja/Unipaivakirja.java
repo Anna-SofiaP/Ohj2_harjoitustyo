@@ -27,16 +27,21 @@ public class Unipaivakirja {
     }
     
     
-    /**
-     * Poistaa käyttäjistä ne joilla on nro. Kesken.
-     * @param poistettava se käyttäjä, joka poistetaan
-     * @return montako jäsentä poistettiin
-     */
-    public int poista(Merkinta poistettava) {
-        if ( poistettava == null ) return 0;
-        int ret = merkinnat.poista(poistettava.getMerkintaid());
-        return ret;
-    }
+    /** 
+     * Poistaa tämän merkinnän 
+     * @param merkinta poistettava merkintä
+     * @example
+     * <pre name="test">
+     * #THROWS Exception
+     *   alustaKerho();
+     *   kerho.annaHarrastukset(aku1).size() === 2;
+     *   kerho.poistaHarrastus(pitsi11);
+     *   kerho.annaHarrastukset(aku1).size() === 1;
+     */ 
+    public void poista(Merkinta merkinta) { 
+        merkinnat.poista(merkinta.getMerkintaid()); 
+    } 
+
     
     
     /**
@@ -247,26 +252,26 @@ public class Unipaivakirja {
         merkinnat.lisaa(merkinta);
         
     }
+
+
+    public int poista(Kayttaja kayttaja) {
+        if ( kayttaja == null ) return 0;
+        int ret = kayttajat.poista(kayttaja.getKayttajaId()); 
+        merkinnat.poistaKayttajanMerkinnat(kayttaja.getKayttajaId()); 
+        return ret; 
+    }
     
     
     /** 
-     * Korvaa merkinnän tietorakenteessa.  Ottaa merkinnän omistukseensa. 
-     * Etsitään samalla tunnusnumerolla oleva merkintä.  Jos ei löydy, 
-     * niin lisätään uutena merkintänä. 
-     * @param merkinta viite lisättävään merkintään
+     * Korvaa jäsenen tietorakenteessa.  Ottaa jäsenen omistukseensa. 
+     * Etsitään samalla tunnusnumerolla oleva jäsen.  Jos ei löydy, 
+     * niin lisätään uutena jäsenenä. 
+     * @param jasen lisätäävän jäsenen viite.  Huom tietorakenne muuttuu omistajaksi 
      * @throws SailoException jos tietorakenne on jo täynnä 
      */ 
-    public void korvaaTaiLisaa(Merkinta merkinta) throws SailoException { 
-        merkinnat.korvaaTaiLisaa(merkinta); 
-    }
-
-
-    public int poista(Kayttaja poistettava) {
-        if (poistettava == null) return 0;
-        int ret = kayttajat.poista(poistettava.getKayttajaId());
-        //merkinnat.poistaKayttajanMerkinnat(poistettava.getKayttajaId());
-        return ret;
-    } 
+    /*public void korvaaTaiLisaa(Jasen jasen) throws SailoException { 
+        jasenet.korvaaTaiLisaa(jasen); 
+    } */
 
     
     

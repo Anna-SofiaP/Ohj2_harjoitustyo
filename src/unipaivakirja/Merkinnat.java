@@ -483,46 +483,22 @@ public class Merkinnat implements Iterable<Merkinta>{
     }
 
 
-    /**
-     * Poistaa kaikki tietyn tietyn käyttäjän merkinnät
-     * @param id viite siihen, mihin liittyvät tietueet poistetaan
-     * @return montako poistettiin 
-     * @example
-     * <pre name="test">
-     *  Harrastukset harrasteet = new Harrastukset();
-     *  Harrastus pitsi21 = new Harrastus(); pitsi21.vastaaPitsinNyplays(2);
-     *  Harrastus pitsi11 = new Harrastus(); pitsi11.vastaaPitsinNyplays(1);
-     *  Harrastus pitsi22 = new Harrastus(); pitsi22.vastaaPitsinNyplays(2); 
-     *  Harrastus pitsi12 = new Harrastus(); pitsi12.vastaaPitsinNyplays(1); 
-     *  Harrastus pitsi23 = new Harrastus(); pitsi23.vastaaPitsinNyplays(2); 
-     *  harrasteet.lisaa(pitsi21);
-     *  harrasteet.lisaa(pitsi11);
-     *  harrasteet.lisaa(pitsi22);
-     *  harrasteet.lisaa(pitsi12);
-     *  harrasteet.lisaa(pitsi23);
-     *  harrasteet.poistaJasenenHarrastukset(2) === 3;  harrasteet.getLkm() === 2;
-     *  harrasteet.poistaJasenenHarrastukset(3) === 0;  harrasteet.getLkm() === 2;
-     *  List<Harrastus> h = harrasteet.annaHarrastukset(2);
-     *  h.size() === 0; 
-     *  h = harrasteet.annaHarrastukset(1);
-     *  h.get(0) === pitsi11;
-     *  h.get(1) === pitsi12;
-     * </pre>
-     */
-    /*public int poistaJasenenHarrastukset(int id) {
-        int n = 0;
-        for (Iterator<Merkinta> it = alkiot.iterator(); it.hasNext();) {
-            Merkinta har = it.next();
-            if ( har.getMerkintaid() == id ) {
-                it.remove();
-                n++;
-            }
-        }
-        if (n > 0) muutettu = true;
-        return n;
-    }*/
- 
+    public int poistaKayttajanMerkinnat(int id) {
+        int ind = etsiKayttajaId(id); 
+        if (ind < 0) return 0;  
+        for (int i = ind; i < lkm; i++) 
+            alkiot[i] = alkiot[i + 1];
+            lkm--;
+        alkiot[lkm] = null; 
+        muutettu = true; 
+        return 1; 
+    }
 
 
+    private int etsiKayttajaId(int id) {
+        for (int i = 0; i < lkm; i++) 
+            if (id == alkiot[i].getKayttajaId()) return i; 
+        return -1; 
+    }
 
 }
