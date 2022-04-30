@@ -26,6 +26,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import unipaivakirja.Kayttaja;
 import unipaivakirja.Merkinta;
 import unipaivakirja.Unenlaatu;
 import unipaivakirja.Unipaivakirja;

@@ -62,10 +62,6 @@ public class UnipaivakirjaGUIController implements Initializable{
         haeMerkinnat(0);
     }
 
-    /*@FXML void handleValitseKayttaja(String valittuKayttaja) {
-        avaaKayttajanPaivakirja(valittuKayttaja);
-    }*/
-
 
     @FXML void handleAvaa() {
         avaa();
@@ -241,11 +237,6 @@ public class UnipaivakirjaGUIController implements Initializable{
             return;
         }
         
-        //tekstilaatikko.setText("");
-        //try (PrintStream os = TextAreaOutputStream.getTextPrintStream(tekstilaatikko)) {
-            //merkintaKohdalla.tulosta(os);
-        //}
-        
         naytaUnimerkinta();
     }
     
@@ -274,25 +265,7 @@ public class UnipaivakirjaGUIController implements Initializable{
         uusi.merkinnanLisays();
         kayttajanUnipaivakirja.lisaa(uusi);
         haeMerkinnat(uusi.getMerkintaid());
-         
-        //uusi.taytaM1Tiedoilla(); 
     }
-    
-    
-    /*private void muokkaaMerkintaa() {
-        if ( merkintaKohdalla == null ) return; 
-        try { 
-            Merkinta merk; 
-            merk = merkintaKohdalla.clone(); 
-            if ( merk == null ) return; 
-            kayttajanUnipaivakirja.korvaaTaiLisaa(merk); 
-            //haeMerkinta(merk.getMerkintaid()); 
-        } catch (CloneNotSupportedException e) { 
-            // 
-        } catch (SailoException e) { 
-            Dialogs.showMessageDialog(e.getMessage()); 
-        } 
-    }*/
     
     
     /**
