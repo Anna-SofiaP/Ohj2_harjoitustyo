@@ -156,7 +156,7 @@ public class UnipaivakirjaGUIController implements Initializable{
      * @return null, jos tiedoston lukeminen onnistui, muuten virhe
      */
     protected String lueTiedosto() {
-        setTitle("Unipäiväkirja - " + valittuKayttaja.getNimi());
+        //setTitle("Unipäiväkirja - " + valittuKayttaja.getNimi());
         try {
             kayttajanUnipaivakirja.lueTiedostosta("data");
         } catch (SailoException e) {
@@ -193,8 +193,11 @@ public class UnipaivakirjaGUIController implements Initializable{
     
     
     private void uusiKayttaja() {
-        valittuKayttaja = ModalController.<Kayttaja,UusiKayttajaController>showModal(UnipaivakirjaGUIController.class.getResource(
+        Kayttaja uusiKayttaja = ModalController.<Kayttaja,UusiKayttajaController>showModal(UnipaivakirjaGUIController.class.getResource(
                 "Uusikayttaja.fxml"), "Luo uusi käyttäjä", null, null, ctrl -> ctrl.setUnipaivakirja(kayttajanUnipaivakirja));
+        if (uusiKayttaja == null) return;
+        valittuKayttaja = uusiKayttaja;
+        haeMerkinnat(0);
     }
     
     
@@ -337,7 +340,7 @@ public class UnipaivakirjaGUIController implements Initializable{
      */
     public void setUnipaivakirja(Unipaivakirja unipaivakirja) {
         this.kayttajanUnipaivakirja = unipaivakirja;
-        //lueTiedosto();
+        lueTiedosto();
         //haeMerkinnat(0);
     }
 

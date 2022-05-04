@@ -68,7 +68,7 @@ public class AloitusikkunaController implements ModalControllerInterface<Kayttaj
      */
     public void setUnipaivakirja(Unipaivakirja unipaivakirja) {
         this.kayttajanUnipaivakirja = unipaivakirja;
-        lueTiedosto("kayttajat");
+        //lueTiedosto("kayttajat");
     }
     
     
