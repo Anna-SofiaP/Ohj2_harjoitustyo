@@ -7,9 +7,7 @@ import fi.jyu.mit.fxgui.ComboBoxChooser;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.stage.Stage;
 import unipaivakirja.Kayttaja;
 import unipaivakirja.SailoException;
 import unipaivakirja.Unipaivakirja;
@@ -29,11 +27,13 @@ public class AloitusikkunaController implements ModalControllerInterface<Kayttaj
     }
     
     @FXML void handleUusiKayttaja() {
-        //uusiKayttaja();
+        uusiKayttaja();
     }
     
     @FXML void handleSulje() {
-        Platform.exit();
+        //if (kayttajaValinta != null)
+        ModalController.closeStage(kayttajaValinta);
+        //Platform.exit();
     }
     
     
@@ -100,6 +100,14 @@ public class AloitusikkunaController implements ModalControllerInterface<Kayttaj
         }
     }
     
+    
+    private void uusiKayttaja() {
+        Kayttaja uusiKayttaja = ModalController.<Kayttaja,UusiKayttajaController>showModal(UnipaivakirjaGUIController.class.getResource(
+                "Uusikayttaja.fxml"), "Luo uusi käyttäjä", null, null, ctrl -> ctrl.setUnipaivakirja(kayttajanUnipaivakirja));
+        if (uusiKayttaja == null) return;
+        valittuKayttaja = uusiKayttaja;
+        ModalController.closeStage(kayttajaValinta);
+    }
     
     /*private void setTitle(String title) {
         ModalController.getStage(kayttajaValinta).setTitle(title);

@@ -3,13 +3,8 @@
  */
 package fxUnipaivakirja;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;

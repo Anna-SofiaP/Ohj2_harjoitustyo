@@ -1,9 +1,7 @@
 package fxUnipaivakirja;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.stage.Stage;
-import unipaivakirja.Unipaivakirja;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.fxml.FXMLLoader;

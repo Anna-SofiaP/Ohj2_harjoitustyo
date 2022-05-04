@@ -70,34 +70,7 @@ public class Merkinnat implements Iterable<Merkinta>{
     }
     
     
-    /**
-     * Korvaa merkinnän tietorakenteessa.  Ottaa merkinnän omistukseensa.
-     * Etsitään samalla tunnusnumerolla oleva merkintä.  Jos ei löydy,
-     * niin lisätään uutena merkintänä.
-     * @param merkinta viite lisättävään merkintään
-     * @throws SailoException jos tietorakenne on jo täynnä
-     * <pre name="test">
-     * #THROWS SailoException,CloneNotSupportedException
-     * #PACKAGEIMPORT
-     * Jasenet jasenet = new Jasenet();
-     * Jasen aku1 = new Jasen(), aku2 = new Jasen();
-     * aku1.rekisteroi(); aku2.rekisteroi();
-     * jasenet.getLkm() === 0;
-     * jasenet.korvaaTaiLisaa(aku1); jasenet.getLkm() === 1;
-     * jasenet.korvaaTaiLisaa(aku2); jasenet.getLkm() === 2;
-     * Jasen aku3 = aku1.clone();
-     * aku3.setPostinumero("00130");
-     * Iterator<Jasen> it = jasenet.iterator();
-     * it.next() == aku1 === true;
-     * jasenet.korvaaTaiLisaa(aku3); jasenet.getLkm() === 2;
-     * it = jasenet.iterator();
-     * Jasen j0 = it.next();
-     * j0 === aku3;
-     * j0 == aku3 === true;
-     * j0 == aku1 === false;
-     * </pre>
-     */
-    public void korvaaTaiLisaa(Merkinta merkinta) throws SailoException {
+    /*public void korvaaTaiLisaa(Merkinta merkinta) throws SailoException {
         int id = merkinta.getMerkintaid();
         for (int i = 0; i < lkm; i++) {
             if ( alkiot[i].getMerkintaid() == id ) {
@@ -107,7 +80,7 @@ public class Merkinnat implements Iterable<Merkinta>{
             }
         }
         lisaa(merkinta);
-    }
+    }*/
 
     
     
@@ -437,15 +410,14 @@ public class Merkinnat implements Iterable<Merkinta>{
      * @example 
      * <pre name="test"> 
      * #THROWS SailoException  
-     * Jasenet jasenet = new Jasenet(); 
-     * Jasen aku1 = new Jasen(), aku2 = new Jasen(), aku3 = new Jasen(); 
-     * aku1.rekisteroi(); aku2.rekisteroi(); aku3.rekisteroi(); 
-     * int id1 = aku1.getTunnusNro(); 
-     * jasenet.lisaa(aku1); jasenet.lisaa(aku2); jasenet.lisaa(aku3); 
-     * jasenet.poista(id1+1) === 1; 
-     * jasenet.annaId(id1+1) === null; jasenet.getLkm() === 2; 
-     * jasenet.poista(id1) === 1; jasenet.getLkm() === 1; 
-     * jasenet.poista(id1+3) === 0; jasenet.getLkm() === 1; 
+     * Merkinnat merkinnat = new Merkinnat(); 
+     * Merkinta pvm1 = new Merkinta(), pvm2 = new Merkinta(), pvm3 = new Merkinta(); 
+     * pvm1.merkinnanLisays(); pvm2.merkinnanLisays(); pvm3.merkinnanLisays(); 
+     * int id1 = pvm1.getMerkintaid(); 
+     * merkinnat.lisaa(pvm1); merkinnat.lisaa(pvm2); merkinnat.lisaa(pvm3); 
+     * merkinnat.poista(id1+1) === 1; merkinnat.getLkm() === 2; 
+     * merkinnat.poista(id1) === 1; merkinnat.getLkm() === 1; 
+     * merkinnat.poista(id1+3) === 0; merkinnat.getLkm() === 1; 
      * </pre> 
      *  
      */ 
@@ -467,13 +439,13 @@ public class Merkinnat implements Iterable<Merkinta>{
      * @return löytyneen merkinnän indeksi tai -1 jos ei löydy 
      * <pre name="test"> 
      * #THROWS SailoException  
-     * Jasenet jasenet = new Jasenet(); 
-     * Jasen aku1 = new Jasen(), aku2 = new Jasen(), aku3 = new Jasen(); 
-     * aku1.rekisteroi(); aku2.rekisteroi(); aku3.rekisteroi(); 
-     * int id1 = aku1.getTunnusNro(); 
-     * jasenet.lisaa(aku1); jasenet.lisaa(aku2); jasenet.lisaa(aku3); 
-     * jasenet.etsiId(id1+1) === 1; 
-     * jasenet.etsiId(id1+2) === 2; 
+     * Merkinnat merkinnat = new Merkinnat(); 
+     * Merkinta pvm1 = new Merkinta(), pvm2 = new Merkinta(), pvm3 = new Merkinta(); 
+     * pvm1.merkinnanLisays(); pvm2.merkinnanLisays(); pvm3.merkinnanLisays(); 
+     * int id1 = pvm1.getMerkintaid(); 
+     * merkinnat.lisaa(pvm1); merkinnat.lisaa(pvm2); merkinnat.lisaa(pvm3); 
+     * merkinnat.etsiId(id1+1) === 1; 
+     * merkinnat.etsiId(id1+2) === 2; 
      * </pre> 
      */ 
     public int etsiId(int id) { 
@@ -483,19 +455,69 @@ public class Merkinnat implements Iterable<Merkinta>{
     }
 
 
+    /**
+     * Poistaa merkinnät siltä käyttäjältä, jonka id-numero on annettu parametrina
+     * @param id sen käyttäjän id-numero, jonka merkinnät poistetaan
+     * @return 0 jos parametrina tuotu käyttäjä-id on 0, ja 1 jos merkintöjen poistaminen onnistuu
+     * <pre name="test">
+     * #THROWS SailoException
+     * Merkinnat merkinnat = new Merkinnat(); 
+     * Merkinta pvm1 = new Merkinta(1), pvm2 = new Merkinta(1), pvm3 = new Merkinta(1); 
+     * pvm1.merkinnanLisays(); pvm2.merkinnanLisays(); pvm3.merkinnanLisays(); 
+     * int id1 = -1;
+     * merkinnat.lisaa(pvm1); merkinnat.lisaa(pvm2); merkinnat.lisaa(pvm3); 
+     * merkinnat.poistaKayttajanMerkinnat(id1) === 0; 
+     * merkinnat.getLkm() === 3;
+     * id1 = pvm1.getKayttajaId(); 
+     * merkinnat.poistaKayttajanMerkinnat(id1) === 1;
+     * merkinnat.getLkm() === 0;
+     * </pre>
+     */
     public int poistaKayttajanMerkinnat(int id) {
         int ind = etsiKayttajaId(id); 
         if (ind < 0) return 0;  
-        for (int i = ind; i < lkm; i++) 
-            alkiot[i] = alkiot[i + 1];
-            lkm--;
+        for (int i = ind; i < lkm; i++) {
+            if (i == ind)
+                poistaMerkinta(i);
+        }
         alkiot[lkm] = null; 
         muutettu = true; 
         return 1; 
     }
+    
+    
+    /**
+     * Poistaa yhden merkinnän käyttäjän id:n perusteella
+     * @param id sen käyttäjän id, jonka merkintä poistetaan
+     */
+    public void poistaMerkinta(int id) {
+        int ind = etsiKayttajaId(id); 
+        if (ind < 0) return; 
+        lkm--; 
+        for (int i = ind; i < lkm; i++) 
+            alkiot[i] = alkiot[i + 1]; 
+        alkiot[lkm] = null; 
+    }
 
 
-    private int etsiKayttajaId(int id) {
+    /** 
+     * Etsii käyttäjän id:n perusteella 
+     * @param id tunnusnumero, jonka mukaan etsitään 
+     * @return löytyneen käyttäjän indeksi tai -1 jos ei löydy 
+     * <pre name="test"> 
+     * #THROWS SailoException  
+     * Merkinnat merkinnat = new Merkinnat(); 
+     * Merkinta pvm1 = new Merkinta(1), pvm2 = new Merkinta(2), pvm3 = new Merkinta(2); 
+     * pvm1.merkinnanLisays(); pvm2.merkinnanLisays(); pvm3.merkinnanLisays();
+     * int id1 = pvm1.getKayttajaId(); 
+     * merkinnat.lisaa(pvm1); merkinnat.lisaa(pvm2); merkinnat.lisaa(pvm3);
+     * merkinnat.etsiKayttajaId(id1) === 0; 
+     * merkinnat.etsiKayttajaId(id1+1) === 1; 
+     * merkinnat.etsiKayttajaId(id1+2) === -1;
+     * merkinnat.etsiKayttajaId(id1+5) === -1;
+     * </pre> 
+     */ 
+    public int etsiKayttajaId(int id) {
         for (int i = 0; i < lkm; i++) 
             if (id == alkiot[i].getKayttajaId()) return i; 
         return -1; 

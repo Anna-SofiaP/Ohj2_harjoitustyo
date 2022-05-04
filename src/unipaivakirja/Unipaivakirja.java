@@ -4,7 +4,6 @@
 package unipaivakirja;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -92,69 +91,6 @@ public class Unipaivakirja {
      * Lukee unipäiväkirjan tiedot tiedostosta
      * @param tiedosto jota käyteään lukemisessa
      * @throws SailoException jos lukeminen epäonnistuu
-     * 
-     * @example
-     * <pre name="test">
-     * #THROWS SailoException 
-     * #import java.io.*;
-     * #import java.util.*;
-     * 
-     *  Unipaivakirja unip = new Unipaivakirja();
-     *  
-     *  Kayttaja nea = new Kayttaja(); nea.taytaNeaTiedoilla(); nea.rekisteroi();
-     *  Kayttaja ansku = new Kayttaja(); ansku.taytaAnskuTiedoilla(); ansku.rekisteroi();
-     *  Merkinta merk1 = new Merkinta(); merk1.taytaM1Tiedoilla();
-     *  Merkinta merk2 = new Merkinta(); merk2.taytaM2Tiedoilla();
-     *  Merkinta merk3 = new Merkinta(); merk3.taytaM1Tiedoilla(); 
-     *  Merkinta merk4 = new Merkinta(); merk4.taytaM2Tiedoilla(); 
-     *  Merkinta merk5 = new Merkinta(); merk5.taytaM1Tiedoilla();
-     *   
-     *  String hakemisto = "testiKayttajat";
-     *  File dir = new File(hakemisto);
-     *  File ftied  = new File(hakemisto+"/tkayttajat.dat");
-     *  File fhtied = new File(hakemisto+"/tmerkinnat.dat");
-     *  dir.mkdir();  
-     *  ftied.delete();
-     *  fhtied.delete();
-     *  unip.lueTiedostosta(hakemisto); #THROWS SailoException
-     *  unip.lisaa(nea);
-     *  unip.lisaa(ansku);
-     *  unip.lisaa(merk1);
-     *  unip.lisaa(merk2);
-     *  unip.lisaa(merk3);
-     *  unip.lisaa(merk4);
-     *  unip.lisaa(merk5);
-     *  unip.talleta();
-     *  unip = new Unipaivakirja();
-     *  unip.lueTiedostosta(hakemisto);
-     *  Collection<Kayttaja> kaikki = unip.annaKayttajat(); 
-     *  Iterator<Kayttaja> it = kaikki.iterator();
-     *  it.next() === nea;
-     *  it.next() === ansku;
-     *  it.hasNext() === false;
-     *  List<Merkinta> loytyneet = unip.annaKayttajanMerkinnat(1);
-     *  Iterator<Merkinta> ih = loytyneet.iterator();
-     *  ih.next() === merk1;
-     *  ih.next() === merk2;
-     *  ih.hasNext() === false;
-     *  loytyneet = unip.annaKayttajanMerkinnat(2);
-     *  ih = loytyneet.iterator();
-     *  ih.next() === merk3;
-     *  ih.next() === merk4;
-     *  ih.next() === merk5;
-     *  ih.hasNext() === false;
-     *  unip.lisaa(ansku);
-     *  unip.lisaa(merk3);
-     *  unip.talleta();
-     *  ftied.delete()  === true;
-     *  fhtied.delete() === true;
-     *  File fbak = new File(hakemisto+"/tkayttajat.bak");
-     *  File fhbak = new File(hakemisto+"/tmerkinnat.bak");
-     *  fbak.delete() === true;
-     *  fhbak.delete() === true;
-     *  dir.delete() === true;
-     *  
-     * </pre>
      */
     public void lueTiedostosta(String tiedosto) throws SailoException {
         kayttajat = new Kayttajat();
@@ -217,6 +153,11 @@ public class Unipaivakirja {
     }
 
 
+    /**
+     * Asettaa käyttäjän comboboxchooserista valitun käyttäjänimen perusteella
+     * @param selectedText comboboxchooserista valittu käyttäjä
+     * @return valittu käyttäjä
+     */
     public Kayttaja asetaKayttaja(String selectedText) {
         return kayttajat.aseta(selectedText);
     }
@@ -231,12 +172,21 @@ public class Unipaivakirja {
     }
 
 
+    /**
+     * Lisää merkinnän tietorakenteeseen
+     * @param merkinta lisättävä merkintä
+     */
     public void lisaa(Merkinta merkinta) {
         merkinnat.lisaa(merkinta);
         
     }
 
 
+    /**
+     * Poistaa valitun käyttäjän tietorakenteesta
+     * @param kayttaja poistettava käyttäjä
+     * @return jokin luku ??
+     */
     public int poista(Kayttaja kayttaja) {
         if ( kayttaja == null ) return 0;
         int ret = kayttajat.poista(kayttaja.getKayttajaId()); 
@@ -248,13 +198,6 @@ public class Unipaivakirja {
     /** 
      * Poistaa tämän merkinnän 
      * @param merkinta poistettava merkintä
-     * @example
-     * <pre name="test">
-     * #THROWS Exception
-     *   alustaKerho();
-     *   kerho.annaHarrastukset(aku1).size() === 2;
-     *   kerho.poistaHarrastus(pitsi11);
-     *   kerho.annaHarrastukset(aku1).size() === 1;
      */ 
     public void poista(Merkinta merkinta) { 
         merkinnat.poista(merkinta.getMerkintaid()); 
@@ -270,10 +213,6 @@ public class Unipaivakirja {
      */ 
     /*public void korvaaTaiLisaa(Jasen jasen) throws SailoException { 
         jasenet.korvaaTaiLisaa(jasen); 
-    } */
-
-    
-    
-    
+    } */   
 
 }

@@ -7,18 +7,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import fi.jyu.mit.fxgui.ComboBoxChooser;
-import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
-import fi.jyu.mit.ohj2.Mjonot;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -26,11 +21,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import unipaivakirja.Kayttaja;
 import unipaivakirja.Merkinta;
-import unipaivakirja.Unenlaatu;
 import unipaivakirja.Unipaivakirja;
-import unipaivakirja.Vireystila;
 
 /**
  * @author Omistaja
@@ -76,7 +68,6 @@ public class MerkintaDialogiController implements ModalControllerInterface<Merki
     
     private Merkinta merkintaKohdalla;
     private Unipaivakirja unipaivakirja;
-    private static Merkinta apumerkinta = new Merkinta();
     private boolean tallennetaanko = false;
     private final Collection<String> unenlaatu = new ArrayList<String>(Arrays.asList("erittäin huono", "huono",
             "kohtalainen", "hyvä", 
@@ -118,6 +109,9 @@ public class MerkintaDialogiController implements ModalControllerInterface<Merki
     }
     
     
+    /**
+     * Tallentaa unipäiväkirjamerkinnän editointikenttiin tehdyt muutokset.
+     */
     public void tallennaMuutokset() {
         merkintaKohdalla.setPvmDate(kalenteri.getValue().toString());
         merkintaKohdalla.setHeratysKlo(editHeratys.getText());

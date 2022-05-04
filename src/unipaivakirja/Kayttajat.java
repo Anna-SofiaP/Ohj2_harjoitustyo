@@ -400,15 +400,14 @@ public class Kayttajat implements Iterable<Kayttaja>{
          * @example 
          * <pre name="test"> 
          * #THROWS SailoException  
-         * Jasenet jasenet = new Jasenet(); 
-         * Jasen aku1 = new Jasen(), aku2 = new Jasen(), aku3 = new Jasen(); 
-         * aku1.rekisteroi(); aku2.rekisteroi(); aku3.rekisteroi(); 
-         * int id1 = aku1.getTunnusNro(); 
-         * jasenet.lisaa(aku1); jasenet.lisaa(aku2); jasenet.lisaa(aku3); 
-         * jasenet.poista(id1+1) === 1; 
-         * jasenet.annaId(id1+1) === null; jasenet.getLkm() === 2; 
-         * jasenet.poista(id1) === 1; jasenet.getLkm() === 1; 
-         * jasenet.poista(id1+3) === 0; jasenet.getLkm() === 1; 
+         * Kayttajat kayttajat = new Kayttajat(); 
+         * Kayttaja nea = new Kayttaja(), ansku = new Kayttaja(), liisa = new Kayttaja(); 
+         * nea.rekisteroi(); ansku.rekisteroi(); liisa.rekisteroi(); 
+         * int id1 = nea.getKayttajaId(); 
+         * kayttajat.lisaa(nea); kayttajat.lisaa(ansku); kayttajat.lisaa(liisa); 
+         * kayttajat.poista(id1+1) === 1; kayttajat.getLkm() === 2; 
+         * kayttajat.poista(id1) === 1; kayttajat.getLkm() === 1; 
+         * kayttajat.poista(id1+3) === 0; kayttajat.getLkm() === 1; 
          * </pre> 
          *  
          */ 
@@ -430,13 +429,13 @@ public class Kayttajat implements Iterable<Kayttaja>{
          * @return löytyneen käyttäjän indeksi tai -1 jos ei löydy 
          * <pre name="test"> 
          * #THROWS SailoException  
-         * Jasenet jasenet = new Jasenet(); 
-         * Jasen aku1 = new Jasen(), aku2 = new Jasen(), aku3 = new Jasen(); 
-         * aku1.rekisteroi(); aku2.rekisteroi(); aku3.rekisteroi(); 
-         * int id1 = aku1.getTunnusNro(); 
-         * jasenet.lisaa(aku1); jasenet.lisaa(aku2); jasenet.lisaa(aku3); 
-         * jasenet.etsiId(id1+1) === 1; 
-         * jasenet.etsiId(id1+2) === 2; 
+         * Kayttajat kayttajat = new Kayttajat(); 
+         * Kayttaja nea = new Kayttaja(), ansku = new Kayttaja(), liisa = new Kayttaja(); 
+         * nea.rekisteroi(); ansku.rekisteroi(); liisa.rekisteroi(); 
+         * int id1 = nea.getKayttajaId(); 
+         * kayttajat.lisaa(nea); kayttajat.lisaa(ansku); kayttajat.lisaa(liisa); 
+         * kayttajat.etsiId(id1+1) === 1; 
+         * kayttajat.etsiId(id1+2) === 2; 
          * </pre> 
          */ 
         public int etsiId(int id) { 

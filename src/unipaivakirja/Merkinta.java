@@ -5,11 +5,7 @@ package unipaivakirja;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
-
 import fi.jyu.mit.ohj2.Mjonot;
 
 /**
@@ -90,10 +86,8 @@ public class Merkinta {
         this.pvm = pvm1;
         nukkumaanKlo = "21:00";
         heratysKlo = "6:00";
-        unenMaara = "9 h";                    //laskeUnenmaara();
+        unenMaara = "9 h";
         lisatiedot = "Heräilin muutaman kerran yön aikana.";
-        //unenlaatu = new Unenlaatu("Erinomainen");
-        //vireystila = new Vireystila("Energinen");
     }
     
     
@@ -105,10 +99,8 @@ public class Merkinta {
         this.pvm = pvm2;
         nukkumaanKlo = "21:30";
         heratysKlo = "6:00";
-        unenMaara = "8 h 30 min";                    //laskeUnenmaara();
+        unenMaara = "8 h 30 min";
         lisatiedot = "Nukuin kuin tukki.";
-        //unenlaatu = new Unenlaatu("Kohtalainen");
-        //vireystila = new Vireystila("Ihan jees");
     }
     
     
@@ -137,10 +129,12 @@ public class Merkinta {
      * @param out tietovirta johon tulostetaan
      */
     public void tulosta(PrintStream out) {
-        out.println(String.format("%03d", merkintaid, 3) + "  " + pvm);
-        out.println("Nukkumaanmenoaika: " + nukkumaanKlo + " Heräämisaika: " + heratysKlo + " Unen määrä: " + unenMaara);
+        out.println("Nukkumaanmenoaika: " + nukkumaanKlo);
+        out.println("Heräämisaika: " + heratysKlo);
+        out.println("Unen määrä: " + unenMaara);
         out.println("Lisätiedot: " + lisatiedot);
-        out.print("Unenlaatu: " + unenlaatu + " Vireystila: " + vireystila);
+        out.println("Unenlaatu: " + unenlaatu);
+        out.print("Vireystila: " + vireystila);
     }
     
     
@@ -282,25 +276,23 @@ public class Merkinta {
      * @return unen määrä
      * @example
      * <pre name="test">
-     * #import java.text.SimpleDateFormat;
-     * #import java.util.Date;
-     *  Merkinta merkinta = new Merkinta("21:00", "5:30");
-     *  SimpleDateFormat unenmaara = new SimpleDateFormat("HH:mm");
-     *  try {
-     *      unenmaara.parse(merkinta.getNukkumaanKlo());
-     *      unenmaara.parse(merkinta.getHeratysKlo());
-     *      merkinta.laskeUnenmaara() === "8 h 30 min";
-     *      Merkinta merkinta2 = new Merkinta("1:00", "9:15");
-     *      unenmaara = new SimpleDateFormat("HH:mm");
-     *      unenmaara.parse(merkinta2.getNukkumaanKlo());
-     *      unenmaara.parse(merkinta2.getHeratysKlo());
-     *      merkinta2.laskeUnenmaara() === "8 h 15 min";
-     *  } catch(Exception e) {
-     *      1 === 0;
-     *  }
+     *  Merkinta m1 = new Merkinta("21:20", "7:15");
+     *  Merkinta m2 = new Merkinta("1:00", "10:45");
+     *  Merkinta m3 = new Merkinta("22:00", "2:00");
+     *  Merkinta m4 = new Merkinta("5:10", "09:55");
+     *  Merkinta m5 = new Merkinta("21:30", "6:30");
+     *  Merkinta m6 = new Merkinta("22:15", "8:15");
+     *  Merkinta m7 = new Merkinta("22:00", "7:00");
+     *  m1.laskeUnenmaara("21:20", "07:15") === "9 h 55 min";
+     *  m2.laskeUnenmaara("1:00", "10:45") === "9 h 45 min";
+     *  m3.laskeUnenmaara("22:00", "2:00") === "4 h 0 min";
+     *  m4.laskeUnenmaara("5:10", "09:55") === "4 h 45 min";
+     *  m5.laskeUnenmaara("21:30", "6:30") === "9 h 0 min";
+     *  m6.laskeUnenmaara("22:15", "8:15") === "10 h 0 min";
+     *  m7.laskeUnenmaara("22:00", "7:00") === "9 h 0 min";
      * </pre>
      */
-    public String laskeUnenmaara(String nukkumaan, String heratys) {                    //TODO: tee tämä ohjelma niin, että se toimii oikein, ja että
+    public String laskeUnenmaara(String nukkumaan, String heratys) {
         String[] nukkumaanKlo = nukkumaan.split(":");
         String[] heratysKlo = heratys.split(":");
         
@@ -373,33 +365,23 @@ public class Merkinta {
                     tunnit = tunti2 - tunti1 + 1;
                 }
             }
+            if (minuutit == 60) {
+                minuutit = 0;
+                tunnit += 1;
+            }
         }
 
         return "" + tunnit + " h " + minuutit + " min" ;
         
     }
     
-    
-    /**
-     * Tehdään identtinen klooni merkinnästä
-     * @return Object kloonattu merkintä
-     * @example
-     * <pre name="test">
-     * #THROWS CloneNotSupportedException 
-     *   Jasen jasen = new Jasen();
-     *   jasen.parse("   3  |  Ankka Aku   | 123");
-     *   Jasen kopio = jasen.clone();
-     *   kopio.toString() === jasen.toString();
-     *   jasen.parse("   4  |  Ankka Tupu   | 123");
-     *   kopio.toString().equals(jasen.toString()) === false;
-     * </pre>
-     */
-    @Override
+
+    /*@Override
     public Merkinta clone() throws CloneNotSupportedException {
         Merkinta uusi;
         uusi = (Merkinta) super.clone();
         return uusi;
-    }
+    }*/
 
     
 
@@ -420,7 +402,10 @@ public class Merkinta {
         /*System.out.println(laskeUnenmaara("21:20", "07:15"));   //9 h 55 min
         System.out.println(laskeUnenmaara("1:00", "10:45"));    //9 h 45 min
         System.out.println(laskeUnenmaara("22:00", "2:00"));    //4 h 0 min
-        System.out.println(laskeUnenmaara("5:10", "09:55"));    //4 h 45 min*/
+        System.out.println(laskeUnenmaara("5:10", "09:55"));    //4 h 45 min
+        System.out.println(laskeUnenmaara("21:30", "6:30"));    //9 h 0 min
+        System.out.println(laskeUnenmaara("22:15", "8:15"));    //10 h 0 min
+        System.out.println(laskeUnenmaara("22:00", "7:00"));    //9 h 0 min*/
     }
 
 
@@ -432,48 +417,87 @@ public class Merkinta {
     }
 
 
+    /**
+     * Asettaa nukkumaanmenoajan
+     * @param s nukkumaanmenoaika merkkijonona
+     * @return null
+     */
     public String setNukkumaanKlo(String s) {
         nukkumaanKlo = s;
         return null;
     }
 
 
+    /**
+     * Asettaa heräämisajan
+     * @param s heräämisaika merkkijonona
+     * @return null
+     */
     public String setHeratysKlo(String s) {
         heratysKlo = s;
         return null;
     }
 
 
+    /**
+     * Asettaa unenmäärän
+     * @param s unenmäärä merkkijonona
+     * @return null
+     */
     public String setUnenmaara(String s) {
         unenMaara = s;
         return null;
     }
 
 
+    /**
+     * Asettaa lisätiedot
+     * @param s lisätiedot merkkijonona
+     * @return null
+     */
     public String setLisatiedot(String s) {
         lisatiedot = s;
         return null;
     }
 
 
+    /**
+     * Asettaa päivämäärän
+     * @param s päivämäärä merkkijonona
+     * @return null
+     */
     public String setPvmDate(String s) {
         pvm = s;
         return null;
     }
 
 
+    /**
+     * Asettaa unenlaadun
+     * @param s unenlaatu merkkijonona
+     * @return null
+     */
     public String setUnenlaatu(String s) {
         unenlaatu = s;
         return null;
     }
 
 
+    /**
+     * Asettaa vireystilan
+     * @param s vireystila merkkijonona
+     * @return null
+     */
     public String setVireystila(String s) {
         vireystila = s;
         return null;
     }
 
 
+    /**
+     * Asettaa unipäiväkirjan editointikentät //TODO: tarvitaanko tätä edes?
+     * @return editointikenttien määrä
+     */
     public int getKenttia() {
         return 3;
     }
@@ -487,27 +511,36 @@ public class Merkinta {
         return 1;
     }
 
-
-    public String getKysymys(int k) {
+    
+    /*public String getKysymys(int k) {
         switch ( k ) {
         case 0: return "Nukkumaanmenoaika";
         case 1: return "Heräämisaika";
         case 2: return "Unen määrä";
         default: return "Äääliö";
         }
-    }
+    }*/
 
 
+    /**
+     * @return unen määrä
+     */
     public String getUnenmaara() {
         return this.unenMaara;
     }
 
 
+    /**
+     * @return unenlaatu
+     */
     public String getUnenlaatu() {
         return this.unenlaatu;
     }
 
 
+    /**
+     * @return vireystila
+     */
     public String getVireystila() {
         return this.vireystila;
     }

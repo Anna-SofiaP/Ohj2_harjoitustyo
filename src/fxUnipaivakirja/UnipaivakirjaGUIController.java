@@ -10,26 +10,20 @@ import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 import unipaivakirja.Kayttaja;
-import unipaivakirja.Merkinnat;
 import unipaivakirja.Merkinta;
 import unipaivakirja.SailoException;
-import unipaivakirja.Unenlaatu;
 import unipaivakirja.Unipaivakirja;
-import unipaivakirja.Vireystila;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.TextAreaOutputStream;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 
-import fi.jyu.mit.fxgui.ComboBoxChooser;
 import fi.jyu.mit.fxgui.ListChooser;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.text.Font;
-import javafx.stage.Stage;
 
 /**
  * Luokka unipäiväkirjan tapahtumien hoitamiseksi.
@@ -56,15 +50,18 @@ public class UnipaivakirjaGUIController implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle bundle) { 
         setUnipaivakirja(new Unipaivakirja());
-        valittuKayttaja = ModalController.<Kayttaja,AloitusikkunaController>showModal(UnipaivakirjaGUIController.class.getResource(
-                "aloitusikkuna.fxml"), "Valitse käyttäjä", null, null, ctrl -> ctrl.setUnipaivakirja(kayttajanUnipaivakirja));
+        avaa(true);
+        if (valittuKayttaja == null) {
+            Platform.exit();
+            return;
+        }
         alusta();
         haeMerkinnat(0);
     }
 
 
     @FXML void handleAvaa() {
-        avaa();
+        avaa(false);
     }
 
 
@@ -87,7 +84,6 @@ public class UnipaivakirjaGUIController implements Initializable{
     }
 
     @FXML void handlePoistaMerkinta() {
-        //Dialogs.showMessageDialog("Vielä ei osata poistaa merkintää");
         poistaMerkinta();
     }
 
@@ -106,8 +102,8 @@ public class UnipaivakirjaGUIController implements Initializable{
     }
 
     @FXML void handleTulosta() {
-        //TulostusController tulostusCtrl = TulostusController.tulosta(null); 
-        //tulostaValitut(tulostusCtrl.getTextArea()); 
+        TulostusController tulostusCtrl = TulostusController.tulosta(null); 
+        tulostaValitut(tulostusCtrl.getTextArea()); 
     }
 
     @FXML void handleUusiKayttaja() {
@@ -126,9 +122,20 @@ public class UnipaivakirjaGUIController implements Initializable{
     private Kayttaja valittuKayttaja;
     
     
-    public void avaa() {
-        valittuKayttaja = ModalController.<Kayttaja,AloitusikkunaController>showModal(UnipaivakirjaGUIController.class.getResource(
+    /**
+     * Kysyy aloitusikkunacontrollerilta uutta käyttäjää ja avaa valitun käyttäjän perusteella
+     * kyseisen käyttäjän unipäiväkirjan
+     * @param suljetaan true jos suljetaan koko ohjelma, false jos vain ikkuna
+     */
+    public void avaa(boolean suljetaan) {
+        Kayttaja kayttaja = ModalController.<Kayttaja,AloitusikkunaController>showModal(UnipaivakirjaGUIController.class.getResource(
                 "aloitusikkuna.fxml"), "Valitse käyttäjä", null, null, ctrl -> ctrl.setUnipaivakirja(kayttajanUnipaivakirja));
+        if (kayttaja == null && suljetaan) {
+            Platform.exit();
+            return;
+        }
+        if (kayttaja == null) return;
+        valittuKayttaja = kayttaja;
         alusta();
         haeMerkinnat(0);
     }
@@ -167,9 +174,9 @@ public class UnipaivakirjaGUIController implements Initializable{
     }
 
 
-    private void setTitle(String title) {
+    /*private void setTitle(String title) {
         //ModalController.getStage(kayttajaValinta).setTitle(title);
-    }
+    }*/
     
     
     private void poistaMerkinta() {
@@ -188,7 +195,7 @@ public class UnipaivakirjaGUIController implements Initializable{
         if ( !Dialogs.showQuestionDialog("Käyttäjän poisto", "Poistetaanko käyttäjä: " + kayttaja.getNimi(), "Kyllä", "Ei"))
             return;
         kayttajanUnipaivakirja.poista(kayttaja);
-        avaa();
+        avaa(true);
     }
     
     
@@ -309,15 +316,27 @@ public class UnipaivakirjaGUIController implements Initializable{
      */
     public void tulosta(PrintStream os, final Merkinta merkinta) {
         os.println("----------------------------------------------");
-        merkinta.tulosta(os);
-        os.println("----------------------------------------------");   
+        merkinta.tulosta(os); 
     }
+    
+    
+    /**
+     * Tulostaa listassa olevan merkinnän tekstialueeseen
+     * @param text alue johon tulostetaan
+     */
+    public void tulostaValitut(TextArea text) {
+        Merkinta merkinta = merkintaKohdalla;
+        try (PrintStream os = TextAreaOutputStream.getTextPrintStream(text)) {
+            os.println("Tulostetaan merkintä " + merkinta.getPvmDate());
+            tulosta(os, merkinta);
+        }
+    }   
 
     
     
     /**
      * haetaan käyttäjän merkintöjen tiedot listaan
-     * @param merkintaid ??
+     * @param merkintaid sen merkinnän id-numero, joka haetaan
      */
     private void haeMerkinnat(int merkintaid) {
         chooserMerkinnat.clear();
@@ -369,9 +388,5 @@ public class UnipaivakirjaGUIController implements Initializable{
         // TODO Auto-generated method stub
         
     }
-    
-    
-
-    
     
 }
