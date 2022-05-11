@@ -16,9 +16,7 @@ import org.junit.runners.Suite.SuiteClasses;
     unipaivakirja.test.KloTarkistusTest.class,
     unipaivakirja.test.MerkinnatTest.class,
     unipaivakirja.test.MerkintaTest.class,
-    unipaivakirja.test.UnenlaatuListaTest.class,
-    unipaivakirja.test.UnipaivakirjaTest.class,
-    unipaivakirja.test.VireystilaListaTest.class,
+    unipaivakirja.test.UnipaivakirjaTest.class
     })
 public class AllTests {
     //

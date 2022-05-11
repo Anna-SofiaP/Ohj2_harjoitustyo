@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
@@ -66,7 +67,7 @@ public class UnipaivakirjaGUIController implements Initializable{
 
 
     @FXML void handleHaku() {
-        //hae();
+        hae(0);
     }
 
     @FXML void handleLopeta() {
@@ -361,6 +362,41 @@ public class UnipaivakirjaGUIController implements Initializable{
         this.kayttajanUnipaivakirja = unipaivakirja;
         lueTiedosto();
         //haeMerkinnat(0);
+    }
+    
+    
+    /**
+     * Hakee tietyn merkinnän merkintälistasta hakuehdon perusteella
+     * @param mnr merkinnän id-numero
+     */
+    protected void hae(int mnr) {
+        int mnro = mnr; // mnro merkinnän numero, joka aktivoidaan haun jälkeen 
+        if ( mnro <= 0 ) { 
+            Merkinta kohdalla = merkintaKohdalla; 
+            if ( kohdalla != null ) mnro = kohdalla.getMerkintaid(); 
+        }
+        
+        String ehto = hakuehto.getText(); 
+        
+        if (ehto.indexOf('*') < 0) ehto = "*" + ehto + "*"; 
+        
+        chooserMerkinnat.clear();
+
+        int index = 0;
+        Collection<Merkinta> merkinnat;
+        try {
+            merkinnat = kayttajanUnipaivakirja.etsi(ehto);
+            int i = 0;
+            for (Merkinta merkinta : merkinnat) {
+                if (merkinta.getMerkintaid() == mnro) index = i;
+                chooserMerkinnat.add(merkinta.getPvmDate().toString(), merkinta);
+                i++;
+            }
+        } catch (SailoException ex) {
+            Dialogs.showMessageDialog("Merkinnän hakemisessa ongelmia! " + ex.getMessage());
+        }
+        chooserMerkinnat.setSelectedIndex(index); // tästä tulee muutosviesti joka näyttää merkinnän
+
     }
 
     

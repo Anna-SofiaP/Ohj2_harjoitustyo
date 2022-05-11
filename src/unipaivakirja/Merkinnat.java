@@ -11,9 +11,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import fi.jyu.mit.ohj2.WildChars;
 
 /**
  * Luokka käyttäjän unipäiväkirjan merkinnöille. Osaa lisätä uuden merkinnän.
@@ -476,11 +479,14 @@ public class Merkinnat implements Iterable<Merkinta>{
     public int poistaKayttajanMerkinnat(int id) {
         int ind = etsiKayttajaId(id); 
         if (ind < 0) return 0;  
-        for (int i = ind; i < lkm; i++) {
+        /*for (int i = ind; i < lkm; i++) {
             if (i == ind)
                 poistaMerkinta(i);
-        }
-        alkiot[lkm] = null; 
+        }*/
+        while (ind != -1) {
+            poistaMerkinta(ind);
+            ind = etsiKayttajaId(id);
+        } 
         muutettu = true; 
         return 1; 
     }
@@ -488,15 +494,15 @@ public class Merkinnat implements Iterable<Merkinta>{
     
     /**
      * Poistaa yhden merkinnän käyttäjän id:n perusteella
-     * @param id sen käyttäjän id, jonka merkintä poistetaan
+     * @param ind sen käyttäjän id, jonka merkintä poistetaan
      */
-    public void poistaMerkinta(int id) {
-        int ind = etsiKayttajaId(id); 
-        if (ind < 0) return; 
-        lkm--; 
-        for (int i = ind; i < lkm; i++) 
+    public void poistaMerkinta(int ind) {
+        //int ind = etsiKayttajaId(id); 
+        if (ind < 0) return;  
+        for (int i = ind; i < lkm-1; i++) 
             alkiot[i] = alkiot[i + 1]; 
         alkiot[lkm] = null; 
+        lkm--;
     }
 
 
@@ -522,5 +528,47 @@ public class Merkinnat implements Iterable<Merkinta>{
             if (id == alkiot[i].getKayttajaId()) return i; 
         return -1; 
     }
+    
+    
+    /** 
+     * Palauttaa "taulukossa" hakuehtoon vastaavien merkintöjen viitteet 
+     * @param hakuehto hakuehto 
+     * @return tietorakenteen löytyneistä merkinnöistä
+     * @example 
+     * <pre name="test"> 
+     * #THROWS SailoException  
+     *   Jasenet jasenet = new Jasenet(); 
+     *   Jasen jasen1 = new Jasen(); jasen1.parse("1|Ankka Aku|030201-115H|Paratiisitie 13|"); 
+     *   Jasen jasen2 = new Jasen(); jasen2.parse("2|Ankka Tupu||030552-123B|"); 
+     *   Jasen jasen3 = new Jasen(); jasen3.parse("3|Susi Sepe|121237-121V||131313|Perämetsä"); 
+     *   Jasen jasen4 = new Jasen(); jasen4.parse("4|Ankka Iines|030245-115V|Ankkakuja 9"); 
+     *   Jasen jasen5 = new Jasen(); jasen5.parse("5|Ankka Roope|091007-408U|Ankkakuja 12"); 
+     *   jasenet.lisaa(jasen1); jasenet.lisaa(jasen2); jasenet.lisaa(jasen3); jasenet.lisaa(jasen4); jasenet.lisaa(jasen5);
+     *   List<Jasen> loytyneet;  
+     *   loytyneet = (List<Jasen>)jasenet.etsi("*s*",1);  
+     *   loytyneet.size() === 2;  
+     *   loytyneet.get(0) == jasen3 === true;  
+     *   loytyneet.get(1) == jasen4 === true;  
+     *     
+     *   loytyneet = (List<Jasen>)jasenet.etsi("*7-*",2);  
+     *   loytyneet.size() === 2;  
+     *   loytyneet.get(0) == jasen3 === true;  
+     *   loytyneet.get(1) == jasen5 === true; 
+     *     
+     *   loytyneet = (List<Jasen>)jasenet.etsi(null,-1);  
+     *   loytyneet.size() === 5;  
+     * </pre> 
+     */ 
+    public Collection<Merkinta> etsi(String hakuehto) { 
+        String ehto = "*"; 
+        if ( hakuehto != null && hakuehto.length() > 0 ) ehto = hakuehto; 
+        Collection<Merkinta> loytyneet = new ArrayList<Merkinta>(); 
+        for (Merkinta merkinta : this) { 
+            if (ehto.equals(merkinta.getPvmDate().toString())) loytyneet.add(merkinta);   
+        } 
+        //  TODO: lajittelua varten vertailija  
+        return loytyneet; 
+    }
+
 
 }

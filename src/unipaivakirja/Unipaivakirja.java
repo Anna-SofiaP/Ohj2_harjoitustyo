@@ -4,6 +4,7 @@
 package unipaivakirja;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -201,7 +202,31 @@ public class Unipaivakirja {
      */ 
     public void poista(Merkinta merkinta) { 
         merkinnat.poista(merkinta.getMerkintaid()); 
+    }
+
+
+    /** 
+     * Palauttaa "taulukossa" hakuehtoon vastaavien merkintöjen viitteet 
+     * @param hakuehto hakuehto 
+     * @return tietorakenteen löytyneistä merkinnöistä
+     * @throws SailoException Jos jotakin menee väärin
+     * @example 
+     * <pre name="test">
+     *   #THROWS CloneNotSupportedException, SailoException
+     *   alustaKerho();
+     *   Jasen jasen3 = new Jasen(); jasen3.rekisteroi();
+     *   jasen3.aseta(1,"Susi Sepe");
+     *   kerho.lisaa(jasen3);
+     *   Collection<Jasen> loytyneet = kerho.etsi("*Susi*",1);
+     *   loytyneet.size() === 1;
+     *   Iterator<Jasen> it = loytyneet.iterator();
+     *   it.next() == jasen3 === true; 
+     * </pre>
+     */ 
+    public Collection<Merkinta> etsi(String hakuehto) throws SailoException { 
+        return merkinnat.etsi(hakuehto); 
     } 
+
     
     
     /** 
