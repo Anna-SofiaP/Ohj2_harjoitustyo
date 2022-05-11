@@ -67,12 +67,13 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Muokkaa">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#handleUusiMerkinta" text="Lisää uusi merkintä">
+              <MenuItem mnemonicParsing="false" onAction="#handleUusiMerkinta" text="Lisää uusi merkintä...">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
                   </MenuItem>
                   <MenuItem mnemonicParsing="false" onAction="#handlePoistaMerkinta" text="Poista merkintä..." />
+                  <MenuItem mnemonicParsing="false" onAction="#handleMuokkaaMerkintaa" text="Muokkaa merkintää..." />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Apua">

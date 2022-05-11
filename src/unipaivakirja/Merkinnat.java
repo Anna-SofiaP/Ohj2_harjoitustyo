@@ -73,6 +73,24 @@ public class Merkinnat implements Iterable<Merkinta>{
     }
     
     
+    /**
+     * Lisää muutetun merkinnän merkintälistaan
+     * @param merkinta merkintä, jota muokataan
+     * @throws SailoException jos muokkaus ei onnistu
+     */
+    public void muokkaa(Merkinta merkinta) throws SailoException{
+        int id = merkinta.getMerkintaid();
+        for (int i = 0; i < lkm; i++) {
+            if ( alkiot[i].getMerkintaid() == id ) {
+                alkiot[i] = merkinta;
+                muutettu = true;
+                return;
+            }
+        }
+        //lisaa(merkinta);
+    }
+    
+    
     /*public void korvaaTaiLisaa(Merkinta merkinta) throws SailoException {
         int id = merkinta.getMerkintaid();
         for (int i = 0; i < lkm; i++) {
@@ -533,38 +551,45 @@ public class Merkinnat implements Iterable<Merkinta>{
     /** 
      * Palauttaa "taulukossa" hakuehtoon vastaavien merkintöjen viitteet 
      * @param hakuehto hakuehto 
+     * @param kayttajaid sen käyttäjän id-numero, jonka merkinnät haetaan hakuehdon mukaan
      * @return tietorakenteen löytyneistä merkinnöistä
      * @example 
      * <pre name="test"> 
      * #THROWS SailoException  
-     *   Jasenet jasenet = new Jasenet(); 
-     *   Jasen jasen1 = new Jasen(); jasen1.parse("1|Ankka Aku|030201-115H|Paratiisitie 13|"); 
-     *   Jasen jasen2 = new Jasen(); jasen2.parse("2|Ankka Tupu||030552-123B|"); 
-     *   Jasen jasen3 = new Jasen(); jasen3.parse("3|Susi Sepe|121237-121V||131313|Perämetsä"); 
-     *   Jasen jasen4 = new Jasen(); jasen4.parse("4|Ankka Iines|030245-115V|Ankkakuja 9"); 
-     *   Jasen jasen5 = new Jasen(); jasen5.parse("5|Ankka Roope|091007-408U|Ankkakuja 12"); 
-     *   jasenet.lisaa(jasen1); jasenet.lisaa(jasen2); jasenet.lisaa(jasen3); jasenet.lisaa(jasen4); jasenet.lisaa(jasen5);
-     *   List<Jasen> loytyneet;  
-     *   loytyneet = (List<Jasen>)jasenet.etsi("*s*",1);  
-     *   loytyneet.size() === 2;  
-     *   loytyneet.get(0) == jasen3 === true;  
-     *   loytyneet.get(1) == jasen4 === true;  
+     *   Merkinnat merkinnat = new Merkinnat(); 
+     *   Merkinta merk1 = new Merkinta(); merk1.parse("1|1|2022-03-08|"); 
+     *   Merkinta merk2 = new Merkinta(); merk2.parse("1|2|2022-03-11|"); 
+     *   Merkinta merk3 = new Merkinta(); merk3.parse("2|3|2022-03-12|"); 
+     *   Merkinta merk4 = new Merkinta(); merk4.parse("1|4|2022-03-03|"); 
+     *   Merkinta merk5 = new Merkinta(); merk5.parse("1|5|2022-03-15|"); 
+     *   merkinnat.lisaa(merk1); merkinnat.lisaa(merk2); merkinnat.lisaa(merk3); merkinnat.lisaa(merk4); merkinnat.lisaa(merk5);
+     *   List<Merkinta> loytyneet;  
+     *   loytyneet = (List<Merkinta>)merkinnat.etsi("12", 2);  
+     *   loytyneet.size() === 1;  
+     *   loytyneet.get(0) == merk3 === true;   
      *     
-     *   loytyneet = (List<Jasen>)jasenet.etsi("*7-*",2);  
+     *   loytyneet = (List<Merkinta>)merkinnat.etsi("1", 1);  
      *   loytyneet.size() === 2;  
-     *   loytyneet.get(0) == jasen3 === true;  
-     *   loytyneet.get(1) == jasen5 === true; 
+     *   loytyneet.get(0) == merk2 === true;   
+     *   loytyneet.get(1) == merk5 === true;
+     *   
+     *   loytyneet = (List<Merkinta>)merkinnat.etsi("2022-03-03", 1);
+     *   loytyneet.size() === 1;
+     *   loytyneet.get(0) == merk4 === true;
      *     
-     *   loytyneet = (List<Jasen>)jasenet.etsi(null,-1);  
-     *   loytyneet.size() === 5;  
+     *   loytyneet = (List<Merkinta>)merkinnat.etsi(null, 1);  
+     *   loytyneet.size() === 4; 
      * </pre> 
      */ 
-    public Collection<Merkinta> etsi(String hakuehto) { 
-        String ehto = "*"; 
+    public Collection<Merkinta> etsi(String hakuehto, int kayttajaid) { 
+        String ehto = ""; 
         if ( hakuehto != null && hakuehto.length() > 0 ) ehto = hakuehto; 
         Collection<Merkinta> loytyneet = new ArrayList<Merkinta>(); 
         for (Merkinta merkinta : this) { 
-            if (ehto.equals(merkinta.getPvmDate().toString())) loytyneet.add(merkinta);   
+            if (merkinta.getPvmDate().toString().contains(ehto)) {
+                if (merkinta.getKayttajaId() == kayttajaid)
+                    loytyneet.add(merkinta);   
+            }
         } 
         //  TODO: lajittelua varten vertailija  
         return loytyneet; 

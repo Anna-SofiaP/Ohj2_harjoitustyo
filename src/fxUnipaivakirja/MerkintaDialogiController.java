@@ -53,12 +53,16 @@ public class MerkintaDialogiController implements ModalControllerInterface<Merki
     }
 
     @FXML private void handleOK() {
+        if ( merkintaKohdalla != null && (merkintaKohdalla.getNukkumaanKlo().trim().equals("") || merkintaKohdalla.getHeratysKlo().equals(""))) {
+            naytaVirhe("Nukkumaanmenoaika ja heräämisaika eivät saa olla tyhjät");
+            return;
+        }
+        if ( merkintaKohdalla != null && merkintaKohdalla.getPvmDate().toString().trim().equals("")) {
+            naytaVirhe("Päivämäärä ei saa olla tyhjä");
+            return;
+        }
         tallennetaanko = true;
         tallennaMuutokset();
-        /*if ( merkintaKohdalla != null && merkintaKohdalla.getPvmDate().toString().trim().equals("") ) {
-            naytaVirhe("Nimi ei saa olla tyhjä");
-            return;
-        }*/
         ModalController.closeStage(labelVirhe);
 
     }
@@ -114,14 +118,26 @@ public class MerkintaDialogiController implements ModalControllerInterface<Merki
      */
     public void tallennaMuutokset() {
         merkintaKohdalla.setPvmDate(kalenteri.getValue().toString());
-        merkintaKohdalla.setHeratysKlo(editHeratys.getText());
         merkintaKohdalla.setNukkumaanKlo(editNukkumaan.getText());
+        merkintaKohdalla.setHeratysKlo(editHeratys.getText());
         String unenmaara = merkintaKohdalla.laskeUnenmaara(editNukkumaan.getText(), editHeratys.getText());
         merkintaKohdalla.setUnenmaara(unenmaara);
         merkintaKohdalla.setLisatiedot(editLisatiedot.getText());
         merkintaKohdalla.setUnenlaatu(editUnenlaatu.getSelectedObject());
         merkintaKohdalla.setVireystila(editVireystila.getSelectedObject());
     }
+    
+    
+    private void naytaVirhe(String virhe) {
+        if ( virhe == null || virhe.isEmpty() ) {
+            labelVirhe.setText("");
+            labelVirhe.getStyleClass().removeAll("virhe");
+            return;
+        }
+        labelVirhe.setText(virhe);
+        labelVirhe.getStyleClass().add("virhe");
+    }
+
     
     
     @Override
@@ -153,9 +169,9 @@ public class MerkintaDialogiController implements ModalControllerInterface<Merki
      */
     public void naytaMerkinta() {
         if (merkintaKohdalla == null) return;
-        editNukkumaan.setText(merkintaKohdalla.getUnenmaara());
-        editHeratys.setText(merkintaKohdalla.getNukkumaanKlo());
-        editUnenmaara.setText(merkintaKohdalla.getHeratysKlo());
+        editNukkumaan.setText(merkintaKohdalla.getNukkumaanKlo());
+        editHeratys.setText(merkintaKohdalla.getHeratysKlo());
+        editUnenmaara.setText(merkintaKohdalla.getUnenmaara());
         editLisatiedot.setText(merkintaKohdalla.getLisatiedot());
         kalenteri.setValue(merkintaKohdalla.getPvmDate());
         editUnenlaatu.setValue(null);

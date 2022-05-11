@@ -22,6 +22,7 @@ import javafx.fxml.FXML;
 
 import fi.jyu.mit.fxgui.ListChooser;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -47,6 +48,7 @@ public class UnipaivakirjaGUIController implements Initializable{
     @FXML private TextArea editLisatiedot;
     @FXML private TextField editUnenlaatu;
     @FXML private TextField editVireystila;
+
     
     @Override
     public void initialize(URL url, ResourceBundle bundle) { 
@@ -63,6 +65,11 @@ public class UnipaivakirjaGUIController implements Initializable{
 
     @FXML void handleAvaa() {
         avaa(false);
+    }
+    
+    
+    @FXML void handleMuokkaaMerkintaa() {
+        muokkaaMerkintaa();
     }
 
 
@@ -300,7 +307,6 @@ public class UnipaivakirjaGUIController implements Initializable{
      * käyttäjänimi
      * @param modalityStage mille ollaan modaalisia, null = sovellukselle
      * @param oletus mitä käyttäjää näytetään oletuksena
-     * @return null jos painetaan Cancel, muuten valittu nimi
      */
     /*public static String kysyKayttaja(Stage modalityStage, String oletus) {
         return ModalController.showModal(
@@ -308,6 +314,25 @@ public class UnipaivakirjaGUIController implements Initializable{
                 "Unipäiväkirja",
                 modalityStage, oletus);
     }*/
+    
+    
+    /**
+     * Muokataan listasta valittua merkintää
+     */
+    private void muokkaaMerkintaa() { 
+        if ( merkintaKohdalla == null ) return; 
+        try { 
+            Merkinta merkinta; 
+            merkinta = MerkintaDialogiController.kysyMerkinta(null, merkintaKohdalla, kayttajanUnipaivakirja);    
+            if ( merkinta == null ) return; 
+            merkintaKohdalla = merkinta;
+            kayttajanUnipaivakirja.muokkaa(merkinta); 
+            haeMerkinnat(merkinta.getMerkintaid()); 
+        } catch (SailoException e) { 
+            Dialogs.showMessageDialog(e.getMessage()); 
+        } 
+    } 
+
     
     
     /**
@@ -378,22 +403,18 @@ public class UnipaivakirjaGUIController implements Initializable{
         
         String ehto = hakuehto.getText(); 
         
-        if (ehto.indexOf('*') < 0) ehto = "*" + ehto + "*"; 
+        //if (ehto.indexOf('*') < 0) ehto = "" + ehto + ""; 
         
         chooserMerkinnat.clear();
 
         int index = 0;
         Collection<Merkinta> merkinnat;
-        try {
-            merkinnat = kayttajanUnipaivakirja.etsi(ehto);
-            int i = 0;
-            for (Merkinta merkinta : merkinnat) {
-                if (merkinta.getMerkintaid() == mnro) index = i;
-                chooserMerkinnat.add(merkinta.getPvmDate().toString(), merkinta);
-                i++;
-            }
-        } catch (SailoException ex) {
-            Dialogs.showMessageDialog("Merkinnän hakemisessa ongelmia! " + ex.getMessage());
+        merkinnat = kayttajanUnipaivakirja.etsi(ehto, valittuKayttaja.getKayttajaId());
+        int i = 0;
+        for (Merkinta merkinta : merkinnat) {
+            if (merkinta.getMerkintaid() == mnro) index = i;
+            chooserMerkinnat.add(merkinta.getPvmDate().toString(), merkinta);
+            i++;
         }
         chooserMerkinnat.setSelectedIndex(index); // tästä tulee muutosviesti joka näyttää merkinnän
 

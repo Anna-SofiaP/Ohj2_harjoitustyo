@@ -208,24 +208,34 @@ public class Unipaivakirja {
     /** 
      * Palauttaa "taulukossa" hakuehtoon vastaavien merkintöjen viitteet 
      * @param hakuehto hakuehto 
+     * @param kayttajaid sen käyttäjän id-numero, jonka merkinnät haetaan hakuehdon mukaan 
      * @return tietorakenteen löytyneistä merkinnöistä
-     * @throws SailoException Jos jotakin menee väärin
      * @example 
      * <pre name="test">
-     *   #THROWS CloneNotSupportedException, SailoException
-     *   alustaKerho();
-     *   Jasen jasen3 = new Jasen(); jasen3.rekisteroi();
-     *   jasen3.aseta(1,"Susi Sepe");
-     *   kerho.lisaa(jasen3);
-     *   Collection<Jasen> loytyneet = kerho.etsi("*Susi*",1);
+     *   #import java.util.Collection;
+     *   #import java.util.Iterator;
+     *   Unipaivakirja unip = new Unipaivakirja();
+     *   Merkinta merk1 = new Merkinta(1); merk1.merkinnanLisays();
+     *   merk1.setPvmDate("2022-03-12");
+     *   unip.lisaa(merk1);
+     *   Collection<Merkinta> loytyneet = unip.etsi("2022-03-12", 1);
      *   loytyneet.size() === 1;
-     *   Iterator<Jasen> it = loytyneet.iterator();
-     *   it.next() == jasen3 === true; 
+     *   Iterator<Merkinta> it = loytyneet.iterator();
+     *   it.next() == merk1 === true; 
      * </pre>
      */ 
-    public Collection<Merkinta> etsi(String hakuehto) throws SailoException { 
-        return merkinnat.etsi(hakuehto); 
+    public Collection<Merkinta> etsi(String hakuehto, int kayttajaid) { 
+        return merkinnat.etsi(hakuehto, kayttajaid); 
     } 
+    
+    
+    /**
+     * @param merkinta merkintä jota muokataan
+     * @throws SailoException jos muokkaus ei onnistu
+     */
+    public void muokkaa(Merkinta merkinta) throws SailoException{
+        merkinnat.muokkaa(merkinta);
+    }
 
     
     

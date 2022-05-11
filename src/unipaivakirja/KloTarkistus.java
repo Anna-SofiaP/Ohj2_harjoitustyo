@@ -30,6 +30,8 @@ public class KloTarkistus {
      * </pre>
      */
     public static String kellonajanTarkistus(String aika) {
+        if (aika == null) return "Anna kellonaika";
+        
         String[] kellonaika = aika.split(":");
         
         if (kellonaika.length == 1) 
