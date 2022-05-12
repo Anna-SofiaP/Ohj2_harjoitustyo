@@ -31,9 +31,7 @@ public class AloitusikkunaController implements ModalControllerInterface<Kayttaj
     }
     
     @FXML void handleSulje() {
-        //if (kayttajaValinta != null)
         ModalController.closeStage(kayttajaValinta);
-        //Platform.exit();
     }
     
     
@@ -51,8 +49,7 @@ public class AloitusikkunaController implements ModalControllerInterface<Kayttaj
     
     private Unipaivakirja kayttajanUnipaivakirja;
     private Kayttaja valittuKayttaja;
-    //private Kayttaja valittu;
-
+    
     
     /**
      * Avaa valitun käyttäjän unipäiväkirjan
@@ -68,7 +65,6 @@ public class AloitusikkunaController implements ModalControllerInterface<Kayttaj
      */
     public void setUnipaivakirja(Unipaivakirja unipaivakirja) {
         this.kayttajanUnipaivakirja = unipaivakirja;
-        //lueTiedosto("kayttajat");
     }
     
     
@@ -89,7 +85,7 @@ public class AloitusikkunaController implements ModalControllerInterface<Kayttaj
      * @param tiedosto tiedosto, mistä käyttäjät luetaan
      * @return null, jos tiedoston luku onnistuu, jos ei niin virhe
      */
-    protected String lueTiedosto(String tiedosto) {            //TODO: tämän pitää osata lukea kayttajat.dat!!!!!
+    protected String lueTiedosto(String tiedosto) {
         try {
             kayttajanUnipaivakirja.lueTiedostosta(tiedosto);
             return null;
@@ -100,7 +96,9 @@ public class AloitusikkunaController implements ModalControllerInterface<Kayttaj
         }
     }
     
-    
+    /**
+     * Luo uuden käyttäjän kysymis -dialogin. Tallentaa uuden käyttäjän tietorakenteeseen.
+     */
     private void uusiKayttaja() {
         Kayttaja uusiKayttaja = ModalController.<Kayttaja,UusiKayttajaController>showModal(UnipaivakirjaGUIController.class.getResource(
                 "Uusikayttaja.fxml"), "Luo uusi käyttäjä", null, null, ctrl -> ctrl.setUnipaivakirja(kayttajanUnipaivakirja));
@@ -108,10 +106,6 @@ public class AloitusikkunaController implements ModalControllerInterface<Kayttaj
         valittuKayttaja = uusiKayttaja;
         ModalController.closeStage(kayttajaValinta);
     }
-    
-    /*private void setTitle(String title) {
-        ModalController.getStage(kayttajaValinta).setTitle(title);
-    }*/
 
     
     @Override
@@ -125,14 +119,5 @@ public class AloitusikkunaController implements ModalControllerInterface<Kayttaj
         // TODO Auto-generated method stub
         
     }
-    
-    
-    /**
-     * @return TODO: mitä tähän?
-     */
-    /*public boolean voikoSulkea() {
-        // TODO Auto-generated method stub
-        return false;
-    }*/
 
 }

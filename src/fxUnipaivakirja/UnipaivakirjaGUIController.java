@@ -22,7 +22,6 @@ import javafx.fxml.FXML;
 
 import fi.jyu.mit.fxgui.ListChooser;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -38,7 +37,6 @@ public class UnipaivakirjaGUIController implements Initializable{
     
     @FXML private ListChooser<Merkinta> chooserMerkinnat;
     @FXML private TextField hakuehto;
-    //@FXML private ComboBoxChooser<String> kayttajaValinta;
     @FXML private ScrollPane panelMerkinta;
     
     @FXML private DatePicker kalenteri;
@@ -87,7 +85,6 @@ public class UnipaivakirjaGUIController implements Initializable{
     }
 
     @FXML void handlePoistaKayttaja() {
-        //Dialogs.showMessageDialog("Vielä ei osata poistaa käyttäjää");
         poistaKayttaja();
     }
 
@@ -119,7 +116,6 @@ public class UnipaivakirjaGUIController implements Initializable{
     }
 
     @FXML void handleUusiMerkinta() {
-        //Dialogs.showMessageDialog("Ei osata vielä lisätä uutta merkintää.");
         uusiMerkinta();
     }
     
@@ -171,22 +167,19 @@ public class UnipaivakirjaGUIController implements Initializable{
      * @return null, jos tiedoston lukeminen onnistui, muuten virhe
      */
     protected String lueTiedosto() {
-        //setTitle("Unipäiväkirja - " + valittuKayttaja.getNimi());
         try {
             kayttajanUnipaivakirja.lueTiedostosta("data");
         } catch (SailoException e) {
-            // TODO Auto-generated catch block
+            //
             e.printStackTrace();
-        }  //TODO: tähän tulee sen käyttäjän id, joka on valittu comboboxchooserista?
+        }  //
         return null;
     }
-
-
-    /*private void setTitle(String title) {
-        //ModalController.getStage(kayttajaValinta).setTitle(title);
-    }*/
     
     
+    /**
+     * Poistaa listasta valitun merkinnän
+     */
     private void poistaMerkinta() {
         Merkinta merkinta = merkintaKohdalla;
         if (merkinta == null) return;
@@ -197,6 +190,9 @@ public class UnipaivakirjaGUIController implements Initializable{
     }
     
     
+    /**
+     * Poistaa tällä hetkellä valittuna olevan käyttäjän ja sen merkinnät
+     */
     private void poistaKayttaja() {
         Kayttaja kayttaja = valittuKayttaja;
         if (kayttaja == null) return;
@@ -207,6 +203,9 @@ public class UnipaivakirjaGUIController implements Initializable{
     }
     
     
+    /**
+     * Luo uuden käyttäjän kysymis -dialogin. Tallentaa käyttäjän tietorakenteeseen.
+     */
     private void uusiKayttaja() {
         Kayttaja uusiKayttaja = ModalController.<Kayttaja,UusiKayttajaController>showModal(UnipaivakirjaGUIController.class.getResource(
                 "Uusikayttaja.fxml"), "Luo uusi käyttäjä", null, null, ctrl -> ctrl.setUnipaivakirja(kayttajanUnipaivakirja));
@@ -240,8 +239,6 @@ public class UnipaivakirjaGUIController implements Initializable{
     protected void alusta() {
         chooserMerkinnat.clear();
         chooserMerkinnat.addSelectionListener(e -> naytaMerkinta());
-        
-        //edits = new TextField[]{editNukkumaan, editHeratys, editUnenmaara};
     }
     
     
@@ -284,36 +281,6 @@ public class UnipaivakirjaGUIController implements Initializable{
         kayttajanUnipaivakirja.lisaa(uusi);
         haeMerkinnat(uusi.getMerkintaid());
     }
-    
-    
-    /**
-     * Avaa valitun käyttäjän unipäiväkirjan
-     * @param valittuKayttaja käyttäjä joka on valittu comboboxchooserista
-     * @return ??
-     */
-    /*public boolean avaaKayttajanPaivakirja(String valittuKayttaja) {
-        //valittu = "Nea";
-        //ModalController.closeStage(kayttajaValinta);
-        //String valinta = "Nea";
-        //Kayttaja valittuKayttaja = new Kayttaja("Nea");
-        lueTiedosto(kysyKayttaja(null, valittuKayttaja));
-        //lueTiedosto(kysyKayttaja(null, ""));
-        return true;
-    }*/
-    
-    
-    /**
-     * Luodaan käyttäjänkysymisdialogi ja palautetaan comboboxchooserista valittu
-     * käyttäjänimi
-     * @param modalityStage mille ollaan modaalisia, null = sovellukselle
-     * @param oletus mitä käyttäjää näytetään oletuksena
-     */
-    /*public static String kysyKayttaja(Stage modalityStage, String oletus) {
-        return ModalController.showModal(
-                AloitusikkunaController.class.getResource("aloitusikkuna.fxml"),
-                "Unipäiväkirja",
-                modalityStage, oletus);
-    }*/
     
     
     /**
@@ -370,7 +337,7 @@ public class UnipaivakirjaGUIController implements Initializable{
         int index = 0;
         List<Merkinta> merkinnat = kayttajanUnipaivakirja.annaKayttajanMerkinnat(valittuKayttaja.getKayttajaId());
         //tässä haetaan merkinnöistä kaikki merkinnät joiden käyttäjäid täsmää tämänhetkiseen käyttäjään
-        for (int i = 0; i < merkinnat.size(); i++) { //TODO: nollan tilalle jotain!
+        for (int i = 0; i < merkinnat.size(); i++) {
             Merkinta merkinta = merkinnat.get(i);
             if (merkinta.getMerkintaid() == merkintaid) index = i;
             chooserMerkinnat.add(merkinta.getPvm(), merkinta);
@@ -386,7 +353,6 @@ public class UnipaivakirjaGUIController implements Initializable{
     public void setUnipaivakirja(Unipaivakirja unipaivakirja) {
         this.kayttajanUnipaivakirja = unipaivakirja;
         lueTiedosto();
-        //haeMerkinnat(0);
     }
     
     
@@ -402,9 +368,7 @@ public class UnipaivakirjaGUIController implements Initializable{
         }
         
         String ehto = hakuehto.getText(); 
-        
-        //if (ehto.indexOf('*') < 0) ehto = "" + ehto + ""; 
-        
+                
         chooserMerkinnat.clear();
 
         int index = 0;
@@ -422,7 +386,7 @@ public class UnipaivakirjaGUIController implements Initializable{
 
     
     /**
-     * @return TODO: mitä tähän?
+     * @return false
      */
     public boolean voikoSulkea() {
         // TODO Auto-generated method stub
@@ -431,7 +395,7 @@ public class UnipaivakirjaGUIController implements Initializable{
     
     
     /**
-     * @return ??       //TODO: mitä tähän?
+     * @return testi
      */
     public String getResult() {
         return "testi";
@@ -439,9 +403,9 @@ public class UnipaivakirjaGUIController implements Initializable{
 
     
     /**
-     * @param arg0 ??   //TODO: mitä tähän?
+     * @param arg0 ??
      */
-    public void setDefault(String arg0) {
+    public void setDefault(@SuppressWarnings("unused") String arg0) {
         // TODO Auto-generated method stub
         
     }

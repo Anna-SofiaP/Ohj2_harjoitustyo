@@ -153,7 +153,10 @@ public class Kayttaja {
     }
 
     
-    
+    /**
+     * Asettaa käyttäjälle id-numeron
+     * @param id tunnusnumero joka asetetaan käyttäjälle
+     */
     private void setKayttajaId(int id) {
         this.kayttajaid = id; 
         if (kayttajaid >= seuraavaNro) seuraavaNro = kayttajaid + 1;

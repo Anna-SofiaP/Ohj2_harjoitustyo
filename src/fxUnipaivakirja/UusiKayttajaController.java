@@ -22,7 +22,6 @@ public class UusiKayttajaController implements ModalControllerInterface<Kayttaja
     @FXML private Label labelVirhe;
     
     @FXML void handlePeruuta() {
-        //uusi = null;
         ModalController.closeStage(editKayttajanimi);
     }
 
@@ -45,11 +44,12 @@ public class UusiKayttajaController implements ModalControllerInterface<Kayttaja
      */
     public void setUnipaivakirja(Unipaivakirja unipaivakirja) {
         this.unipaivakirja = unipaivakirja;
-        //lueTiedosto();
-        //haeMerkinnat(0);
     }
     
     
+    /**
+     * Tallentaa juuri luodun uuden käyttäjän tietorakenteeseen
+     */
     private void tallennaUusiKayttaja() {
         uusi = new Kayttaja(editKayttajanimi.getText());
         uusi.rekisteroi();
@@ -67,6 +67,7 @@ public class UusiKayttajaController implements ModalControllerInterface<Kayttaja
     
     @Override
     public Kayttaja getResult() {
+        if (!tallennetaanko) return null;
         return uusi;
     }
 

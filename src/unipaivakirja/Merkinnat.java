@@ -16,8 +16,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import fi.jyu.mit.ohj2.WildChars;
-
 /**
  * Luokka käyttäjän unipäiväkirjan merkinnöille. Osaa lisätä uuden merkinnän.
  * @author Omistaja
@@ -66,7 +64,6 @@ public class Merkinnat implements Iterable<Merkinta>{
      */
     public void lisaa(Merkinta merkinta) {
         if (lkm >= alkiot.length) kasvataTaulukkoa();
-            //throw new SailoException("Liikaa alkioita");
         alkiot[lkm] = merkinta;
         lkm++;
         muutettu = true;
@@ -77,6 +74,26 @@ public class Merkinnat implements Iterable<Merkinta>{
      * Lisää muutetun merkinnän merkintälistaan
      * @param merkinta merkintä, jota muokataan
      * @throws SailoException jos muokkaus ei onnistu
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException,CloneNotSupportedException
+     * #PACKAGEIMPORT
+     * Merkinnat merkinnat = new Merkinnat();
+     * Merkinta merk1 = new Merkinta(1), merk2 = new Merkinta(1);
+     * merk1.merkinnanLisays(); merk2.merkinnanLisays();
+     * merkinnat.getLkm() === 0;
+     * merkinnat.lisaa(merk1); merkinnat.lisaa(merk2);
+     * Merkinta merk3 = merk1.clone();
+     * merk3.taytaM1Tiedoilla();
+     * Iterator<Merkinta> it = merkinnat.iterator();
+     * it.next() == merk1 === true;
+     * merkinnat.muokkaa(merk3); merkinnat.getLkm() === 2;
+     * it = merkinnat.iterator();
+     * Merkinta j0 = it.next();
+     * j0 === merk3;
+     * j0 == merk3 === true;
+     * j0 == merk1 === false;
+     * </pre>
      */
     public void muokkaa(Merkinta merkinta) throws SailoException{
         int id = merkinta.getMerkintaid();
@@ -87,22 +104,7 @@ public class Merkinnat implements Iterable<Merkinta>{
                 return;
             }
         }
-        //lisaa(merkinta);
     }
-    
-    
-    /*public void korvaaTaiLisaa(Merkinta merkinta) throws SailoException {
-        int id = merkinta.getMerkintaid();
-        for (int i = 0; i < lkm; i++) {
-            if ( alkiot[i].getMerkintaid() == id ) {
-                alkiot[i] = merkinta;
-                muutettu = true;
-                return;
-            }
-        }
-        lisaa(merkinta);
-    }*/
-
     
     
     /**
@@ -258,8 +260,6 @@ public class Merkinnat implements Iterable<Merkinta>{
             for (Merkinta merkinta : this) {
                 fo.println(merkinta.toString());
             }
-            //} catch ( IOException e ) { // ei heitä poikkeusta
-            //  throw new SailoException("Tallettamisessa ongelmia: " + e.getMessage());
         } catch ( FileNotFoundException ex ) {
             throw new SailoException("Tiedosto " + ftiedosto.getName() + " ei aukea");
         } catch ( IOException ex ) {
@@ -396,32 +396,6 @@ public class Merkinnat implements Iterable<Merkinta>{
     public Iterator<Merkinta> iterator() {
         return new MerkinnatIterator();
     } 
-    
-    
-    /**
-     * @param args ei käytössä
-     */
-    public static void main(String[] args) {
-        Merkinnat merkinnat = new Merkinnat();
-
-        Merkinta pvm1 = new Merkinta(), pvm2 = new Merkinta();
-        pvm1.merkinnanLisays();
-        //pvm1.taytaM1Tiedoilla(5);
-        pvm2.merkinnanLisays();
-        pvm2.taytaM2Tiedoilla();
-
-        merkinnat.lisaa(pvm1);
-        merkinnat.lisaa(pvm2);
-
-        System.out.println("============= Merkinnät testi =================");
-
-        for (int i = 0; i < merkinnat.getLkm(); i++) {
-            Merkinta merkinta = merkinnat.anna(i);
-            System.out.println("Merkinta nro: " + i);
-            merkinta.tulosta(System.out);
-        }
-    
-    }
 
 
     /** 
@@ -497,10 +471,7 @@ public class Merkinnat implements Iterable<Merkinta>{
     public int poistaKayttajanMerkinnat(int id) {
         int ind = etsiKayttajaId(id); 
         if (ind < 0) return 0;  
-        /*for (int i = ind; i < lkm; i++) {
-            if (i == ind)
-                poistaMerkinta(i);
-        }*/
+
         while (ind != -1) {
             poistaMerkinta(ind);
             ind = etsiKayttajaId(id);
@@ -515,7 +486,6 @@ public class Merkinnat implements Iterable<Merkinta>{
      * @param ind sen käyttäjän id, jonka merkintä poistetaan
      */
     public void poistaMerkinta(int ind) {
-        //int ind = etsiKayttajaId(id); 
         if (ind < 0) return;  
         for (int i = ind; i < lkm-1; i++) 
             alkiot[i] = alkiot[i + 1]; 
@@ -590,9 +560,34 @@ public class Merkinnat implements Iterable<Merkinta>{
                 if (merkinta.getKayttajaId() == kayttajaid)
                     loytyneet.add(merkinta);   
             }
-        } 
-        //  TODO: lajittelua varten vertailija  
+        }  
         return loytyneet; 
+    }
+    
+    
+    /**
+     * @param args ei käytössä
+     */
+    public static void main(String[] args) {
+        Merkinnat merkinnat = new Merkinnat();
+
+        Merkinta pvm1 = new Merkinta(), pvm2 = new Merkinta();
+        pvm1.merkinnanLisays();
+        //pvm1.taytaM1Tiedoilla(5);
+        pvm2.merkinnanLisays();
+        pvm2.taytaM2Tiedoilla();
+
+        merkinnat.lisaa(pvm1);
+        merkinnat.lisaa(pvm2);
+
+        System.out.println("============= Merkinnät testi =================");
+
+        for (int i = 0; i < merkinnat.getLkm(); i++) {
+            Merkinta merkinta = merkinnat.anna(i);
+            System.out.println("Merkinta nro: " + i);
+            merkinta.tulosta(System.out);
+        }
+    
     }
 
 

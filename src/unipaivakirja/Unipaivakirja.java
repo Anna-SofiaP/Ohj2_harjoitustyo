@@ -125,7 +125,6 @@ public class Unipaivakirja {
     public void talleta() throws SailoException {
         kayttajat.talleta();
         merkinnat.talleta();
-        // TODO: yritä tallettaa toinen vaikka toinen epäonnistuisi
     }
     
 
@@ -232,22 +231,23 @@ public class Unipaivakirja {
     /**
      * @param merkinta merkintä jota muokataan
      * @throws SailoException jos muokkaus ei onnistu
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException  
+     *  Unipaivakirja unip = new Unipaivakirja();
+     *  Kayttaja uusi = new Kayttaja("Nea");
+     *  uusi.rekisteroi();
+     *  unip.lisaa(uusi);
+     *  Merkinta merk1 = new Merkinta(1);
+     *  merk1.merkinnanLisays();
+     *  merk1.setPvmDate("2022-03-12");
+     *  unip.lisaa(merk1);
+     *  unip.etsi("12", 1).size() === 1;
+     *  unip.muokkaa(merk1);
+     *  unip.etsi("12", 1).size() === 1;
+     * </pre>
      */
     public void muokkaa(Merkinta merkinta) throws SailoException{
         merkinnat.muokkaa(merkinta);
     }
-
-    
-    
-    /** 
-     * Korvaa jäsenen tietorakenteessa.  Ottaa jäsenen omistukseensa. 
-     * Etsitään samalla tunnusnumerolla oleva jäsen.  Jos ei löydy, 
-     * niin lisätään uutena jäsenenä. 
-     * @param jasen lisätäävän jäsenen viite.  Huom tietorakenne muuttuu omistajaksi 
-     * @throws SailoException jos tietorakenne on jo täynnä 
-     */ 
-    /*public void korvaaTaiLisaa(Jasen jasen) throws SailoException { 
-        jasenet.korvaaTaiLisaa(jasen); 
-    } */   
-
 }

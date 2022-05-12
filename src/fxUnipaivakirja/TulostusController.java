@@ -41,7 +41,6 @@ public class TulostusController implements ModalControllerInterface<String> {
     
     @Override
     public void setDefault(String oletus) {
-        // if ( oletus == null ) return;
         tulostusAlue.setText(oletus);
     }
 

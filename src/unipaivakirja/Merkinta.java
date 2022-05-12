@@ -6,15 +6,15 @@ package unipaivakirja;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.time.LocalDate;
+
 import fi.jyu.mit.ohj2.Mjonot;
-import unipaivakirja.KloTarkistus;
 
 /**
  * @author Omistaja
  * @version 8.3.2022
  *
  */
-public class Merkinta {
+public class Merkinta implements Cloneable {
     private int kayttajaid;
     private int merkintaid;
     private String pvm = "";
@@ -83,7 +83,6 @@ public class Merkinta {
      * @param pvm1 merkinnän päivämäärä
      */
     public void taytaM1Tiedoilla(String pvm1) {
-        //this.merkintaid = merkintanro;
         this.pvm = pvm1;
         nukkumaanKlo = "21:00";
         heratysKlo = "6:00";
@@ -110,7 +109,7 @@ public class Merkinta {
      * Unenmäärä ja päivämäärä saadaan laskettua/tuotua erillisistä metodeista.
      */
     public void taytaM1Tiedoilla() {
-        String pvm1 = "12.3.2022";          //TODO: pvmKalenterista();
+        String pvm1 = "12.3.2022";
         taytaM1Tiedoilla(pvm1);
     }
     
@@ -120,7 +119,7 @@ public class Merkinta {
      * Unenmäärä ja päivämäärä saadaan laskettua/tuotua erillisistä metodeista.
      */
     public void taytaM2Tiedoilla() {
-        String pvm2 = "13.2.2022";         //TODO: pvmKalenterista();
+        String pvm2 = "13.2.2022";
         taytaM2Tiedoilla(pvm2);
     }
     
@@ -181,12 +180,6 @@ public class Merkinta {
     /**
      * Palauttaa merkinnän id-numeron.
      * @return merkinnän id-numero
-     * @example
-     * <pre name="test">
-     *   Merkinta pvm1 = new Merkinta();
-     *   pvm1.merkinnanLisays();
-     *   pvm1.getMerkintaid() === 1;
-     * </pre>
      */
     public int getMerkintaid() {
         return merkintaid;
@@ -362,8 +355,14 @@ public class Merkinta {
                     minuutit = minuutit2 - minuutit1;
                 }
                 else if (minuutit2 < minuutit1) {
-                    minuutit = minuutit1 + minuutit2 - 60;
-                    tunnit = tunti2 - tunti1 + 1;
+                    if (minuutit1 + minuutit2 > 60) {
+                        minuutit = minuutit1 + minuutit2 - 60;
+                        tunnit = tunti2 - tunti1 + 1;
+                    }
+                    else if (minuutit1 + minuutit2 < 60){
+                        minuutit = 60 - minuutit1 + minuutit2;
+                        tunnit = tunti2 - tunti1 -1;
+                    }
                 }
             }
             if (minuutit == 60) {
@@ -375,15 +374,6 @@ public class Merkinta {
         return "" + tunnit + " h " + minuutit + " min" ;
         
     }
-    
-
-    /*@Override
-    public Merkinta clone() throws CloneNotSupportedException {
-        Merkinta uusi;
-        uusi = (Merkinta) super.clone();
-        return uusi;
-    }*/
-
     
 
     /**
@@ -406,7 +396,8 @@ public class Merkinta {
         System.out.println(laskeUnenmaara("5:10", "09:55"));    //4 h 45 min
         System.out.println(laskeUnenmaara("21:30", "6:30"));    //9 h 0 min
         System.out.println(laskeUnenmaara("22:15", "8:15"));    //10 h 0 min
-        System.out.println(laskeUnenmaara("22:00", "7:00"));    //9 h 0 min*/
+        System.out.println(laskeUnenmaara("22:00", "7:00"));    //9 h 0 min
+        System.out.println(laskeUnenmaara("1:25", "9:15"));     //7 h 50 min*/
     }
 
 
@@ -417,17 +408,6 @@ public class Merkinta {
         return this.lisatiedot;
     }
 
-
-    /**
-     * Asettaa nukkumaanmenoajan
-     * @param s nukkumaanmenoaika merkkijonona
-     * @return null
-     */
-    /*public String setNukkumaanKlo(String s) {
-        nukkumaanKlo = s;
-        return null;
-    }*/
-
     
     /**
      * Asettaa nukkumaanmenoajan
@@ -437,21 +417,10 @@ public class Merkinta {
     public String setNukkumaanKlo(String s) {
         
         String virhe = kellonajanTarkistus(s);
-        if ( s != null ) return virhe;
+        if ( virhe != null ) return virhe;
         nukkumaanKlo = s;
         return null;
     }
-
-
-    /**
-     * Asettaa heräämisajan
-     * @param s heräämisaika merkkijonona
-     * @return null
-     */
-    /*public String setHeratysKlo(String s) {
-        heratysKlo = s;
-        return null;
-    }*/
     
     
     /**
@@ -462,7 +431,7 @@ public class Merkinta {
     public String setHeratysKlo(String s) {
         
         String virhe = kellonajanTarkistus(s);
-        if ( s != null ) return virhe;
+        if ( virhe != null ) return virhe;
         heratysKlo = s;
         return null;
     }
@@ -496,6 +465,7 @@ public class Merkinta {
      * @return null
      */
     public String setPvmDate(String s) {
+        if (s == null || s.equals("")) return "Päivämäärä ei saa olla tyhjä";
         pvm = s;
         return null;
     }
@@ -524,7 +494,7 @@ public class Merkinta {
 
 
     /**
-     * Asettaa unipäiväkirjan editointikentät //TODO: tarvitaanko tätä edes?
+     * Asettaa unipäiväkirjan editointikentät
      * @return editointikenttien määrä
      */
     public int getKenttia() {
@@ -539,16 +509,6 @@ public class Merkinta {
     public int ekaKentta() {
         return 1;
     }
-
-    
-    /*public String getKysymys(int k) {
-        switch ( k ) {
-        case 0: return "Nukkumaanmenoaika";
-        case 1: return "Heräämisaika";
-        case 2: return "Unen määrä";
-        default: return "Äääliö";
-        }
-    }*/
 
 
     /**
@@ -577,7 +537,6 @@ public class Merkinta {
     
     /**
      * Tarkistetaan, onko syötetty kellonaika hyväksyttävää muotoa: "hh:mm" tai "h:mm".
-     * TODO: mistä tätä funktiota kutsutaan
      * @param aika kellonaika, joka tarkistetaan
      * @return palauttaa null jos kellonaika on oikeanlainen, jos ei niin palautetaan virheilmoitus
      * @example
@@ -643,6 +602,29 @@ public class Merkinta {
         
         return null;
     }
+    
+    
+    /**
+     * Tehdään identtinen klooni jäsenestä
+     * @return Object kloonattu jäsen
+     * @example
+     * <pre name="test">
+     * #THROWS CloneNotSupportedException 
+     *   Merkinta merkinta = new Merkinta();
+     *   merkinta.parse("1|2|2022-03-12");
+     *   Merkinta kopio = merkinta.clone();
+     *   kopio.toString() === merkinta.toString();
+     *   merkinta.parse("1|4|2022-04-13");
+     *   kopio.toString().equals(merkinta.toString()) === false;
+     * </pre>
+     */
+    @Override
+    public Merkinta clone() throws CloneNotSupportedException {
+        Merkinta uusi;
+        uusi = (Merkinta) super.clone();
+        return uusi;
+    }
+
     
 
 }

@@ -163,13 +163,12 @@ public class Kayttajat implements Iterable<Kayttaja>{
             if ( kokoNimi == null ) throw new SailoException("Käyttäjän nimi puuttuu");
             String rivi = fi.readLine();
             if ( rivi == null ) throw new SailoException("Maksimikoko puuttuu");
-            // int maxKoko = Mjonot.erotaInt(rivi,10); // tehdään jotakin
 
             while ( (rivi = fi.readLine()) != null ) {
                 rivi = rivi.trim();
                 if ( "".equals(rivi) || rivi.charAt(0) == ';' ) continue;
                 Kayttaja kayttaja = new Kayttaja();
-                kayttaja.parse(rivi); // voisi olla virhekäsittely
+                kayttaja.parse(rivi);
                 lisaa(kayttaja);
             }
             muutettu = false;
@@ -256,8 +255,6 @@ public class Kayttajat implements Iterable<Kayttaja>{
             for (Kayttaja kayttaja : this) {
                 fo.println(kayttaja.toString());
             }
-            //} catch ( IOException e ) { // ei heitä poikkeusta
-            //  throw new SailoException("Tallettamisessa ongelmia: " + e.getMessage());
         } catch ( FileNotFoundException ex ) {
             throw new SailoException("Tiedosto " + ftiedosto.getName() + " ei aukea");
         } catch ( IOException ex ) {
@@ -364,33 +361,6 @@ public class Kayttajat implements Iterable<Kayttaja>{
         public Iterator<Kayttaja> iterator() {
             return new KayttajatIterator();
         }
-        
-        
-        /**
-         * Testiohjelma
-         * @param args ei käytössä
-         */
-        public static void main(String[] args) {
-            Kayttajat kayttajat = new Kayttajat();
-            
-            Kayttaja nea = new Kayttaja("nea"), ansku = new Kayttaja("ansku");
-            nea.rekisteroi();
-            nea.taytaNeaTiedoilla();
-            ansku.rekisteroi();
-            ansku.taytaAnskuTiedoilla();
-            
-            kayttajat.lisaa(nea);
-            kayttajat.lisaa(ansku);
-            
-            System.out.println("Käyttäjät testi");
-            
-            for (int i = 0; i < kayttajat.getLkm(); i++) {
-                Kayttaja kayttaja = kayttajat.anna(i);
-                System.out.println("Käyttäjä nro: " + i);
-                kayttaja.tulosta(System.out);
-            }
-        
-        }
 
 
         /** 
@@ -443,6 +413,34 @@ public class Kayttajat implements Iterable<Kayttaja>{
                 if (id == alkiot[i].getKayttajaId()) return i; 
             return -1; 
         } 
+        
+        
+        
+        /**
+         * Testiohjelma
+         * @param args ei käytössä
+         */
+        public static void main(String[] args) {
+            Kayttajat kayttajat = new Kayttajat();
+            
+            Kayttaja nea = new Kayttaja("nea"), ansku = new Kayttaja("ansku");
+            nea.rekisteroi();
+            nea.taytaNeaTiedoilla();
+            ansku.rekisteroi();
+            ansku.taytaAnskuTiedoilla();
+            
+            kayttajat.lisaa(nea);
+            kayttajat.lisaa(ansku);
+            
+            System.out.println("Käyttäjät testi");
+            
+            for (int i = 0; i < kayttajat.getLkm(); i++) {
+                Kayttaja kayttaja = kayttajat.anna(i);
+                System.out.println("Käyttäjä nro: " + i);
+                kayttaja.tulosta(System.out);
+            }
+        
+        }
 
 }
 

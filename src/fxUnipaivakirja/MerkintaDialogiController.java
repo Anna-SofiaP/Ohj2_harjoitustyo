@@ -6,7 +6,7 @@ package fxUnipaivakirja;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import fi.jyu.mit.fxgui.ComboBoxChooser;
@@ -53,16 +53,8 @@ public class MerkintaDialogiController implements ModalControllerInterface<Merki
     }
 
     @FXML private void handleOK() {
-        if ( merkintaKohdalla != null && (merkintaKohdalla.getNukkumaanKlo().trim().equals("") || merkintaKohdalla.getHeratysKlo().equals(""))) {
-            naytaVirhe("Nukkumaanmenoaika ja heräämisaika eivät saa olla tyhjät");
-            return;
-        }
-        if ( merkintaKohdalla != null && merkintaKohdalla.getPvmDate().toString().trim().equals("")) {
-            naytaVirhe("Päivämäärä ei saa olla tyhjä");
-            return;
-        }
+        if (!tallennaMuutokset()) return;
         tallennetaanko = true;
-        tallennaMuutokset();
         ModalController.closeStage(labelVirhe);
 
     }
@@ -73,10 +65,10 @@ public class MerkintaDialogiController implements ModalControllerInterface<Merki
     private Merkinta merkintaKohdalla;
     private Unipaivakirja unipaivakirja;
     private boolean tallennetaanko = false;
-    private final Collection<String> unenlaatu = new ArrayList<String>(Arrays.asList("erittäin huono", "huono",
+    private final List<String> unenlaatu = new ArrayList<String>(Arrays.asList("erittäin huono", "huono",
             "kohtalainen", "hyvä", 
             "erittäin hyvä"));
-    private final Collection<String> vireystila = new ArrayList<String>(Arrays.asList("erittäin väsynyt", "väsynyt",
+    private final List<String> vireystila = new ArrayList<String>(Arrays.asList("erittäin väsynyt", "väsynyt",
              "ihan jees", "pirteä", 
              "erittäin energinen"));
 
@@ -94,40 +86,64 @@ public class MerkintaDialogiController implements ModalControllerInterface<Merki
      * tapahtuman menemään kasitteleMuutosJaseneen-metodiin.
      */
     protected void alusta() {        
-        /*editNukkumaan.setOnKeyReleased( e -> kasitteleMuutosMerkintaan((TextField)(e.getSource())));
-        editHeratys.setOnKeyReleased( e -> kasitteleMuutosMerkintaan((TextField)(e.getSource())));
-        editUnenmaara.setOnKeyReleased( e -> kasitteleMuutosMerkintaan((TextField)(e.getSource())));
-        kalenteri.setOnKeyReleased( e -> kasitteleMuutosMerkintaan((DatePicker)(e.getSource())));
-        editLisatiedot.setOnKeyReleased( e -> kasitteleMuutosMerkintaan((TextArea)(e.getSource())));
-        editUnenlaatu.setOnKeyReleased( e -> kasitteleMuutosMerkintaan((ComboBoxChooser<Unenlaatu>)(e.getSource()), (ComboBoxChooser<Vireystila>)(e.getSource())));
-        je je*/
-        
         editUnenlaatu.clear();
         editVireystila.clear();
-        for (String teksti : unenlaatu) {
-            editUnenlaatu.add(teksti);
+        for (int i = 0; i < unenlaatu.size(); i++) {
+            editUnenlaatu.add(unenlaatu.get(i));
+            if (unenlaatu.get(i).equals(merkintaKohdalla.getUnenlaatu()))
+                editUnenlaatu.setSelectedIndex(i);
         }
-        for (String teksti : vireystila) {
-            editVireystila.add(teksti);
+        for (int i = 0; i < vireystila.size(); i++) {
+            editVireystila.add(vireystila.get(i));
+            if (vireystila.get(i).equals(merkintaKohdalla.getVireystila()))
+                editVireystila.setSelectedIndex(i);
         }
     }
     
     
     /**
      * Tallentaa unipäiväkirjamerkinnän editointikenttiin tehdyt muutokset.
+     * @return true, jos tallennetaan, muuten false
      */
-    public void tallennaMuutokset() {
-        merkintaKohdalla.setPvmDate(kalenteri.getValue().toString());
-        merkintaKohdalla.setNukkumaanKlo(editNukkumaan.getText());
-        merkintaKohdalla.setHeratysKlo(editHeratys.getText());
+    public boolean tallennaMuutokset() {
+        String virhe = null;
+        virhe = merkintaKohdalla.setPvmDate(kalenteri.getValue().toString());
+        if (virhe != null) {
+            naytaVirhe(virhe); return false;
+        }
+        virhe = merkintaKohdalla.setNukkumaanKlo(editNukkumaan.getText());
+        if (virhe != null) {
+            naytaVirhe(virhe); return false;
+        }
+        virhe = merkintaKohdalla.setHeratysKlo(editHeratys.getText());
+        if (virhe != null) {
+            naytaVirhe(virhe); return false;
+        }
         String unenmaara = merkintaKohdalla.laskeUnenmaara(editNukkumaan.getText(), editHeratys.getText());
-        merkintaKohdalla.setUnenmaara(unenmaara);
-        merkintaKohdalla.setLisatiedot(editLisatiedot.getText());
-        merkintaKohdalla.setUnenlaatu(editUnenlaatu.getSelectedObject());
-        merkintaKohdalla.setVireystila(editVireystila.getSelectedObject());
+        virhe = merkintaKohdalla.setUnenmaara(unenmaara);
+        if (virhe != null) {
+            naytaVirhe(virhe); return false;
+        }
+        virhe = merkintaKohdalla.setLisatiedot(editLisatiedot.getText());
+        if (virhe != null) {
+            naytaVirhe(virhe); return false;
+        }
+        virhe = merkintaKohdalla.setUnenlaatu(editUnenlaatu.getSelectedObject());
+        if (virhe != null) {
+            naytaVirhe(virhe); return false;
+        }
+        virhe = merkintaKohdalla.setVireystila(editVireystila.getSelectedObject());
+        if (virhe != null) {
+            naytaVirhe(virhe); return false;
+        }
+        return true;
     }
     
     
+    /**
+     * Näyttää virheen merkinnänmuokkaus-dialogissa
+     * @param virhe virheteksti joka näytetään
+     */
     private void naytaVirhe(String virhe) {
         if ( virhe == null || virhe.isEmpty() ) {
             labelVirhe.setText("");
@@ -174,14 +190,11 @@ public class MerkintaDialogiController implements ModalControllerInterface<Merki
         editUnenmaara.setText(merkintaKohdalla.getUnenmaara());
         editLisatiedot.setText(merkintaKohdalla.getLisatiedot());
         kalenteri.setValue(merkintaKohdalla.getPvmDate());
-        editUnenlaatu.setValue(null);
-        editVireystila.setValue(null);
     }
     
     
     /**
      * Luodaan merkinnän kysymisdialogi ja palautetaan sama tietue muutettuna tai null
-     * TODO: korjattava toimimaan
      * @param modalityStage mille ollaan modaalisia, null = sovellukselle
      * @param oletus mitä dataan näytetään oletuksena
      * @param unipaivakirja käyttäjän unipäiväkirja
@@ -196,6 +209,10 @@ public class MerkintaDialogiController implements ModalControllerInterface<Merki
     }
 
     
+    /**
+     * Asettaa unipäiväkirjan
+     * @param unipaivakirja asetettava unipäiväkirja
+     */
     private void setUnipaivakirja(Unipaivakirja unipaivakirja) {
         this.unipaivakirja = unipaivakirja;
     }
